@@ -11,7 +11,7 @@ class Type(models.Model):
 class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
 
-    
+
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     comment = models.TextField(default="", blank=False)
@@ -37,7 +37,7 @@ class Post(models.Model):
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE,)
     content = models.FileField()
     category = models.ManyToManyField(Category)
-    items = models.ForeignKey(Inbox,on_delete=models.CASCADE)
+    items = models.ForeignKey(Inbox,on_delete=models.CASCADE,default='')
 
 
 class Author(models.Model):
@@ -46,16 +46,9 @@ class Author(models.Model):
     host = models.CharField(max_length=20,default='127.0.0.1:5454',editable = False)
     displayName = models.CharField(max_length=30, default="", blank=False)
     github = models.SlugField(unique=True, blank=False)
-    inbox = models.ForeignKey(Inbox,on_delete=models.CASCADE,verbose_name="author")
-    comment = models.ForeignKey(Comment,on_delete=models.CASCADE,verbose_name="author")
-    post = models.ForeignKey(Post,on_delete=models.CASCADE,verbose_name="author")
-
-
-
-
-
-
-
+    inbox = models.ForeignKey(Inbox,on_delete=models.CASCADE,verbose_name="author",default='')
+    comment = models.ForeignKey(Comment,on_delete=models.CASCADE,verbose_name="author",default='')
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,verbose_name="author",default='')
 
 
 class Like(models.Model):
