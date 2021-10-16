@@ -31,6 +31,7 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 # Application definition
 
 INSTALLED_APPS = [
+    'django_postgres_createdb',
     "django_mysql",
     'rest_framework',
     'authors.apps.AuthorsConfig',
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': BASE_DIR / 'testdb',
+        'NAME':'postgres',
         'USER':'postgres',
         'PASSWORD':'1',
         'HOST':'',
