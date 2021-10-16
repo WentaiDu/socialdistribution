@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+USE_TZ=True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -27,10 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 # Application definition
 
 INSTALLED_APPS = [
+    "django_mysql",
     'rest_framework',
     'authors.apps.AuthorsConfig',
     'django.contrib.admin',
@@ -77,8 +78,12 @@ WSGI_APPLICATION = 'service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': BASE_DIR / 'testdb',
+        'USER':'postgres',
+        'PASSWORD':'1',
+        'HOST':'',
+        'PORT':'5432'
     }
 }
 
