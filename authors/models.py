@@ -29,11 +29,11 @@ class Post(models.Model):
     published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py
     visibility = ArrayField(models.CharField(max_length=200), blank=True)
     unlisted = models.BooleanField(default=False, null=False)
-    
+
 class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
     inbox_author = models.OneToOneField(Author,on_delete=models.CASCADE,default='')
-    item = models.ForeignKey(Post,on_delete=models.CASCADE,default='')
+    item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
 
 
 class Comment(models.Model):
