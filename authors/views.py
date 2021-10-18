@@ -1,7 +1,7 @@
 from authors.models import Author
 from authors.serializers import *
 from rest_framework import generics
-from authors.pagination import MyCustomPagination
+from authors.pagination import AuthorPagination,CommentPagination
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -9,7 +9,7 @@ from rest_framework import status
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    pagination_class = MyCustomPagination
+    pagination_class = AuthorPagination
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -27,3 +27,8 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
 
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    lookup_field = 'post_id'
+    serializer_class = CommentSerializer
+    pagination_class = CommentPagination
