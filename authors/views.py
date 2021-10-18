@@ -1,7 +1,8 @@
-from authors.models import Author
-from authors.serializers import AuthorSerializer
+from authors.models import Author, Inbox
+from authors.serializers import *
 from rest_framework import generics
-from http import Response,status
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class AuthorList(generics.ListAPIView):
@@ -19,3 +20,13 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
+
+class InboxList(generics.ListCreateAPIView):
+    queryset = Inbox.objects.all()
+    serializer_class = InboxSerializer
+
+# #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
+   
+#     def get(self, request, *args, **kwargs):
+#         id = request.data['id']
+
