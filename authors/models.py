@@ -7,10 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 class Author(models.Model):
     author_type = models.CharField(max_length=30,default="", blank=False)
     author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False)
-    host = models.GenericIPAddressField(max_length=20,default='127.0.0.1:5454',editable = False)
+    host = models.CharField(max_length=20)
     displayName = models.CharField(max_length=30, default="", blank=False)
     url = models.URLField()
-    #github = models.SlugField(unique=True, blank=False)
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.URLField()
     def __str__(self):
@@ -33,11 +32,6 @@ class Post(models.Model):
     published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py
     #visibility = ArrayField(models.CharField(max_length=200), blank=True)
     unlisted = models.BooleanField(default=False, null=False)
-
-class Inbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author = models.OneToOneField(Author,on_delete=models.CASCADE,default='')
-    item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
 
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
