@@ -1,6 +1,7 @@
 from authors.models import Author
 from authors.serializers import *
 from rest_framework import generics
+from authors.pagination import MyCustomPagination
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -8,11 +9,16 @@ from rest_framework import status
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+    pagination_class = MyCustomPagination
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        self.perform_create(serializer)
+        author = self.perform_create(serializer)
+        author.type = "author"
+        author.host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
+        author.url = request.getRequestURL()
+        author.github = "http://github.com/"+author.github
+        author.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)   
 
