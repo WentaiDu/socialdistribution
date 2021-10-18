@@ -34,11 +34,6 @@ class Post(models.Model):
     #visibility = ArrayField(models.CharField(max_length=200), blank=True)
     unlisted = models.BooleanField(default=False, null=False)
 
-class Inbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author = models.OneToOneField(Author,on_delete=models.CASCADE,default='')
-    item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
-
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')

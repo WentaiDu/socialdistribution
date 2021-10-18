@@ -6,10 +6,4 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = '__all__'
 
-class InboxSerializer(serializers.ModelSerializer):
-    authors = AuthorSerializer(read_only=True)
-    class Meta:
-        model = Inbox
-        fields = '__all__'
-
 
