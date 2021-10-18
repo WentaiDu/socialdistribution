@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+#from django.contrib.postgres.fields import ArrayField
 import uuid
 from django.contrib.contenttypes.models import ContentType
 
@@ -17,7 +17,16 @@ class Author(models.Model):
         return self.displayName+'  ' +str(self.author_id)
 
 
+
+
+
+class Inbox(models.Model):
+     inbox_type = models.CharField(max_length=100, default="", blank=False)
+     inbox_author = models.CharField(max_length=100, default="", blank=False)
+# #     item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
+
 class Post(models.Model):
+    items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
     post_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
     post_id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
@@ -25,19 +34,15 @@ class Post(models.Model):
     origin = models.URLField(default="")
     description = models.TextField(default="")
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
-    content = models.FileField()
-    #post_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')
+    image_content = models.FileField()
+    text_content = models.CharField(max_length=500, default='',blank=True, null=True)
+    post_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')
     #categories = ArrayField(models.CharField(max_length=200), blank=True)
-    count = models.IntegerField()
+    #count = models.IntegerField()
     comments = models.URLField()
     published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py
     #visibility = ArrayField(models.CharField(max_length=200), blank=True)
     unlisted = models.BooleanField(default=False, null=False)
-
-class Inbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author = models.OneToOneField(Author,on_delete=models.CASCADE,default='')
-    item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
 
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")

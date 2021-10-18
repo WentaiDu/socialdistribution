@@ -1,4 +1,4 @@
-from authors.models import Author, Inbox
+from authors.models import *
 from authors.serializers import *
 from rest_framework import generics
 from rest_framework.response import Response
