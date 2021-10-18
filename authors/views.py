@@ -29,5 +29,6 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
 
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
+    lookup_field = 'post_id'
     serializer_class = CommentSerializer
     pagination_class = CommentPagination
