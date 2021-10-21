@@ -2,6 +2,7 @@ from django.urls import path,re_path
 from authors import views
 
 urlpatterns = [
-    path('authors/', views.AuthorList.as_view()),
-    re_path(r'authors/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
+    path('author/', views.AuthorList.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/posts/(?P<post_id>[(-z)]{36})/comments', views.CommentList.as_view()),
 ]
