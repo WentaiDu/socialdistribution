@@ -16,9 +16,9 @@ class Author(models.Model):
         return self.displayName+'  ' +str(self.author_id)
 
 class Inbox(models.Model):
-     inbox_type = models.CharField(max_length=100, default="", blank=False)
-     inbox_author = models.CharField(max_length=100, default="", blank=False)
-# #     item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author = models.CharField(max_length=100, default="", blank=False)
+    #item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
 
 class Post(models.Model):
     items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
@@ -29,7 +29,7 @@ class Post(models.Model):
     origin = models.URLField(default="")
     description = models.TextField(default="")
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
-    image_content = models.FileField()
+    image_content = models.FileField(null=True,blank=True)
     text_content = models.CharField(max_length=500, default='',blank=True, null=True)
     post_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')
     #categories = ArrayField(models.CharField(max_length=200), blank=True)

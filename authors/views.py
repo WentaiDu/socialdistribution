@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from authors.models import *
 from authors.serializers import *
 from rest_framework import generics
@@ -37,8 +38,10 @@ class InboxList(generics.ListCreateAPIView):
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
 
-# #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
-   
-#     def get(self, request, *args, **kwargs):
-#         id = request.data['id']
+
+class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Inbox.objects.all()
+    lookup_field = "author_id"
+    serializer_class = InboxSerializer 
+
 

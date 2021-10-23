@@ -31,7 +31,7 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 # Application definition
 
 INSTALLED_APPS = [
-    'django_postgres_createdb',
+    #'django_postgres_createdb',
     'rest_framework',
     'authors.apps.AuthorsConfig',
     'django.contrib.admin',
