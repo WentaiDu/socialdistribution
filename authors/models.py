@@ -15,10 +15,6 @@ class Author(models.Model):
     def __str__(self):
         return self.displayName+'  ' +str(self.author_id)
 
-
-
-
-
 class Inbox(models.Model):
      inbox_type = models.CharField(max_length=100, default="", blank=False)
      inbox_author = models.CharField(max_length=100, default="", blank=False)

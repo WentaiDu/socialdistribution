@@ -4,7 +4,7 @@ from rest_framework import generics
 from authors.pagination import AuthorPagination,CommentPagination
 from rest_framework.response import Response
 from rest_framework import status
-
+from authors.pagination import *
 
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
@@ -32,3 +32,13 @@ class CommentList(generics.ListCreateAPIView):
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
     pagination_class = CommentPagination
+
+class InboxList(generics.ListCreateAPIView):
+    queryset = Inbox.objects.all()
+    serializer_class = InboxSerializer
+
+# #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
+   
+#     def get(self, request, *args, **kwargs):
+#         id = request.data['id']
+

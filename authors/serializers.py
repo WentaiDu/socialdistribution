@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from authors.models import *
 
@@ -6,6 +7,11 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = '__all__'
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class PostImageSerializer(serializers.ModelSerializer):
     post_author = AuthorSerializer(read_only=True)
