@@ -10,15 +10,10 @@ class Author(models.Model):
     host = models.GenericIPAddressField(max_length=20,default='127.0.0.1:5454',editable = False)
     displayName = models.CharField(max_length=30, default="", blank=False)
     url = models.URLField()
-    #github = models.SlugField(unique=True, blank=False)
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.URLField()
     def __str__(self):
         return self.displayName+'  ' +str(self.author_id)
-
-
-
-
 
 class Inbox(models.Model):
      inbox_type = models.CharField(max_length=100, default="", blank=False)
