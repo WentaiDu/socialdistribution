@@ -31,9 +31,5 @@ class PostTextSerializer(serializers.ModelSerializer):
 class InboxSerializer(serializers.ModelSerializer):
     items = PostTextSerializer(many=True,read_only=True)
     class Meta:
-        model = Inbox
+        model = Comment
         fields = '__all__'
-
-
-
-

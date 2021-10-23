@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 class Author(models.Model):
     author_type = models.CharField(max_length=30,default="", blank=False)
     author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False)
-    host = models.GenericIPAddressField(max_length=20,default='127.0.0.1:5454',editable = False)
+    host = models.CharField(max_length=20)
     displayName = models.CharField(max_length=30, default="", blank=False)
     url = models.URLField()
     github = models.CharField(null = True,blank=False, max_length=50)
