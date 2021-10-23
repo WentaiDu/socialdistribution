@@ -1,4 +1,4 @@
-from authors.models import Author
+from authors.models import *
 from authors.serializers import *
 from rest_framework import generics
 from authors.pagination import AuthorPagination,CommentPagination
