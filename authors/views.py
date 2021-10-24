@@ -4,6 +4,7 @@ from rest_framework import generics
 from authors.pagination import AuthorPagination,CommentPagination
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 
 class AuthorList(generics.ListAPIView):
@@ -32,3 +33,71 @@ class CommentList(generics.ListCreateAPIView):
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
     pagination_class = CommentPagination
+
+class Like(APIView):
+    """GET a list of likes from other authors on author_id’s post post_id"""
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    pagination_class = AuthorPagination
+    def get(self, author_id, post_id):
+        post=Post.objects.get(pk=post_id)
+        if not Author.objects.get(pk=author_id):
+            
+            error="Author id not found"
+            print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        elif not post:
+            error="Post id not found"
+            print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        
+        likes = Like.objects.filter(object=post.url)
+        serializer = LikeSerializer(likes, many=True)
+        return Response(serializer.data)
+
+class LikesCommentList(APIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    pagination_class = AuthorPagination
+
+    """
+    GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
+
+    def get(self, author_id, post_id, comment_id):
+        comment_id = Comment.objects.get(pk=comment_id)
+        if not Author.objects.get(pk=author_id):
+            error="Author id not found"
+            print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        if not Post.objects.get(pk=post_id):
+            error="Post id not found"
+            print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        if not comment_id:     
+            error="Comment id not found"
+            print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)      
+        
+        likes = Like.objects.filter(object=comment_id.url)
+        serializer = LikeSerializer(likes, many=True)
+        return Response(serializer.data)
+
+
+class LikedList(APIView):
+    
+    """
+    GET list what public things author_id liked
+    """
+    def get(self, author_id):
+        author=Author.objects.get(pk=author_id)
+        if not author:
+            error = "Author not found"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        
+        likes = Like.objects.filter(author_id=author_id)
+        serializer = LikeSerializer(likes, many=True)
+        response = {
+            "type": "liked",
+            "items": serializer.data
+        }
+        return Response(response)
