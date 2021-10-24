@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05370d6b-58cb-4ba2-9718-a6117be9932b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/migrations/0005_auto_20211018_1220.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/migrations/0006_auto_20211018_1233.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/migrations/0007_alter_author_host.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/pagination.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/pagination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authors/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -51,7 +47,7 @@
         <entry file="file://$PROJECT_DIR$/authors/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
-              <caret line="48" selection-start-line="48" selection-end-line="48" />
+              <caret line="81" selection-start-line="81" selection-end-line="81" />
             </state>
           </provider>
         </entry>
@@ -236,7 +232,7 @@
     <entry file="file://$PROJECT_DIR$/authors/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
+          <caret line="81" selection-start-line="81" selection-end-line="81" />
         </state>
       </provider>
     </entry>

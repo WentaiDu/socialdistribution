@@ -17,7 +17,7 @@ class Author(models.Model):
 
 class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
     #item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
 
 class Post(models.Model):
