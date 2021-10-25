@@ -14,6 +14,7 @@ class AuthorList(generics.ListAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         author = self.perform_create(serializer)
+        author.id = request.getRequestURI()
         author.type = "author"
         author.host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
         author.url = request.getRequestURL()
