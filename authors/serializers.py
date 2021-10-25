@@ -33,3 +33,18 @@ class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
         fields = '__all__'
+class LikeSerializer(serializers.ModelSerializer):
+    # type is only provided to satisfy API format
+    #type = serializers.CharField(default="Like", source="get_api_type", read_only=True)
+    
+    # author will be created and validated separately 
+    #author = AuthorSerializer(required=False)
+    class Meta:
+        model = Like
+        fields = '__all__'
+        # fields = [
+        #     "type",
+        #     "summary",
+        #     "author",
+        #     "object"
+        # ]
