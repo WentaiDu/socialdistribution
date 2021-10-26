@@ -8,10 +8,25 @@ from rest_framework.response import Response
 from rest_framework import status
 from authors.pagination import *
 from rest_framework.views import APIView
-class AuthorList(generics.ListAPIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+from django.contrib.auth import authenticate, login, logout
+
+class LoginAPI(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    def post(self, request):
+        displayName = request.data["displayName"]
+        password = request.data["password"]
+        user = authenticate(displayName=displayName, password=password)
+        if user is not None:
+            login(request,user)
+            response = {
+                'detail': 'User logs in successfully!',
+                'id': user.id,
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
+
+class Signup(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -22,7 +37,12 @@ class AuthorList(generics.ListAPIView):
         author.github = "http://github.com/"+author.github
         author.save()
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)   
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class AuthorList(generics.ListAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    pagination_class = AuthorPagination
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
@@ -185,3 +205,4 @@ class LikedList(APIView):
             "items": serializer.data
         }
         return Response(response)
+

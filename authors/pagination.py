@@ -2,7 +2,6 @@ from rest_framework.pagination  import PageNumberPagination
 from rest_framework.response import Response
 from collections import OrderedDict
 
-
 class AuthorPagination(PageNumberPagination):
 
     page_size_query_param = "size"

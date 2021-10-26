@@ -1,0 +1,826 @@
+@charset "utf-8";
+@import "less/css3.less";
+@import "less/z.less";
+@import "variables.less";
+
+.reset();
+
+body{
+	background: @body_background;
+}
+
+//头部header
+.header{
+	@h:48px;
+	@border: 2px;
+
+	
+	height: @h;
+	border-top: @border solid @link_hover;
+	background-color: #fff;
+
+	&_content{
+		.bc();//zless库中提供的方法用于居中
+		width: 1240px;
+		.clearfix();//zless库中提供的方法用于清除浮动使header_content有宽度和高度，因为它的子元素全部浮动了
+	}
+
+	.logo{
+		width: 80px;
+		height: 27px;
+		background: url(../img/logo.jpg) left top no-repeat;
+		.fl();//zless库中提供的方法用于左浮动
+		margin: 8px 30px 13px 0px;
+
+		a{
+			height: 100%;
+			display: block;
+			text-indent: -99em;
+		}
+	}
+
+	.search{//外层的search div做出了input框的样式，但是内层其实是两个input，一个放文字，一个放图片
+		@search_h: 30px;
+		@search_w: 458px;
+		@input_w: 429px;
+
+		.fl();
+		width: @search_w;
+		height: @search_h;
+		border: solid 1px @input_border;
+		background-color: #F2F2F5;
+		margin: (@h - @search_h - 2)/2 0;
+
+		&_input{
+			.fl();
+			width: @input_w - 18px;
+			height: 100%;
+			padding: 0 9px;
+			line-height: @search_h~"/9";
+			color: @input_font;
+			.font-s11();
+		}
+
+		&_btn{
+			width: 17px;
+			height: 16px;
+			background: url("../img/search.jpg") left top no-repeat;
+			margin-top: (@search_h - 2px - 17px)/2;
+			margin-right: 11px;
+			.fr();
+		}
+
+	}
+
+	&_nav{
+		@nav_w: 478px;
+		@nav_h: 24px;
+		.fr();
+		height: @nav_h;
+		margin: (@h - @nav_h)/2 0;
+		border-right: 1px solid @input_border;
+		li{
+			.fl();
+			margin-right: 26px;
+		}
+		.a_init{
+			.font-fm();//zless库中的函数，用于设置字体为微软雅黑
+			.font-s14();
+			height: @nav_h;
+			line-height: @nav_h~"/9";
+			color: @link_color;
+			padding-left: 25px;
+			.dib();//指明了display方式为inline-block
+			&:hover{
+				color: @link_hover;
+			}
+		}
+		.li_home{
+			.a_init;
+			background: url(../img/home.jpg) left top no-repeat;
+		}
+		.li_video{
+			.a_init;
+			background: url(../img/video.jpg) left top no-repeat;
+		}
+		.li_found{
+			.a_init;
+			background: url(../img/found.jpg) left top no-repeat;
+		}
+		.li_game{
+			.a_init;
+			background: url(../img/game.jpg) left top no-repeat;
+		}
+		.li_user{
+			.a_init;
+			background: url(../img/user.png) left top no-repeat;
+		}
+	}
+
+	&_operate{
+		@ope_w: 172px;
+		@ope_h: 24px;
+		.fr();
+		width: @ope_w;
+		height: @ope_h;
+		margin: (@h - @ope_h)/2 0;
+		.clearfix();
+		li{
+			.fl();
+		}
+		.a_init{
+			width: 19px;
+			.dib();
+			margin-left: 22px;
+			text-indent: -999em;
+		}
+		.li_1{
+			.a_init;
+			height: 16px;
+			margin-top: (@ope_h - 16px)/2;
+			background: url(../img/message.jpg) left top no-repeat;
+		}
+		.li_2{
+			.a_init;
+			height: 19px;
+			margin-top: (@ope_h - 19px)/2;
+			background: url(../img/settings.jpg) left top no-repeat;
+		}
+		.li_3{
+			.a_init;
+			width: 26px;
+			height: 24px;
+			margin-top: (@ope_h - 24px)/2;
+			background: url(../img/post.jpg) left top no-repeat;
+		}
+	}
+}
+
+//所有卡片公用的
+.card{
+	background: @main_content_background;
+	.border-radius(@card_border_radius);
+}
+
+//主体部分
+.main{
+	width: @main_width;
+	.bc();
+	.clearfix();
+	background-color: @main_background;
+	padding-top: @main_padding_top;
+}
+
+//除去右边左边的一大块内容
+.left{
+	width: @left_width;
+	.fl();
+
+	&_sidebar{
+		.fl();
+		width: @left_sidebar;
+	}
+
+	&_content{
+		.fl();
+		width: @left_width - @left_sidebar;
+	}
+}
+
+//页面左侧导航栏
+.nav{
+	.font-s13();
+	.font-fm();
+
+	&_common{
+		.d-b();
+		padding: 13px 0px 13px 15px;
+	}
+
+	a{
+		color: #FFF;
+		&:hover{
+			background: rgba(255,255,255,0.2);
+		}
+	}
+	
+	&_bold{
+		font-weight: bold;
+	}
+
+	&_line{
+		height: 1px;
+		background: rgba(255,255,255,0.1);
+		overflow: hidden;
+	}
+
+	&_normal{
+		.font-s11();
+		.font-fm();
+	}
+}
+
+//页面中间内容
+.left_content{
+	width: @left_width - @left_sidebar;
+}
+
+//新微博发布框整体及头部
+.release{
+	@h: 165px;
+	height: @h;
+	.card;
+
+	&_top{
+		padding: 15px 11px 9px 11px;
+		.clearfix();
+	}
+
+	&_text{
+		width: 184px;
+		height: 16px;
+		background: url(../img/release_top.jpg) left center no-repeat;
+		text-indent: -99em;
+		.fl();
+	}
+
+	&_link{
+		height: 16px;
+		line-height: 16px;
+		.fr();
+	}
+	
+	a{
+		color: #EB7350;
+		.font-s11();
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+}
+
+//新微博编辑框
+.release_main{
+	height: 78px;
+	margin: 0px 10px;
+	border: 1px solid #CCC;
+	textarea{
+		width: 100%;
+		height: 78px;
+		.font-fm();
+		.font-s12();
+		padding: 5px 10px;
+	}
+}
+
+//微博发布框底部
+.release_choise{
+	height: 30px;
+	margin: 5px 10px 10px 10px;
+	.clearfix();
+	&_text{
+		margin-top: 4px;
+		.fl();
+	}
+
+	&_member{
+		.fl();
+		margin-right: 18px;
+	}
+	a{
+		.dib();
+		height: 22px; 
+		line-height: 22px;
+		color: @link_color;
+		padding-left: 25px;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+
+	.btn_expre{
+		background: url(../img/expression.png) left center no-repeat;
+	}
+
+	.btn_img{
+		background: url(../img/picture.png) left center no-repeat;
+	}
+
+	.btn_video{
+		background: url(../img/video.png) left center no-repeat;
+	}
+
+	.btn_topic{
+		background: url(../img/topic.png) left center no-repeat;
+	}
+	
+	.btn_hot{
+		background: url(../img/head_hot.png) left center no-repeat;
+	}
+
+	.btn_more{
+		background: url(../img/others.png) left center no-repeat;
+	}
+
+	//发布按钮
+	.release_button{
+		.fr();
+		background: #FFC09F;
+		.border-radius(3px);
+		
+		.u_release_btn{
+			width: 82px;
+			height: 30px;
+			.font-s15();
+			.font-fm();
+			color: #FFF;
+
+			&:hover{
+				background: #FF6613;
+				.border-radius(3px);
+			}			
+		}
+	}
+}
+
+//页面中间部分的微博分类栏
+.classify{
+	@h: 38px;
+	height: @h;
+	background: #FFF;
+	margin-top: 10px;
+	.card;
+	.clearfix();
+
+	.classes{
+		.fl();
+		padding-left: 13px;
+	}
+
+	.class_text{
+		.fl();
+		height: @h;
+		margin-right: 27px;
+	}
+
+	.choosed{
+		background: url(../img/choose.png) center bottom no-repeat;
+		font-weight: bold;
+	}
+
+	a{
+		height: @h;
+		line-height: @h;
+		.font-s11();
+		.font-fm();
+		color: @link_color;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+}
+
+//页面中间的微博搜索框
+.search{
+	@h: 26px;
+	@w: 178px;
+	width: @w;
+	height: @h - 2px;
+	border: 1px solid @input_border;
+	.fr();
+	margin: (38px - @h)/2;
+	
+	&_text{
+		height: @h - 2px;
+		width: @w - 20px - 15px - 19px;
+		margin-left: 10px;
+		.font-s11();
+	}
+
+	&_button{
+		width: 15px;
+		height: 14px;
+		background: url(../img/search_index.png) left center no-repeat;
+	}
+
+	&_more{
+		width: 9px;
+		height: 5px;
+		margin-left: 5px;
+		background: url(../img/search_arrow.png) left center no-repeat;
+	}
+}
+
+.weibo{
+	.card;
+	margin-top: 10px;
+	.clearfix();
+
+	&_icon{
+		.fl();
+		.dib();
+		margin: 20px 10px 20px 20px;
+	}
+
+	&_usericon{
+		width: 50px;
+		height: 50px;
+		.border-radius(50%);
+	}
+
+	&_text{
+		.fl();
+		.dib();
+		width: 520px - 20px;
+		margin-top: 25px;
+	}
+
+	h3{
+		.font-s14();
+		.font-fm();
+	}
+
+	&_time{
+		.font-s11();
+		.font-fm();
+		color: @context;
+		margin: 5px 0px;
+	}
+
+	&_content{
+		.font-s14();
+		.font-fm();
+	}
+}
+
+//每条微博的转发评论等
+.weibo_operator{
+	@h: 38px;
+	@w: 600px;
+	.fl();
+	width: @w;
+	height: @h;
+	margin-top: 11px;
+
+	.weibo_button{
+		width: @w;
+		height: @h;
+		.clearfix();
+		border-top: solid 1px #EEE;
+		overflow: hidden;
+	}
+
+	li{
+		width: 149px;
+		.fl();
+		height: 22px;
+		line-height: 22px;
+		margin: (@h - 22px)/2 0px;
+		border-right: 1px solid @input_border;
+		.tc();
+	}
+
+	a{
+		height: 12px;
+		line-height: 12px;
+		.font-s12();
+		.font-fm();
+		color: @link_color;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+
+	.last{
+		border-right: none;
+	}
+
+	.repost{
+		background: url(../img/repost.png) left center no-repeat;
+		padding-left: 20px;
+	}
+
+	.review{
+		background: url(../img/review.png) left center no-repeat;
+		padding-left: 20px;
+	}
+
+	.good{
+		background: url(../img/good.png) left center no-repeat;
+		padding-left: 20px;
+	}
+}
+
+
+//查看更多微博
+.readmore{
+	@h: 38px;
+	@w: 600px;
+	background: @main_content_background;
+	margin: 10px 0px;
+	height: @h;
+	.card;
+	.clearfix();
+
+	a{
+		.fl();
+		height: 12px;
+		line-height: 12px;
+		.font-s12();
+		.tc();
+		margin: (@h - 12px)/2 0px;
+		width: @w;
+		color: @link_color;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+}
+
+//页面右侧内容
+.right{
+	.fr();
+	width: @right_width;
+	padding-right: 10px;
+}
+
+//用户信息标签卡
+.usercard{
+	@w: 230px;
+	@h: 165px;
+	width: @w;
+	height: @h;
+	.card;
+	overflow: hidden;
+	.tc();
+	.clearfix();
+	
+	.background{
+		height: 75px;
+		width: @w;
+	}
+	.user_info_icon{
+		width: 60px;
+		height: 60px;
+		.border-radius(50%);
+		border: 4px solid rgba(255,255,255,0.4);
+		.dib();
+		margin-top: -56px;
+	}
+
+	.userinfo{
+		width: @w - 16px * 2;
+		margin: 0px 16px;
+		.clearfix();
+	}
+
+	h3{
+		.font-s14();
+		.font-fm();
+		margin-top: -3px;
+		margin-bottom: 6px;
+	}
+
+	li{
+		width: 65px;
+		border-right: 1px solid @input_border;
+		.fl();
+		height: 38px;
+	}
+
+	a{
+		.font-s12();
+		.font-fm();
+		width: 35px;
+		.dib();
+		height: 38px;
+		.tc();
+		color: @context;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+
+	.last_a{
+		width: 55px;
+		.tc();
+	}
+
+	strong{
+		.font-s16();
+		.font-fm();
+		color: #000;
+	}
+
+	.last{
+		border-right: none;
+	}
+}
+
+//歌曲榜单
+.songlist{
+	@h: 257px;
+	@w: 230px;
+	width: @w;
+	height: @h;
+	.card;
+	margin-top: 10px;
+
+	&_head{
+		height: 38px - 13px - 13px;
+		padding: 13px 16px;
+		border-bottom: 1px solid @song_list_border;
+		.clearfix();
+
+		h4{
+			.font-s12();
+			.font-fm();
+			.dib();
+			.fl();
+		}
+		span{
+			.font-s11();
+			.font-fm();
+			.fr();
+			background: url(../img/change.png) left center no-repeat;
+			padding-left: 19px;
+		}
+	}
+}
+
+.list{
+	margin-top: 6px;
+	padding: 0px 6px;
+	border-bottom: 1px solid @input_border;
+
+
+	//第一首歌曲
+	.first{
+		.clearfix();
+	}
+
+	li{
+		border-bottom: 1px solid @song_list_border;
+	}
+
+	.songimg{
+		width: 72px;
+		height: 72px;
+		.fl();
+		margin-right: 5px;
+		margin-bottom: 6px;
+	}
+	
+	.list_content{
+		.fl();
+		.dib();
+		
+		h4{
+			.font-s12();
+			.font-fm();
+			color: @song_name;
+			background: url(../img/firstsong.png) left center no-repeat;
+			padding-left: 19px;
+			margin-bottom: 7px;
+		}
+
+		p{
+			.font-s11();
+			.font-fm();
+			color: @context;
+			margin-bottom: 6px;
+		}
+	}
+
+	//后两首歌曲
+	.songlist_other{
+		height: 48px - 9px * 2;
+		line-height: 48px - 9px * 2;
+		.clearfix();
+		padding: 9px 10px;
+		span{
+			.font-s12();
+			.font-fm();
+			.fl();
+			background: url(../img/secondsong.png) left center no-repeat;
+			padding-left: 21px;
+		}
+
+		img{
+			width: 30px;
+			height: 30px;
+			.fr();
+		}
+
+		.thirdspan{
+			background: url(../img/thirdsong.png) left center no-repeat;
+		}
+	}
+
+	.last{
+		border-bottom: none;
+	}
+}
+
+.foot{
+	@h: 35px;
+	height: @h;
+	.tc();
+	a{
+		height: @h;
+		line-height: @h;
+		color: #000;
+		.font-s12();
+		.font-fm();
+		background: url(../img/right_arrow.png) right center no-repeat;
+		padding-right: 12px;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+}
+
+.hot{
+	@h: 322px;
+	@w: 230px;
+	width: @w;
+	height: @h;
+	.card;
+	margin-top: 10px;
+
+
+	&_head{
+		height: 38px - 13px - 13px;
+		padding: 13px 16px;
+		border-bottom: 1px solid @song_list_border;
+		.clearfix();
+
+		h4{
+			.font-s12();
+			.font-fm();
+			.dib();
+			.fl();
+		}
+		span{
+			.font-s11();
+			.font-fm();
+			.fr();
+			background: url(../img/change.png) left center no-repeat;
+			padding-left: 19px;
+		}
+	}
+
+	&_content{
+		margin-top: 2px;
+		padding: 19px 15px;
+		border-bottom: 1px solid @input_border;
+	}
+
+	li{
+		height: 11px;
+		line-height: 11px;
+		.clearfix();
+		margin-bottom: 17px;
+	}
+
+	.hot_content_a{
+		height: 11px;
+		line-height: 11px;
+		.font-s11();
+		.font-fm();
+		.fl();
+		color: @link_color;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+
+	span{
+		.font-s11();
+		.font-fm();
+		.fr();
+	}
+
+	.last_li{
+		margin-bottom: 0px;
+	}
+}
+
+.hot_foot{
+	@h: 35px;
+	height: @h;
+	.tc();
+	text-align: center;
+	.hot_foot_a{
+		height: @h;
+		line-height: @h;
+		color: #000;
+		.font-s12();
+		.font-fm();
+		background: url(../img/right_arrow.png) right center no-repeat;
+		padding-right: 12px;
+		&:hover{
+			color: @link_hover;
+		}
+	}
+}
