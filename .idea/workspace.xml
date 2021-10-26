@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="05370d6b-58cb-4ba2-9718-a6117be9932b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/authors/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="05370d6b-58cb-4ba2-9718-a6117be9932b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/authors/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
-              <caret line="164" selection-start-line="164" selection-end-line="164" />
+              <caret line="187" selection-start-line="187" selection-end-line="187" />
             </state>
           </provider>
         </entry>
@@ -232,7 +228,7 @@
     <entry file="file://$PROJECT_DIR$/authors/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
-          <caret line="164" selection-start-line="164" selection-end-line="164" />
+          <caret line="187" selection-start-line="187" selection-end-line="187" />
         </state>
       </provider>
     </entry>
