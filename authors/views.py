@@ -38,36 +38,59 @@ class CommentList(generics.ListCreateAPIView):
 class InboxList(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     
-    def get_inbox(self,author_id):
+    def get_inbox(self,author_id,request):
         try:
-            return Inbox.objects.get(inbox_author_id=author_id)
-        except Inbox.DoesNotExist:
+            return PostInbox.objects.get(inbox_author_id=author_id)
+        except PostInbox.DoesNotExist:
             return Http404
 
     def get(self,request, author_id):
         queryset = self.get_inbox(author_id)
-        serializer = InboxSerializer(queryset)
+        serializer = InboxPostSerializer(queryset)
         return Response(serializer.data)
 
     def post(self,request,author_id):
         inbox = self.get_inbox(author_id)
-        items = inbox.data['items']
         inbox_type = inbox.data['inbox_type']
         inbox_author_id = inbox.data['inbox_author_id']
         if request.data['type'] == 'post':
+            items = inbox.data['post_items']
             inbox_post = {}
             inbox_post['inbox_type'] = inbox_type
             inbox_post['inbox_author_id'] = inbox_author_id
             items.append(request.data['post'])
             inbox_post['items'] = items
-            inbox_post_serializer = InboxSerializer(data = inbox_post)
+            inbox_post_serializer = InboxPostSerializer(data = inbox_post)
             if inbox_post_serializer.is_valid():
                 inbox_post_serializer.save()
             else:
                 print(inbox_post_serializer.errors)
                 
-           #if request.data['type'] == 'follow':
-           #if request.data['type'] == 'like':
+        # if request.data['type'] == 'follow':
+        #     items = inbox.data['follow_items']
+        #     inbox_follow = {}
+        #     inbox_follow['inbox_type'] = inbox_type
+        #     inbox_follow['inbox_author_id'] = inbox_author_id
+        #     items.append(request.data['post'])
+        #     inbox_follow['items'] = items
+        #     inbox_follow_serializer = InboxFollowSerializer(data = inbox_follow)
+        #     if inbox_follow_serializer.is_valid():
+        #         inbox_follow_serializer.save()
+        #     else:
+        #         print(inbox_follow_serializer.errors)
+
+        if request.data['type'] == 'like':
+            items = inbox.data['like_items']
+            inbox_like = {}
+            inbox_like['inbox_type'] = inbox_type
+            inbox_like['inbox_author_id'] = inbox_author_id
+            items.append(request.data['like'])
+            inbox_like['items'] = items
+            inbox_like_serializer = InboxLikeSerializer(data = inbox_like)
+            if inbox_like_serializer.is_valid():
+                inbox_like_serializer.save()
+            else:
+                print(inbox_like_serializer.errors)
     
     def delete(self,request,author_id):
         inbox = self.get_inbox(author_id)

@@ -15,13 +15,23 @@ class Author(models.Model):
     def __str__(self):
         return self.displayName+'  ' +str(self.author_id)
 
-class Inbox(models.Model):
+class PostInbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-    #item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
+
+
+class LikeInbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+
+
+class FollowInbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+
 
 class Post(models.Model):
-    items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
+    items = models.ForeignKey(PostInbox, related_name='post_items', on_delete=models.CASCADE)
     post_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
     post_id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
@@ -49,6 +59,7 @@ class Comment(models.Model):
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='')
 
 class Like(models.Model):
+    items = models.ForeignKey(LikeInbox, related_name='like_items', on_delete=models.CASCADE)
     content = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)

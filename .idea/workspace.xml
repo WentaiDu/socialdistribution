@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="05370d6b-58cb-4ba2-9718-a6117be9932b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/authors/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authors/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authors/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/authors/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="135">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -47,7 +47,7 @@
         <entry file="file://$PROJECT_DIR$/authors/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
-              <caret line="81" selection-start-line="81" selection-end-line="81" />
+              <caret line="164" selection-start-line="164" selection-end-line="164" />
             </state>
           </provider>
         </entry>
@@ -74,7 +74,7 @@
         <entry file="file://$PROJECT_DIR$/service/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1200">
-              <caret line="85" column="47" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+              <caret line="84" column="47" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -208,8 +208,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/authors/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        <state relative-caret-position="135">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
@@ -232,7 +232,7 @@
     <entry file="file://$PROJECT_DIR$/authors/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
+          <caret line="164" selection-start-line="164" selection-end-line="164" />
         </state>
       </provider>
     </entry>
@@ -253,7 +253,7 @@
     <entry file="file://$PROJECT_DIR$/service/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1200">
-          <caret line="85" column="47" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
+          <caret line="84" column="47" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -266,9 +266,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/db.sqlite3">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/db.sqlite3" />
     <entry file="file://$PROJECT_DIR$/authors/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
