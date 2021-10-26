@@ -13,23 +13,29 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-class PostImageSerializer(serializers.ModelSerializer):
+
+
+class PostSerializer(serializers.ModelSerializer):
     post_author = AuthorSerializer(read_only=True)
     class Meta:
         model = Post
-        fields = ['post_type','title','post_id','source','origin','description','contentType','image_content'
+        fields = ['post_type','title','post_id','source','origin','description','contentType','content'
         ,'post_author','comments','published','unlisted']
 
-class PostTextSerializer(serializers.ModelSerializer):
-    post_author = AuthorSerializer(read_only=True)
-    class Meta:
-        model = Post
-        fields = ['post_type','title','post_id','source','origin','description','contentType','text_content'
-        ,'post_author','comments','published','unlisted']
+
+# class PostTextSerializer(serializers.ModelSerializer):
+#     post_author = AuthorSerializer(read_only=True)
+#     class Meta:
+#         model = Post
+#         fields = ['post_type','title','post_id','source','origin','description','contentType','text_content'
+#         ,'post_author','comments','published','unlisted']
+
+
+
 
 
 class InboxSerializer(serializers.ModelSerializer):
-    items = PostTextSerializer(many=True,read_only=True)
+    items = PostSerializer(many=True,read_only=True)
     class Meta:
         model = Comment
         fields = '__all__'
