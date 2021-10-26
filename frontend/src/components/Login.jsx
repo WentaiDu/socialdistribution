@@ -1,24 +1,12 @@
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Box, Typography} from "@material-ui/core";
-import MuiAlert from "@mui/material/core/Alert";
-import Button from "@mui/material/core/Button";
-import Card from "@mui/material/core/Card";
-import Snackbar from "@mui/material/core/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
 import React, { useState } from "react";
-import "../App.css";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#00428b",
-    },
-    secondary: {
-      main: "#ffa800",
-    },
-  },
-});
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -48,7 +36,6 @@ function Login() {
       .then((res) => {
         handleClick(true);
         console.log(res.data);
-        localStorage.setItem("id" , res.data.id)
       })
       .catch((res) => {
         handleClick(false);
@@ -92,7 +79,7 @@ function Login() {
   };
 
   return (
-    <div className="Blue-background">
+    <div >
       <Box
         sx={{
           display: "flex",
@@ -111,7 +98,7 @@ function Login() {
             borderRadius: 7,
           }}
         >
-          <ThemeProvider theme={theme}>
+
             <Box sx={{ mb: 0 }}>
               <Typography
                 color="textPrimary"
@@ -119,7 +106,7 @@ function Login() {
                 align="center"
                 fontFamily="Arial"
               >
-                EFCL Financial Assessment Tool
+                CMPUT404-project
               </Typography>
               <br></br>
             </Box>
@@ -164,7 +151,7 @@ function Login() {
               onBlur={(e) => handlePasswordBlur()}
             />
 
-            {/* Need this so TextFields in CreateUser look normal?? :( */}
+
             <TextField
               variant="filled"
               size="small"
@@ -187,7 +174,7 @@ function Login() {
                 Login
               </Button>
             </Box>
-          </ThemeProvider>
+
         </Card>
 
         <Snackbar
