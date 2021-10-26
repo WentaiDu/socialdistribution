@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.admin import UserAdmin
 from .models import Author
+from . import models
 class UserAdmin(BaseUserAdmin):
   form = UserChangeForm
   fieldsets = (
@@ -24,3 +25,6 @@ class UserAdmin(BaseUserAdmin):
   search_fields = ('displayName', 'author_type', 'author_id')
   ordering = ('displayName',)
 admin.site.register(Author, UserAdmin)
+admin.site.register(models.Post)
+admin.site.register(models.Comment)
+admin.site.register(models.Like)
