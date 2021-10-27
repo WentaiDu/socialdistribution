@@ -8,18 +8,32 @@ class Author(AbstractUser):
   author_type = models.CharField(max_length=30,default="author", blank=False)
   author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
   displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
-  host = models.CharField(max_length=20)
+  host = models.CharField(max_length=50)
   url = models.URLField()
   github = models.CharField(null = True,blank=False, max_length=50)
-  profileImage = models.URLField()
 
-  USERNAME_FIELD = 'displayName'
-  REQUIRED_FIELDS = ['username']
+#   profileImage = models.ImageField(upload_to = 'media', blank = True, null = True)
+  #USERNAME_FIELD = 'username'
+#   def photo_url(self):
+#     if self.photo and hasattr(self.photo, 'url'):
+#         return self.photo.url
+#     else:
+#         return '/media/user.jpg'
 
-class Inbox(models.Model):
-     inbox_type = models.CharField(max_length=100, default="", blank=False)
-     inbox_author = models.CharField(max_length=100, default="", blank=False)
-# #     item = models.ManyToManyField(Post,on_delete=models.CASCADE,default='')
+class PostInbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+
+
+class LikeInbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+
+
+class FollowInbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+
 
 class Post(models.Model):
     class Visibility(models.TextChoices):
@@ -60,14 +74,15 @@ class Post(models.Model):
 
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
-    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')
+    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
     comment = models.TextField(default="", blank=False)
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
-    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='')
+    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id") 
+    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
 
 class Like(models.Model):
+    items = models.ForeignKey(LikeInbox, related_name='like_items', on_delete=models.CASCADE)
     content = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)
