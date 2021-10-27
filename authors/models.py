@@ -64,7 +64,7 @@ class Comment(models.Model):
     comment = models.TextField(default="", blank=False)
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id") 
+    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='')
 
 class Like(models.Model):
@@ -74,3 +74,5 @@ class Like(models.Model):
     like_author = models.OneToOneField(Author,on_delete=models.CASCADE,verbose_name="author")
     object = models.URLField()
 
+class Follower(models.Model):
+    author_id = models.UUIDField(primary_key = True, default = uuid.uuid4)

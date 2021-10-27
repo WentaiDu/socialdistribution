@@ -9,7 +9,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     displayName = serializers.CharField()
     password = serializers.CharField()
-    
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -39,15 +39,14 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class InboxSerializer(serializers.ModelSerializer):
-    items = PostTextSerializer(many=True,read_only=True)
     class Meta:
         model = Comment
         fields = '__all__'
 class LikeSerializer(serializers.ModelSerializer):
     # type is only provided to satisfy API format
     #type = serializers.CharField(default="Like", source="get_api_type", read_only=True)
-    
-    # author will be created and validated separately 
+
+    # author will be created and validated separately
     #author = AuthorSerializer(required=False)
     class Meta:
         model = Like
