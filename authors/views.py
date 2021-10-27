@@ -7,11 +7,12 @@ from rest_framework import status
 from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
-
+from rest_framework import permissions
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    permission_classes = [permissions.AllowAny]
     def post(self, request):
-        displayName = request.data["displayName"]
+        displayName = request.data["username"]
         password = request.data["password"]
         user = authenticate(displayName=displayName, password=password)
         if user is not None:
@@ -25,13 +26,15 @@ class LoginAPI(generics.GenericAPIView):
             return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
 
 class Signup(generics.CreateAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = [permissions.AllowAny]
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         author = self.perform_create(serializer)
-        author.type = "author"
-        author.host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
-        author.url = request.getRequestURL()
+        author.author_type = "author"
+        # author.host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
+        # author.url = request.getRequestURL()
         author.github = "http://github.com/"+author.github
         author.save()
         headers = self.get_success_headers(serializer.data)

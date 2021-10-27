@@ -8,5 +8,7 @@ urlpatterns = [
     re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
     path('auth/', include('rest_auth.urls')),
     path('author/', views.AuthorList.as_view()),
+    path('signup/', views.Signup.as_view()),
+    path('login/', views.LoginAPI.as_view()),
 
 ]

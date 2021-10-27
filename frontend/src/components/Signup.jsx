@@ -15,13 +15,12 @@ import { useHistory } from "react-router-dom";
 
 
 export default function SignUp() {
-    const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const history = useHistory();
     const [displayName, setDisplayName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
-    const [profileImage, setProfileImage] = useState("");
+    // const [profileImage, setProfileImage] = useState("");
     const [errorStates, setErrorStates] = useState({
         usernameError: false,
         passwordError: false,
@@ -75,18 +74,12 @@ export default function SignUp() {
       }
     function handleSubmit() {
         axios
-            .post(`${base_url}/signup/`, {
+            .post('http://localhost:8000/signup/', {
             displayName: displayName,
             password: password,
             github: github,
-            profileImage: profileImage,
+            // profileImage: profileImage,
             })
-            .then((res) => {
-            console.log(res);
-            console.log(res.data);
-            })
-            .catch((res) => {
-            });
         history.push("");
         }
 
@@ -149,13 +142,13 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleSubmit}
               disabled={
                 displayName === "" ||
                 password === "" ||
                 confirmPassword === "" ||
                 password !== confirmPassword
               }
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
