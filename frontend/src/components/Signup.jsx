@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useRef,useState } from "react";
+import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,16 +13,17 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
+const Input = styled('input')({
+  display: 'none',
+});
 
 export default function SignUp() {
-    const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const history = useHistory();
     const [displayName, setDisplayName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
-    const [profileImage, setProfileImage] = useState("");
+    const imageHook = useRef("");
     const [errorStates, setErrorStates] = useState({
         usernameError: false,
         passwordError: false,
@@ -74,13 +76,15 @@ export default function SignUp() {
         history.push("");
       }
     function handleSubmit() {
-        axios
-          .post(`http://127.0.0.1:8000/signup/`, {
+        const target = {
           displayName: displayName,
           password: password,
           github: github,
-          profileImage: profileImage,
-          })
+          profileImage: imageHook.current.value,
+        }
+        console.log("Target is",target)
+        axios
+          .post(`http://127.0.0.1:8000/signup/`, target)
           .then((res) => {
           console.log(res);
           console.log(res.data);
@@ -143,19 +147,27 @@ export default function SignUp() {
                   onBlur={(e) => handleBlurs("confirmPasswordBlur")}
                 />
               </Grid>
+              <Grid item xs={12}>
+              <label htmlFor="contained-button-file">
+                <Input ref={imageHook}accept="image/*" id="contained-button-file" multiple type="file" />
+                <Button variant="contained" component="span">
+                Upload
+                </Button>
+             </label>
+              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleSubmit}
               disabled={
                 displayName === "" ||
                 password === "" ||
                 confirmPassword === "" ||
                 password !== confirmPassword
               }
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
