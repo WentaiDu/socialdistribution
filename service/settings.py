@@ -24,7 +24,7 @@ SECRET_KEY = '+*9dq@o&-y&w=(@j38)uc0sw#e83!1(gpq9&nl_%d6c&^@*nxu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -37,20 +37,25 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'authors.apps.AuthorsConfig',
+    'authors',
+    'corsheaders',
 ]
 AUTH_USER_MODEL ='authors.Author'
 REST_FRAMEWORK = {
-  'DEFAULT_PERMISSION_CLASSES': (
-      'rest_framework.permissions.IsAuthenticated',
-  ),
-  'DEFAULT_AUTHENTICATION_CLASSES': (
-      'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-      'rest_framework.authentication.SessionAuthentication',
-      'rest_framework.authentication.BasicAuthentication',
-  ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+    #  'DEFAULT_PERMISSION_CLASSES':
+    #  ['rest_framework.permissions.IsAuthenticated',
+    # 'rest_framework.permissions.AllowAny'],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    # 'rest_framework.authentication.SessionAuthentication',
+    # 'rest_framework.authentication.BasicAuthentication']
+  
 }
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'service.urls'
@@ -134,3 +141,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS  = True
+

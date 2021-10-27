@@ -6,9 +6,9 @@ class AuthorSerializer(serializers.ModelSerializer):
       model = Author
       fields = ['author_type','author_id','host','displayName','url','github','profileImage']
 
-class LoginSerializer(serializers.Serializer):
-    displayName = serializers.CharField()
-    password = serializers.CharField()
+# class LoginSerializer(serializers.Serializer):
+#     username = serializers.CharField()
+#     password = serializers.CharField()
     
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

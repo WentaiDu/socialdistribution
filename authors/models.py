@@ -52,12 +52,12 @@ class Post(models.Model):
 
 class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
-    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='')
+    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
     comment = models.TextField(default="", blank=False)
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
     comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id") 
-    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='')
+    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
 
 class Like(models.Model):
     items = models.ForeignKey(LikeInbox, related_name='like_items', on_delete=models.CASCADE)

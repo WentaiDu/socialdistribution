@@ -26,7 +26,7 @@ function Login() {
   const [openFailureAlert, setOpenFailureAlert] = useState(false);
   
   function handleSignup() {
-    history.push("/Signup");
+    history.push("/signup");
   }
 
   function handleLogin() {

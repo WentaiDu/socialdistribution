@@ -1,43 +1,50 @@
 from django.db.models.query import QuerySet
 from django.http.response import Http404
+from authors import pagination
 from authors.models import *
 from authors.serializers import *
 from rest_framework import generics
-from authors.pagination import AuthorPagination,CommentPagination
+from authors.pagination import *
 from rest_framework.response import Response
 from rest_framework import status
 from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
+from rest_framework import permissions
 
-class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-    def post(self, request):
-        displayName = request.data["displayName"]
-        password = request.data["password"]
-        user = authenticate(displayName=displayName, password=password)
-        if user is not None:
-            login(request,user)
-            response = {
-                'detail': 'User logs in successfully!',
-                'id': user.id,
-            }
-            return Response(response, status=status.HTTP_200_OK)
+# class LoginAPI(generics.GenericAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = LoginSerializer
+#     def post(self, request):
+#         displayName = request.data["username"]
+#         password = request.data["password"]
+#         user = authenticate(displayName=displayName, password=password)
+#         if user is not None:
+#             login(request,user)
+#             response = {
+#                 'detail': 'User logs in successfully!',
+#                 'id': user.id,
+#             }
+#             return Response(response, status=status.HTTP_200_OK)
+#         else:
+#             return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
+
+class SignupAPI(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        author = {}
+        author["type"] = 'author'
+        author['host'] = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
+        author['url'] = request.getRequestURL()
+        author['github'] = "http://github.com/"+author.github
+        serializer = AuthorSerializer(data=author)
+        if serializer.is_valid():
+            author.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         else:
-            return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
-
-class Signup(generics.CreateAPIView):
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        author = self.perform_create(serializer)
-        author.type = "author"
-        author.host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
-        author.url = request.getRequestURL()
-        author.github = "http://github.com/"+author.github
-        author.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            print(serializer.errors)
 
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
@@ -55,8 +62,16 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     pagination_class = CommentPagination
 
+    # def post(self,request):
+    #     try:
+    #         if request.data['type'] == comment:
+                
+
+        
+
+
 class InboxList(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
+    #permission_classes = [permissions.AllowAny]
     
     def get_inbox(self,author_id,request):
         try:
