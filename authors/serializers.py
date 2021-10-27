@@ -6,9 +6,9 @@ class AuthorSerializer(serializers.ModelSerializer):
       model = Author
       fields = ['author_type','author_id','host','displayName','url','github','profileImage']
 
-class LoginSerializer(serializers.Serializer):
-    displayName = serializers.CharField()
-    password = serializers.CharField()
+# class LoginSerializer(serializers.Serializer):
+#     username = serializers.CharField()
+#     password = serializers.CharField()
     
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,11 +30,6 @@ class PostTextSerializer(serializers.ModelSerializer):
         ,'post_author','comments','published','unlisted']
 
 
-class InboxSerializer(serializers.ModelSerializer):
-    items = PostTextSerializer(many=True,read_only=True)
-    class Meta:
-        model = Comment
-        fields = '__all__'
 class LikeSerializer(serializers.ModelSerializer):
     # type is only provided to satisfy API format
     #type = serializers.CharField(default="Like", source="get_api_type", read_only=True)
@@ -50,3 +45,25 @@ class LikeSerializer(serializers.ModelSerializer):
         #     "author",
         #     "object"
         # ]
+
+
+class InboxPostSerializer(serializers.ModelSerializer):
+    post_items = PostTextSerializer(many=True,read_only=True)
+    class Meta:
+        model = PostInbox
+        fields = '__all__'
+
+
+class InboxLikeSerializer(serializers.ModelSerializer):
+    like_items = LikeSerializer(many=True,read_only=True)
+    class Meta:
+        model = LikeInbox
+        fields = '__all__'
+
+
+# class InboxFollowSerializer(serializers.ModelSerializer):
+#     follow_items = FollowSerializer(many=True,read_only=True)
+#     class Meta:
+#         model = FollowInbox
+#         fields = '__all__'
+

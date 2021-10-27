@@ -74,12 +74,18 @@ export default function SignUp() {
       }
     function handleSubmit() {
         axios
-            .post('http://localhost:8000/signup/', {
-            displayName: displayName,
-            password: password,
-            github: github,
-            // profileImage: profileImage,
-            })
+          .post(`http://127.0.0.1:8000/signup/`, {
+          displayName: displayName,
+          password: password,
+          github: github,
+          profileImage: profileImage,
+          })
+          .then((res) => {
+          console.log(res);
+          console.log(res.data);
+          })
+          .catch((res) => {
+          });
         history.push("");
         }
 
