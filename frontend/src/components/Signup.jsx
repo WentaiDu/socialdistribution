@@ -22,6 +22,54 @@ export default function SignUp() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
     const [profileImage, setProfileImage] = useState("");
+    const [errorStates, setErrorStates] = useState({
+        usernameError: false,
+        passwordError: false,
+        confirmPasswordError: false,
+      });
+    const [errorHelper, setErrorHelper] = useState({
+        usernameHelper: null,
+        passwordHelper: null,
+        confirmPasswordHelper: null,
+    });
+    const handleBlurs = (type) => {
+        if (type === "usernameBlur"){
+            if (displayName === "") {
+                setErrorStates({ ...errorStates, usernameError: true });
+                setErrorHelper({
+                ...errorHelper,
+                usernameHelper: "Username is required",
+                });
+            } else {
+                setErrorStates({ ...errorStates, usernameError: false });
+                setErrorHelper({ ...errorHelper, usernameHelper: null });
+            }
+        } 
+        if (type === "passwordBlur") {
+            if (password === "") {
+                setErrorStates({ ...errorStates, passwordError: true });
+                setErrorHelper({
+                ...errorHelper,
+                passwordHelper: "Password is required",
+                });
+            } else {
+                setErrorStates({ ...errorStates, passwordError: false });
+                setErrorHelper({ ...errorHelper, passwordHelper: null });
+            }
+        } 
+        if (type === "passwordBlur") {
+            if (confirmPassword === "") {
+                setErrorStates({ ...errorStates, confirmPasswordError: true });
+                setErrorHelper({
+                ...errorHelper,
+                confirmPasswordHelper: "Please confirm password",
+                });
+            } else {
+                setErrorStates({ ...errorStates, confirmPasswordError: false });
+                setErrorHelper({ ...errorHelper, passwordHelper: null });
+            }
+        }
+    };
     function handleLogin() {
         history.push("");
       }
@@ -39,6 +87,7 @@ export default function SignUp() {
             })
             .catch((res) => {
             });
+        history.push("");
         }
 
   return (
@@ -62,7 +111,11 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
               <TextField required id="displayName" label="displayName" variant="outlined" value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}/>
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    error={errorStates.usernameError}
+                    helperText={errorHelper.usernameHelper}
+                    onBlur={(e) => handleBlurs("usernameBlur")}
+              />
               </Grid>
               <Grid item xs={12} sm={6}>
               <TextField required id="github" label="github" variant="outlined" value={github}
@@ -74,6 +127,9 @@ export default function SignUp() {
                   fullWidth
                   id="password" type="password"label="password" variant="outlined" value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  error={errorStates.passwordError}
+                  helperText={errorHelper.passwordHelper}
+                  onBlur={(e) => handleBlurs("passwordBlur")}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -82,6 +138,9 @@ export default function SignUp() {
                   fullWidth
                   id="confirmPassword" type="password"label="confirm password" variant="outlined" value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  error={errorStates.confirmPasswordError}
+                  helperText={errorHelper.confirmPasswordHelper}
+                  onBlur={(e) => handleBlurs("confirmPasswordBlur")}
                 />
               </Grid>
             </Grid>
@@ -91,6 +150,12 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSubmit}
+              disabled={
+                displayName === "" ||
+                password === "" ||
+                confirmPassword === "" ||
+                password !== confirmPassword
+              }
             >
               Sign Up
             </Button>
