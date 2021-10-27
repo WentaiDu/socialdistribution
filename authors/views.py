@@ -247,11 +247,13 @@ class ShowFollower(generics.ListAPIView):
                     followers.append(author = Author.objects.get(pk=id))
                 return Response(result)
             except Exception:
-                error = "This user has no followers"
+                error = "This user has no followers!"
                 return Response(error, status=status.HTTP_404_NOT_FOUND)
 
-class ModifyFollower(generics.RetrieveUpdateDestroyAPIView):
-
+class ModifyFollowerDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'author_id1'
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
     def delete(self, request, author_id1, author_id2):
         pass
 
