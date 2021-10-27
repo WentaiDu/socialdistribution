@@ -34,10 +34,11 @@ class SignupAPI(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         print(request.data)
         author = {}
-        author["type"] = 'author'
+        author["author_type"] = 'author'
         author['host'] = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
         author['url'] = request.getRequestURL()
         author['github'] = "http://github.com/"+author.github
+        author['profileImage'] = author.profileImage
         serializer = AuthorSerializer(data=author)
         if serializer.is_valid():
             author.save()
