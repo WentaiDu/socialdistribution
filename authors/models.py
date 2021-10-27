@@ -12,6 +12,7 @@ class Author(AbstractUser):
   url = models.URLField()
   github = models.CharField(null = True,blank=False, max_length=50)
   profileImage = models.URLField()
+  myList = models.TextField(null=True)
 
   USERNAME_FIELD = 'displayName'
   REQUIRED_FIELDS = ['username']
@@ -73,6 +74,3 @@ class Like(models.Model):
     type = models.CharField(max_length=100, default="", blank=False)
     like_author = models.OneToOneField(Author,on_delete=models.CASCADE,verbose_name="author")
     object = models.URLField()
-
-class Follower(models.Model):
-    author_id = models.UUIDField(primary_key = True, default = uuid.uuid4)

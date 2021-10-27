@@ -7,6 +7,7 @@ from rest_framework import status
 from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
+import simplejson as json
 
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -234,7 +235,17 @@ class LikedList(APIView):
         return Response(response)
 
 class Follower(generics.ListAPIView):
-    queryset = Follower.objects.all()
-    lookup_field = 'author_id'
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+    def get(self, request, author_id):
+        author = Author.objects.get(pk=author_id)
+        followers = []
+        result = {"type":"followers","items":followers}
+        if author:
+            try:
+                jsonDec = json.decoder.JSONDecoder()
+                temp_list = jsonDec.decode(author.followers)
+                for id in temp_list:
+                    followers.append(author = Author.objects.get(pk=id))
+                return Response(result)
+            except Exception:
+                error = "This user has no followers"
+                return Response(error, status=status.HTTP_404_NOT_FOUND)
