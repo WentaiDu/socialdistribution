@@ -34,6 +34,7 @@ class SignupAPI(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         print(request.data)
         author = {}
+        author['username'] = request.data['username']
         author['displayName'] = request.data['displayName']
         #author['password'] = request.data['password']
         author["author_type"] = 'author'
@@ -47,7 +48,6 @@ class SignupAPI(generics.CreateAPIView):
             new_author = Author.objects.filter(displayName=author['displayName'])
             id = author_serializer.data['author_id']
             new_author.update(url=author['url']+id)
-            #headers = self.get_success_headers(serializer.data)
             response = {
                 'detail':'User created successfully!'
             }
