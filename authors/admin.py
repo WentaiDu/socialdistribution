@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
       (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                      'groups', 'user_permissions')}),
       (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        (_('user_info'), {'fields': ('host', 'url','github','profileImage')}),
+        (_('user_info'), {'fields': ('host', 'url','github')}),
   )
   add_fieldsets = (
       (None, {
@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
           'fields': ('displayName', 'password1', 'password2'),
       }),
   )
-  list_display = ['displayName', 'author_type', 'author_id', 'is_staff','host', 'url','github','profileImage']
+  list_display = ['displayName', 'author_type', 'author_id', 'is_staff','host', 'url','github']
   search_fields = ('displayName', 'author_type', 'author_id')
   ordering = ('displayName',)
 admin.site.register(Author, UserAdmin)

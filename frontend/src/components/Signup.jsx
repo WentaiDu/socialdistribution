@@ -84,7 +84,7 @@ export default function SignUp() {
         }
         console.log("Target is",target)
         axios
-          .post(`http://127.0.0.1:8000/signup/`, target)
+          .post(`http://127.0.0.1:8000/authors/`, target)
           .then((res) => {
           console.log(res);
           console.log(res.data);

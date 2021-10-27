@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 
 # class LoginAPI(generics.GenericAPIView):
-#     permission_classes = [AllowAny]
+#     permission_classes = [permissions.AllowAny]
 #     serializer_class = LoginSerializer
 #     def post(self, request):
 #         displayName = request.data["username"]
@@ -34,18 +34,26 @@ class SignupAPI(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         print(request.data)
         author = {}
+        author['displayName'] = request.data['displayName']
+        #author['password'] = request.data['password']
         author["author_type"] = 'author'
-        author['host'] = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()
-        author['url'] = request.getRequestURL()
-        author['github'] = "http://github.com/"+author.github
-        author['profileImage'] = author.profileImage
-        serializer = AuthorSerializer(data=author)
-        if serializer.is_valid():
-            author.save()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        else:
-            print(serializer.errors)
+        author['host'] = 'http://'+request.get_host()+'/'
+        author['url'] = request.build_absolute_uri()
+        author['github'] = "http://github.com/"+request.data['github']
+        # author['profileImage'] = author.profileImage
+        author_serializer = AuthorSerializer(data=author)
+        if author_serializer.is_valid():
+            author_serializer.save()
+            new_author = Author.objects.filter(displayName=author['displayName'])
+            id = author_serializer.data['author_id']
+            new_author.update(url=author['url']+id)
+            #headers = self.get_success_headers(serializer.data)
+            response = {
+                'detail':'User created successfully!'
+            }
+            return Response(response, status=status.HTTP_201_CREATED)
+        else :
+            print(author_serializer.errors)
 
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
