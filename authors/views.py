@@ -109,6 +109,110 @@ class LikesCommentList(APIView):
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
 
+    
+    
+class PostList(generics.ListCreateAPIView):
+    # permission=[permissions.IsAuthenticatedOrReadOnly]
+
+    queryset = Post.objects.all()
+    serializer_class=PostSerializer
+
+    def get_queryset(self):
+        return self.posts
+
+
+    def get(self, request, author_id):
+
+        try:
+            check=Author.objects.get(pk=author_id)
+            self.posts = Post.objects.filter(author_id=author_id)
+
+        except:
+            err_msg='Author does not exist.'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+
+        response = super().list(request,author_id)
+        return response
+
+    def post(self,request,author_id):
+        post_id=uuid.uuid4()
+        return PostDetail().put(request,author_id,post_id)
+
+
+
+
+class PostDetail(generics.RetrieveUpdateAPIView):
+    lookup_field = 'post_id'
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    def get(self,request,author_id,post_id):
+        try:
+            author = Author.objects.get(pk=author_id)
+            post = Post.objects.get(pk = post_id)
+            if post and author:
+                if post.visibility != 'PUBLIC':
+                    return Response(status=status.HTTP_403_FORBIDDEN)
+                else:
+                    serializer_class = PostSerializer(post, many=False)
+                    return Response(serializer_class.data)
+            else:
+                raise Exception
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    def post(self,request,author_id,post_id):
+        # permission_class=[permissions.IsAuthenticatedOrReadOnly]
+        try:
+
+            author = Author.objects.get(pk=author_id)
+            post = Post.objects.get(pk = post_id)
+            if author and post:
+                serializer = PostSerializer(post, data=request.data, partial=True)
+                if serializer.is_valid():
+                    post=serializer.save()
+                    return Response(serializer.data)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                raise Exception
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    def delete(self,request,author_id, post_id):
+        try:
+            author = Author.objects.get(pk=author_id)
+            post = Post.objects.get(pk = post_id)
+            if author and post:
+                post.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                raise Exception
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+    def put(self, request,author_id,post_id):
+        try:
+            author = Author.objects.get(pk=author_id)
+            try:
+                post=Post.objects.get(pk=post_id)
+                err_msg = "Post already exists"
+                return Response(err_msg, status=status.HTTP_409_CONFLICT)
+            except:
+                serializer = PostSerializer(data=request.data)
+                if serializer.is_valid():
+                    post=Post.objects.create(author=author,post_id=post_id)
+                    post.save()
+                    return Response(serializer.data)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            err_msg="Author is not found"
+            return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
 
 class LikedList(APIView):
     
