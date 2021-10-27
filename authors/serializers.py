@@ -4,7 +4,7 @@ from authors.models import *
 class AuthorSerializer(serializers.ModelSerializer):
   class Meta:
       model = Author
-      fields = ['username','password','author_type','author_id','host','displayName','url','github','password']
+      fields = ['username','password','author_type','author_id','host','displayName','url','github']
 
 # class LoginSerializer(serializers.Serializer):
 #     username = serializers.CharField()

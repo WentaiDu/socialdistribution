@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 
+
 # class LoginAPI(generics.GenericAPIView):
 #     permission_classes = [permissions.AllowAny]
 #     serializer_class = LoginSerializer
@@ -45,6 +46,9 @@ class SignupAPI(generics.CreateAPIView):
         author_serializer = AuthorSerializer(data=author)
         if author_serializer.is_valid():
             author_serializer.save()
+            new_author = Author.objects.get(displayName=author['displayName'])
+            new_author.set_password(author['password'])
+            new_author.save()
             new_author = Author.objects.filter(displayName=author['displayName'])
             id = author_serializer.data['author_id']
             new_author.update(url=author['url']+id)
