@@ -234,7 +234,7 @@ class LikedList(APIView):
         }
         return Response(response)
 
-class Follower(generics.ListAPIView):
+class ShowFollower(generics.ListAPIView):
     def get(self, request, author_id):
         author = Author.objects.get(pk=author_id)
         followers = []
@@ -249,3 +249,25 @@ class Follower(generics.ListAPIView):
             except Exception:
                 error = "This user has no followers"
                 return Response(error, status=status.HTTP_404_NOT_FOUND)
+
+class ModifyFollower(generics.RetrieveUpdateDestroyAPIView):
+
+    def delete(self, request, author_id1, author_id2):
+        pass
+
+    def put(self, request, author_id1, author_id2):
+        try:
+            author = Author.objects.get(pk=author_id1)
+            jsonDec = json.decoder.JSONDecoder()
+            temp_list = jsonDec.decode(author.followers)
+            temp_list.append(author_id2)
+            author.followers = json.dumps(temp_list)
+            author.save()
+        except Exception as e:
+            return Response(e)
+
+    def get(self, request, author_id1, author_id2):
+        author = Author.objects.get(pk=author_id1)
+        jsonDec = json.decoder.JSONDecoder()
+        temp_list = jsonDec.decode(author.followers)
+        return Response(author_id2 in temp_list)

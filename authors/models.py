@@ -12,7 +12,7 @@ class Author(AbstractUser):
   url = models.URLField()
   github = models.CharField(null = True,blank=False, max_length=50)
   profileImage = models.URLField()
-  myList = models.TextField(null=True)
+  followers = models.TextField(null=True)
 
   USERNAME_FIELD = 'displayName'
   REQUIRED_FIELDS = ['username']
