@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { useRef,useState } from "react";
 import { styled } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
@@ -124,9 +122,6 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
           <label htmlFor="icon-button-file">
             <Input ref={imageHook} accept="image/*" id="icon-button-file" type="file" />
             <IconButton color="primary" aria-label="upload picture" component="span">
@@ -138,7 +133,7 @@ export default function SignUp() {
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-              <TextField required id="username" label="username" variant="outlined" value={displayName}
+              <TextField required id="username" label="username" variant="outlined" value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     error={errorStates.usernameError}
                     helperText={errorHelper.usernameHelper}
