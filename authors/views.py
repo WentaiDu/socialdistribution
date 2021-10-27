@@ -12,22 +12,22 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 
-# class LoginAPI(generics.GenericAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     serializer_class = LoginSerializer
-#     def post(self, request):
-#         displayName = request.data["username"]
-#         password = request.data["password"]
-#         user = authenticate(displayName=displayName, password=password)
-#         if user is not None:
-#             login(request,user)
-#             response = {
-#                 'detail': 'User logs in successfully!',
-#                 'id': user.id,
-#             }
-#             return Response(response, status=status.HTTP_200_OK)
-#         else:
-#             return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
+class LoginAPI(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoginSerializer
+    def post(self, request):
+        username = request.data["username"]
+        password = request.data["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request,user)
+            response = {
+                'detail': 'User logs in successfully!',
+                'id': Author.id,
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
 
 class SignupAPI(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
@@ -45,7 +45,7 @@ class SignupAPI(generics.CreateAPIView):
         author_serializer = AuthorSerializer(data=author)
         if author_serializer.is_valid():
             author_serializer.save()
-            new_author = Author.objects.filter(displayName=author['displayName'])
+            new_author = Author.objects.filter(username=author['username'])
             id = author_serializer.data['author_id']
             new_author.update(url=author['url']+id)
             response = {

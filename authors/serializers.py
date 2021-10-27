@@ -4,11 +4,11 @@ from authors.models import *
 class AuthorSerializer(serializers.ModelSerializer):
   class Meta:
       model = Author
-      fields = ['username','password','author_type','author_id','host','displayName','url','github','password']
+      fields = ['username','author_type','author_id','host','displayName','url','github','password']
 
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField()
-#     password = serializers.CharField()
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
     
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
