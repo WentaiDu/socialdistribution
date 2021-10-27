@@ -6,8 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 
 class Author(AbstractUser):
   author_type = models.CharField(max_length=30,default="author", blank=False)
-  user_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
-  author_id = models.URLField()
+  author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
   displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
   host = models.CharField(max_length=50)
   url = models.URLField()

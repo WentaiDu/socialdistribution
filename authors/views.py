@@ -36,7 +36,7 @@ class SignupAPI(generics.CreateAPIView):
         author = {}
         author['username'] = request.data['username']
         author['displayName'] = request.data['displayName']
-        #author['password'] = request.data['password']
+        author['password'] = request.data['password']
         author["author_type"] = 'author'
         author['host'] = 'http://'+request.get_host()+'/'
         author['url'] = request.build_absolute_uri()
