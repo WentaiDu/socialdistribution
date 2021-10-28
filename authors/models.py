@@ -5,15 +5,13 @@ import uuid
 from django.contrib.contenttypes.models import ContentType
 
 class Author(AbstractUser):
-  author_type = models.CharField(max_length=30,default="author", blank=False)
-  author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
-  displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
-  host = models.CharField(max_length=50)
-  url = models.URLField()
-  github = models.CharField(null = True,blank=False, max_length=50)
-
-#   profileImage = models.ImageField(upload_to = 'media', blank = True, null = True)
-  #USERNAME_FIELD = 'username'
+    author_type = models.CharField(max_length=30,default="author", blank=False)
+    author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
+    displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
+    host = models.CharField(max_length=50)
+    url = models.CharField(max_length=100000,default='',blank=True,null=True)
+    github = models.CharField(null = True,blank=False, max_length=50)
+    profileImage = models.ImageField(upload_to = 'media', blank = True, null = True)
 #   def photo_url(self):
 #     if self.photo and hasattr(self.photo, 'url'):
 #         return self.photo.url
