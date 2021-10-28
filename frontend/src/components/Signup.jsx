@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from "react";
-import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -11,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
 export default function SignUp() {
     const [state,setState] = useState({
       file: null
@@ -172,9 +170,8 @@ export default function SignUp() {
                     onChange={(e) => setGithub(e.target.value)}/>
               </Grid>
             </Grid>
-
+            <br/>
             <input type="file" name="file" onChange={e => handleFile(e)} />
-            {/* <button onClick={e => handleUpload(e)}>Upload</button> */}
 
             <Button
               type="submit"
