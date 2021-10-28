@@ -1,1 +1,14 @@
-ds
+<html><body>
+<h1>Profiles</h1>
+<!-- 实现循环的方式，serializer是Key,得到的是对应传过来的value，也就是serializer.class -->
+<ul>
+    {% for attributes in serializer %}
+    <li>{{ serializer }}</li>
+    {% endfor %}
+</ul>
+<!-- 这个serializer就是传过来的dic了，serializer.type,serializer.content对应不同的值 -->
+<ul>
+    <li>{{ serializer}}</li>
+</ul>
+  
+</body></html>
