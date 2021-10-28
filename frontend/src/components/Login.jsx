@@ -7,11 +7,13 @@ import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import "./common.css";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function Login() {
+  
   const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   const history = useHistory();
   const [username, setUsername] = useState("");
@@ -89,6 +91,7 @@ function Login() {
           alignItems: "center",
           height: "100vh",
           justifyContent: "center",
+          backgroundImage:"login.jpg"
         }}
       >
         <Card
