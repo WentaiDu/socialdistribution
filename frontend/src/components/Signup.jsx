@@ -17,8 +17,14 @@ const Input = styled('input')({
 });
 
 export default function SignUp() {
-
-    const imageHook = useRef("");
+    const [state,setState] = useState({
+      selectedFile: null
+    });
+    const handleInputChange = async (event) => {
+      await setState({
+        [event.target.name]: event.target.files[0]
+      });
+    };
     const history = useHistory();
     const [username,setUsername] = useState("");
     const [displayName, setDisplayName] = useState("");
@@ -90,16 +96,17 @@ export default function SignUp() {
     function handleLogin() {
         history.push("");
       }
-    function handleSubmit() {
-        const target = new FormData()
-        target.append("username",username)
-        target.append("displayName",displayName)
-        target.append("password",password)
-        target.append("github",github)
-        target.append("profileImage",imageHook)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    // function handleSubmit() {
+        const target = new FormData(e.currentTarget)
         console.log(target.get("profileImage"))
         axios
-          .post(`http://127.0.0.1:8000/author/`, target)
+          .post(`http://127.0.0.1:8000/author/`, target,{
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((res) => {
           console.log(res);
           console.log(res.data);
@@ -166,8 +173,8 @@ export default function SignUp() {
 
             <Grid item >
             <label htmlFor="contained-button-file">
-                <Input ref={imageHook} accept="image/*" id="contained-button-file" multiple type="file" />
-                <Button variant="contained" component="span">
+                <Input type="file" onChange={handleInputChange} />
+                <Button variant="contained" component="span" accept="image/*" id="contained-button-file">
                 Upload
                 </Button>
              </label>
