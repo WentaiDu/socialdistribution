@@ -2,8 +2,6 @@ from django.urls import path,re_path
 from django.conf.urls import include
 from authors import views
 from rest_framework.authtoken import views as drf_auth_views
-from django.conf.urls.static import static
-from django.conf import settings
 
 app_name = 'authors'
 urlpatterns = [

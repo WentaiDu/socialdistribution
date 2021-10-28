@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useRef,useState } from "react";
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,20 +12,19 @@ import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import ImageUploader from "react-images-upload";
-
+const Input = styled('input')({
+  display: 'none',
+});
 
 export default function SignUp() {
-  const [pictures, setPictures] = useState([]);
-  const onDrop = picture => {
-    setPictures([pictures, picture]);
-  };
+
+    const imageHook = useRef("");
     const history = useHistory();
     const [username,setUsername] = useState("");
     const [displayName, setDisplayName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
-
     const [errorStates, setErrorStates] = useState({
         usernameError: false,
         displayNameError: false,
@@ -91,13 +91,12 @@ export default function SignUp() {
         history.push("");
       }
     function handleSubmit() {
-        const target = {
-          username:username,
-          displayName: displayName,
-          password: password,
-          github: github,
-          // profileImage: pictures
-        }
+        const target = new FormData()
+        target.append("username",username)
+        target.append("displayName",displayName)
+        target.append("password",password)
+        target.append("github",github)
+        target.append("profileImage",imageHook)
         console.log("Target is",target)
         axios
           .post(`http://127.0.0.1:8000/author/`, target)
@@ -166,17 +165,12 @@ export default function SignUp() {
             </Grid>
 
             <Grid item >
-              <ImageUploader
-                withIcon={false}
-                withPreview={true}
-                label=""
-                buttonText="Upload Images"
-                onChange={onDrop}
-                imgExtension={[".jpg", ".jpeg", ".png"]}
-                maxFileSize={1048576}
-                fileSizeError=" file size is too big"
-                singleImage={true}
-              />
+            <label htmlFor="contained-button-file">
+                <Input ref={imageHook} accept="image/*" id="contained-button-file" multiple type="file" />
+                <Button variant="contained" component="span">
+                Upload
+                </Button>
+             </label>
             </Grid>
 
             <Button
