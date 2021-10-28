@@ -52,7 +52,7 @@ class Post(models.Model):
 
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
-    post_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
+    type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
     post_id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     source = models.URLField(default="")
