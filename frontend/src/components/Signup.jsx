@@ -97,7 +97,7 @@ export default function SignUp() {
         target.append("password",password)
         target.append("github",github)
         target.append("profileImage",imageHook)
-        console.log("Target is",target)
+        console.log(target.get("profileImage"))
         axios
           .post(`http://127.0.0.1:8000/author/`, target)
           .then((res) => {
