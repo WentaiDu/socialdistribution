@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -118,7 +119,7 @@ export default function SignUp() {
 
   return (
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
+        <CssBaseline/>
         <Box
           sx={{
             marginTop: 8,
@@ -128,6 +129,15 @@ export default function SignUp() {
           }}
         >
           <Box component="form" noValidate sx={{ mt: 3 }}>
+          <Card
+          sx={{
+            minWidth: 100,
+            align: "center",
+            padding: "30px",
+            borderRadius: 7,
+          }}
+        >
+
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
               <TextField required id="username" label="username" variant="outlined" value={username}
@@ -202,6 +212,7 @@ export default function SignUp() {
                 </Typography>
               </Grid>
             </Grid>
+            </Card>
           </Box>
         </Box>
       </Container>
