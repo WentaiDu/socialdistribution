@@ -11,14 +11,12 @@ class Author(AbstractUser):
   host = models.CharField(max_length=50)
   url = models.URLField()
   github = models.CharField(null = True,blank=False, max_length=50)
-
-#   profileImage = models.ImageField(upload_to = 'media', blank = True, null = True)
-  #USERNAME_FIELD = 'username'
-#   def photo_url(self):
-#     if self.photo and hasattr(self.photo, 'url'):
-#         return self.photo.url
-#     else:
-#         return '/media/user.jpg'
+  profileImage = models.ImageField(upload_to = 'media', blank = True, null = True)
+  def photo_url(self):
+    if self.photo and hasattr(self.photo, 'url'):
+        return self.photo.url
+    else:
+        return '/media/user.jpg'
 
 class PostInbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)

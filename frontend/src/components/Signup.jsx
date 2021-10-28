@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useRef,useState } from "react";
-import { styled } from '@mui/material/styles';
+import { useState } from "react";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,21 +10,21 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera'
+import ImageUploader from "react-images-upload";
 
-const Input = styled('input')({
-  display: 'none',
-});
 
 export default function SignUp() {
+  const [pictures, setPictures] = useState([]);
+  const onDrop = picture => {
+    setPictures([pictures, picture]);
+  };
     const history = useHistory();
     const [username,setUsername] = useState("");
     const [displayName, setDisplayName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
-    const imageHook = useRef("");
+
     const [errorStates, setErrorStates] = useState({
         usernameError: false,
         displayNameError: false,
@@ -97,7 +96,7 @@ export default function SignUp() {
           displayName: displayName,
           password: password,
           github: github,
-          profileImage: imageHook.current.value,
+          profileImage: pictures
         }
         console.log("Target is",target)
         axios
@@ -122,14 +121,6 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <label htmlFor="icon-button-file">
-            <Input ref={imageHook} accept="image/*" id="icon-button-file" type="file" />
-            <IconButton color="primary" aria-label="upload picture" component="span">
-              <PhotoCamera />
-            </IconButton>
-          </label>
-
-
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -173,6 +164,21 @@ export default function SignUp() {
                     onChange={(e) => setGithub(e.target.value)}/>
               </Grid>
             </Grid>
+
+            <Grid item >
+              <ImageUploader
+                withIcon={false}
+                withPreview={true}
+                label=""
+                buttonText="Upload Images"
+                onChange={onDrop}
+                imgExtension={[".jpg", ".jpeg", ".png"]}
+                maxFileSize={1048576}
+                fileSizeError=" file size is too big"
+                singleImage={true}
+              />
+            </Grid>
+
             <Button
               type="submit"
               fullWidth
