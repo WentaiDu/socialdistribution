@@ -96,11 +96,11 @@ export default function SignUp() {
           displayName: displayName,
           password: password,
           github: github,
-          profileImage: pictures
+          // profileImage: pictures
         }
         console.log("Target is",target)
         axios
-          .post(`http://127.0.0.1:8000/authors/`, target)
+          .post(`http://127.0.0.1:8000/author/`, target)
           .then((res) => {
           console.log(res);
           console.log(res.data);
