@@ -18,13 +18,16 @@ const Input = styled('input')({
 
 export default function SignUp() {
     const [state,setState] = useState({
-      selectedFile: null
+      file: null
     });
-    const handleInputChange = async (event) => {
-      await setState({
-        [event.target.name]: event.target.files[0]
-      });
-    };
+    const handleFile = (e) => {
+      let file = e.target.files[0];
+      setState({ file });
+    }
+    const handleUpload = async (e) => {
+      // console.log(state.file);
+      await uploadImage(state.file);
+    }
     const history = useHistory();
     const [username,setUsername] = useState("");
     const [displayName, setDisplayName] = useState("");
@@ -96,10 +99,15 @@ export default function SignUp() {
     function handleLogin() {
         history.push("");
       }
-    const handleSubmit = (e) => {
-        e.preventDefault();
+      const uploadImage = async file => {
     // function handleSubmit() {
-        const target = new FormData(e.currentTarget)
+        const target = new FormData()
+        target.append("username",username)
+        target.append("displayName",displayName)
+        target.append("password",password)
+        target.append("github",github)
+        target.append("profileImage",file)
+        console.log(target.get("username"))
         console.log(target.get("profileImage"))
         axios
           .post(`http://127.0.0.1:8000/author/`, target,{
@@ -171,16 +179,10 @@ export default function SignUp() {
               </Grid>
             </Grid>
 
-            <Grid item >
-            <label htmlFor="contained-button-file">
-                <Input type="file" onChange={handleInputChange} />
-                <Button variant="contained" component="span" accept="image/*" id="contained-button-file">
-                Upload
-                </Button>
-             </label>
-            </Grid>
+            <input type="file" name="file" onChange={e => handleFile(e)} />
+            <button onClick={e => handleUpload(e)}>Upload</button>
 
-            <Button
+            {/* <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -195,7 +197,7 @@ export default function SignUp() {
               onClick={handleSubmit}
             >
               Sign Up
-            </Button>
+            </Button> */}
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Typography color="textSecondary" variant="body1" align="center">
