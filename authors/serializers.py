@@ -56,7 +56,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class InboxPostSerializer(serializers.ModelSerializer):
-    post_items = PostTextSerializer(many=True,read_only=True)
+    post_items = PostSerializer(many=True,read_only=True)
     class Meta:
         model = PostInbox
         fields = '__all__'
