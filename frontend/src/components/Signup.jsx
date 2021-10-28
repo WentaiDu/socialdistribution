@@ -1,31 +1,34 @@
 import * as React from 'react';
-import { useRef,useState } from "react";
+import { useState } from "react";
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera'
-
-const Input = styled('input')({
-  display: 'none',
-});
 
 export default function SignUp() {
+    const [state,setState] = useState({
+      file: null
+    });
+    const handleFile = (e) => {
+      let file = e.target.files[0];
+      setState({ file });
+    }
+    const handleUpload = async (e) => {
+      await uploadImage(state.file);
+    }
     const history = useHistory();
     const [username,setUsername] = useState("");
     const [displayName, setDisplayName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [github, setGithub] = useState("");
-    const imageHook = useRef("");
     const [errorStates, setErrorStates] = useState({
         usernameError: false,
         displayNameError: false,
@@ -91,17 +94,21 @@ export default function SignUp() {
     function handleLogin() {
         history.push("");
       }
-    function handleSubmit() {
-        const target = {
-          username:username,
-          displayName: displayName,
-          password: password,
-          github: github,
-          profileImage: imageHook.current.value,
-        }
-        console.log("Target is",target)
+      const uploadImage = async file => {
+        const target = new FormData()
+        target.append("username",username)
+        target.append("displayName",displayName)
+        target.append("password",password)
+        target.append("github",github)
+        target.append("profileImage",file)
+        console.log(target.get("username"))
+        console.log(target.get("profileImage"))
         axios
-          .post(`http://127.0.0.1:8000/authors/`, target)
+          .post(`http://127.0.0.1:8000/author/`, target,{
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((res) => {
           console.log(res);
           console.log(res.data);
@@ -122,14 +129,6 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <label htmlFor="icon-button-file">
-            <Input ref={imageHook} accept="image/*" id="icon-button-file" type="file" />
-            <IconButton color="primary" aria-label="upload picture" component="span">
-              <PhotoCamera />
-            </IconButton>
-          </label>
-
-
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -173,6 +172,10 @@ export default function SignUp() {
                     onChange={(e) => setGithub(e.target.value)}/>
               </Grid>
             </Grid>
+
+            <input type="file" name="file" onChange={e => handleFile(e)} />
+            {/* <button onClick={e => handleUpload(e)}>Upload</button> */}
+
             <Button
               type="submit"
               fullWidth
@@ -185,7 +188,7 @@ export default function SignUp() {
                 confirmPassword === "" ||
                 password !== confirmPassword
               }
-              onClick={handleSubmit}
+              onClick={e => handleUpload(e)}
             >
               Sign Up
             </Button>
