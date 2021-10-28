@@ -41,7 +41,7 @@ class SignupAPI(generics.CreateAPIView):
             author["author_type"] = 'author'
             author['host'] = 'http://'+request.get_host()+'/'
             author['url'] = request.build_absolute_uri()
-            #author['profileImage'] = request.data['profileImage']
+            author['profileImage'] = request.data['profileImage']
             author['github'] = "http://github.com/"+request.data['github']
         except:
             response = {
