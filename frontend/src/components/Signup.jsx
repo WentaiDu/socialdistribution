@@ -1,20 +1,16 @@
 import * as React from 'react';
-import { useRef,useState } from "react";
+import { useState } from "react";
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import ImageUploader from "react-images-upload";
-const Input = styled('input')({
-  display: 'none',
-});
 
 export default function SignUp() {
     const [state,setState] = useState({
@@ -25,7 +21,6 @@ export default function SignUp() {
       setState({ file });
     }
     const handleUpload = async (e) => {
-      // console.log(state.file);
       await uploadImage(state.file);
     }
     const history = useHistory();
@@ -100,7 +95,6 @@ export default function SignUp() {
         history.push("");
       }
       const uploadImage = async file => {
-    // function handleSubmit() {
         const target = new FormData()
         target.append("username",username)
         target.append("displayName",displayName)
@@ -180,9 +174,9 @@ export default function SignUp() {
             </Grid>
 
             <input type="file" name="file" onChange={e => handleFile(e)} />
-            <button onClick={e => handleUpload(e)}>Upload</button>
+            {/* <button onClick={e => handleUpload(e)}>Upload</button> */}
 
-            {/* <Button
+            <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -194,10 +188,10 @@ export default function SignUp() {
                 confirmPassword === "" ||
                 password !== confirmPassword
               }
-              onClick={handleSubmit}
+              onClick={e => handleUpload(e)}
             >
               Sign Up
-            </Button> */}
+            </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Typography color="textSecondary" variant="body1" align="center">
