@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authors',
     'corsheaders',
+    'drf_yasg',
 ]
 AUTH_USER_MODEL ='authors.Author'
 REST_FRAMEWORK = {

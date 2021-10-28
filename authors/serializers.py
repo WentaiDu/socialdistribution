@@ -1,14 +1,19 @@
+from django.db.models import fields
 from rest_framework import serializers
 from authors.models import *
 
 class AuthorSerializer(serializers.ModelSerializer):
   class Meta:
       model = Author
-      fields = ['username','password','author_type','author_id','host','displayName','url','github']
+      fields = ['username','password','author_type','author_id','host','displayName','url','github','profileImage']
 
-class LoginSerializer(serializers.Serializer):
+class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
+    class Meta:
+        model = Author
+        ref_name = 'LogIn'
+        fields = ['username','password']
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,17 +61,17 @@ class LikeSerializer(serializers.ModelSerializer):
 
 
 class InboxPostSerializer(serializers.ModelSerializer):
-    post_items = PostTextSerializer(many=True,read_only=True)
+    post_items = PostSerializer(many=True,read_only=True)
     class Meta:
         model = PostInbox
         fields = '__all__'
 
 
-class InboxLikeSerializer(serializers.ModelSerializer):
-    like_items = LikeSerializer(many=True,read_only=True)
-    class Meta:
-        model = LikeInbox
-        fields = '__all__'
+# class InboxLikeSerializer(serializers.ModelSerializer):
+#     like_items = LikeSerializer(many=True,read_only=True)
+#     class Meta:
+#         model = LikeInbox
+        # fields = '__all__'
 
 
 # class InboxFollowSerializer(serializers.ModelSerializer):
