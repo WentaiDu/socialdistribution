@@ -35,21 +35,26 @@ class SignupAPI(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = AuthorSerializer
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        author = {}
-        author['username'] = request.data['username']
-        author['displayName'] = request.data['displayName']
-        author['password'] = request.data['password']
-        author["author_type"] = 'author'
-        author['host'] = 'http://'+request.get_host()+'/'
-        author['url'] = request.build_absolute_uri()
-        #author['profileImage'] = request.data['profileImage']
-        author['github'] = "http://github.com/"+request.data['github']
+        try:
+            author = {}
+            author['username'] = request.data['username']
+            author['displayName'] = request.data['displayName']
+            author['password'] = request.data['password']
+            author["author_type"] = 'author'
+            author['host'] = 'http://'+request.get_host()+'/'
+            author['url'] = request.build_absolute_uri()
+            print(author['url'])
+            #author['profileImage'] = request.data['profileImage']
+            author['github'] = "http://github.com/"+request.data['github']
+        except:
+            response = {
+                'detail': 'Bad Input!'
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
         # author['profileImage'] = author.profileImage
         author_serializer = AuthorSerializer(data=author)
         if author_serializer.is_valid():
             author_serializer.save()
-            print('check', author_serializer)
             new_author = Author.objects.get(username=author['username'])
             new_author.set_password(author['password'])
             new_author.save()
@@ -61,7 +66,10 @@ class SignupAPI(generics.CreateAPIView):
             }
             return Response(response, status=status.HTTP_201_CREATED)
         else :
-            print(author_serializer.errors)
+            response = {
+                'detail':'User created failed!'
+            }
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
