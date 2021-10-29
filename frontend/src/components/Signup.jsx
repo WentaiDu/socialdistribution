@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from "react";
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -114,6 +113,7 @@ export default function SignUp() {
           .then((res) => {
           console.log(res);
           console.log(res.data);
+
           })
           .catch((res) => {
           });
