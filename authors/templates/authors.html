@@ -10,6 +10,8 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <link rel="stylesheet" href="{% static "css/common.css" %}">
+
+
 </head>
 
 <body>
@@ -102,22 +104,13 @@
 
 
                                 <ul>
-                    {% for i in serializer %}
+                    {% for author in authors %}
                            <div class="weibo">
                                     <div class="weibo_icon">
-                                        <img src="./img/1/head1.jpg" class="weibo_usericon">
+                                        <img src= "{{author.profileImage}}" class="weibo_usericon">
                                     </div>
                                     <div class="weibo_text">
-                                        <h3>Weibo<img style="margin-left: 10px;" src="./img/v7.png" alt=""></h3>
-                                        <p class="weibo_time">from Weibo weibo.com</p>
-                                        <p class="weibo_content">
-                                            {{i.content}}
-                                            <span
-                                                class="activeColor">@Dragon</span>
-                                            <span class="activeColor">#XXXX#</span>，Record your life。 ​​​​</p>
-                                        <div class="imgbox">
-                                            <img src="./img/999/1.png" alt="">
-                                        </div>
+                                        <h3><a href="{% url 'authors:one_author' author.author_id %}">{{author.displayName}}</a><img style="margin-left: 10px;" src="./img/v7.png" alt=""></h3>
                                     </div>
                                     <div class="weibo_operator">
                                         <ul class="weibo_button">
