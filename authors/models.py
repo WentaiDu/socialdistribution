@@ -83,16 +83,9 @@ class Like(models.Model):
     object = models.URLField()
 
 class Follower(models.Model):
-    following = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='following')
-    author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
-
-    author_type = models.CharField(max_length=30,default="author", blank=False)
-    displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
-    host = models.CharField(max_length=50)
-    url = models.CharField(max_length=100000,default='',blank=True,null=True)
-    github = models.CharField(null = True,blank=False, max_length=50)
-    profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
-    status = models.BooleanField(default=False)
+    following = models.ForeignKey(Author,on_delete=models.CASCADE,related_name='following')
+    status = models.BooleanField()
+    id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
 
     def __str__(self):
         return "follower: "+ self.displayName

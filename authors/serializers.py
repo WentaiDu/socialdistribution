@@ -81,9 +81,10 @@ class InboxPostSerializer(serializers.ModelSerializer):
 #         fields = '__all__'
 
 class FollowerSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
     class Meta:
         model = Follower
-        fields = '__all__'
+        fields = ['author', 'following']
 
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:

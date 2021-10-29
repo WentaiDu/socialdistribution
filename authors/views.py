@@ -372,9 +372,13 @@ class LikedList(APIView):
         return Response(response)
 
 class FollowerList(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
-        queryset = Follower.objects.filter(status = True, following=self.kwargs['author_id'])
+
+
+    def get(self, request, author_id):
+        queryset = Follower.objects.filter(status = True, following=author_id)
         serializer = FollowerSerializer(queryset)
+        return Response(serializer.data)
+
         try:
             serializer.validate()
             return Response(serializer.data)
