@@ -12,6 +12,8 @@ import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import "./common.css";
+import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
+import Avatar from '@mui/material/Avatar';
 export default function SignUp() {
     const [state,setState] = useState({
       file: null
@@ -120,24 +122,30 @@ export default function SignUp() {
 
   return (
       <Container component="main" maxWidth="xs">
-        <CssBaseline/>
         <Box
           sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}
-        >
+          }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main',width: 56, height: 56 }}>
+            <AccountCircleTwoToneIcon/>
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Card
-            sx={{
-              minWidth: 100,
-              align: "center",
-              padding: "30px",
-              borderRadius: 7,
+              sx={{
+                minWidth: 100,
+                align: "center",
+                padding: "30px",
+                borderRadius: 7,
             }}>
+
             <Grid container spacing={2}>
+
               <Grid item xs={12} sm={6}>
               <TextField required id="username" label="username" variant="outlined" value={username}
                     onChange={(e) => setUsername(e.target.value)}

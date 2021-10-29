@@ -12,6 +12,7 @@ from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -24,7 +25,7 @@ class LoginAPI(generics.GenericAPIView):
             login(request,user)
             response = {
                 'detail': 'User logs in successfully!',
-                'id': Author.id,
+                'id': user.author_id
             }
             return Response(response, status=status.HTTP_200_OK)
         else:
@@ -42,7 +43,8 @@ class SignupAPI(generics.CreateAPIView):
             author["author_type"] = 'author'
             author['host'] = 'http://'+request.get_host()+'/'
             author['url'] = request.build_absolute_uri()
-            author['profileImage'] = request.data['profileImage']
+            if request.data['profileImage'] != 'null':
+                author['profileImage'] = request.data['profileImage']
             author['github'] = "http://github.com/"+request.data['github']
         except:
             response = {
@@ -70,9 +72,21 @@ class SignupAPI(generics.CreateAPIView):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AuthorList(generics.ListAPIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "authors.html"
+    # context_object_name = "context_authors"
+    # queryset = Author.objects.all()
+    # serializer_class = AuthorSerializer
+    # pagination_class = AuthorPagination
+
+    def get(self,request):
+        authors = Author.objects.all()
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = AuthorSerializer(authors, many=True)
+
+        return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
@@ -88,9 +102,9 @@ class CommentList(generics.ListCreateAPIView):
     # def post(self,request):
     #     try:
     #         if request.data['type'] == comment:
-                
 
-        
+
+
 
 
 class InboxList(generics.GenericAPIView):
@@ -123,7 +137,7 @@ class InboxList(generics.GenericAPIView):
                 inbox_post_serializer.save()
             else:
                 print(inbox_post_serializer.errors)
-                
+
         # if request.data['type'] == 'follow':
         #     items = inbox.data['follow_items']
         #     inbox_follow = {}
@@ -149,13 +163,13 @@ class InboxList(generics.GenericAPIView):
                 inbox_like_serializer.save()
             else:
                 print(inbox_like_serializer.errors)
-    
+
     def delete(self,request,author_id):
         inbox = self.get_inbox(author_id)
         inbox.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-            
+
 
 
 # class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -168,9 +182,9 @@ class InboxList(generics.GenericAPIView):
 #         new_post = request.data
 #         queryset = Inbox.objects.filter(inbox_author=self.request.POST.get("author_id"))
 
-    
-    
-    
+
+
+
 
 # #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
 
@@ -230,7 +244,7 @@ class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'index.html'
+    template_name = 'postlist.html'
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
@@ -264,7 +278,7 @@ class PostList(generics.ListCreateAPIView):
 
 class PostDetail(generics.RetrieveUpdateAPIView):
     '''
-    
+
     '''
     lookup_field = 'post_id'
     queryset = Post.objects.all()
@@ -357,8 +371,66 @@ class LikedList(APIView):
         }
         return Response(response)
 
-class Follower(generics.ListAPIView):
-    queryset = Follower.objects.all()
-    lookup_field = 'author_id'
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+class FollowerList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Follower.objects.filter(status = True, following=self.kwargs['author_id'])
+        serializer = FollowerSerializer(queryset)
+        try:
+            serializer.validate()
+            return Response(serializer.data)
+        except Exception as e:
+            err_msg = 'No followers.'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+
+#    def get_queryset(self, **kwargs):
+#        self.author = get_object_or_404(Author, author_id=self.kwargs['author_id'])
+#        return Follower.objects.filter(following_id=self.kwargs['author_id'])
+
+class FollowerDetailView(APIView):
+    serializer_class = FollowerSerializer
+
+    def get(self, request, *args, **kwargs):
+        try:
+            #author1 = Author.objects.get(pk=author_id1)
+            #author2 = Author.objects.filter(pk=author_id2)
+            follower = Follower.objects.get(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
+            serializer = FollowerSerializer(follower)
+            serializer.validate()
+
+        except Exception as e:
+            err_msg='No following relation'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+
+        try:
+            author1 = Author.objects.get(pk=author_id1)
+            author2 = Author.objects.get(pk=author_id2)
+            follower = Follower.objects.filter(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
+            assert not follower.exists(), "already following"
+            author = {}
+            author['username'] = author2['username']
+            author['displayName'] = author2['displayName']
+            author['password'] = author2['password']
+            author["author_type"] = 'author'
+            author['host'] = author2['host']
+            author['url'] = author2['url']
+            author['profileImage'] =author2['profileImage']
+            author['github'] = author2['github']
+            author['following'] = author1['author_id']
+            serializer = FollowerSerializer(data = author)
+            serializer.validate()
+            serializer.save()
+            return Response(serializer.data)
+        except Exception as e:
+            err_msg='No following relation'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            follower = Follower.objects.get(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
+            follower.delete()
+            return Response()
+        except Exception as e:
+            return Response(e,status=status.HTTP_404_NOT_FOUND)
