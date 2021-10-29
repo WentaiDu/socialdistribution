@@ -1,5 +1,5 @@
 <html>
-<!--{% load static %}-->
+{% load static %}
 
 <head>
     <meta charset="utf-8">
@@ -7,8 +7,8 @@
     <title>index</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
-<!--    <link rel="stylesheet" href="{% static "css/common.css" %}">-->
-    <link href="style/common.css" rel="stylesheet">
+	<link rel="stylesheet" href="{% static "css/common.css" %}">
+
 
 </head>
 
@@ -18,10 +18,7 @@
     <div class="header">
         <div class="header_content">
             <div class="logo"><a href="index.html">Weibo</a></div>
-            <div class="search">
-                <input type="text" class="search_input" placeholder="Everyone is searching: #XXXX">
-                <input type="text" class="search_btn" readonly="true">
-            </div>
+
             <ul class="header_operate">
                 <li><a href="#" class="li_1">massage</a></li>
                 <li><a href="#" class="li_2">setting</a></li>
@@ -64,28 +61,7 @@
                 </ul>
             </div>
             <div class="left_content">
-                <div class="release">
-                    <div class="release_top">
-                        <div class="release_text">What do you want to share with everyone？</div>
 
-                    </div>
-                    <div class="release_main">
-                        <textarea></textarea>
-                    </div>
-                    <div class="release_choise">
-                        <ul class="release_choise_text">
-                            <li class="release_choise_member"><a class="btn_expre" href="#">Emoji</a></li>
-                            <li class="release_choise_member"><a class="btn_img" href="#">Image</a></li>
-                            <li class="release_choise_member"><a class="btn_video" href="#">Video</a></li>
-                            <li class="release_choise_member"><a class="btn_topic" href="#">topic</a></li>
-                            <li class="release_choise_member"><a class="btn_hot" href="#">Headlines</a></li>
-                            <li class="release_choise_member"><a class="btn_more" href="#"></a></li>
-                        </ul>
-                      <div class="release_button">
-<input type="button" class="u_release_btn" value="Post">
-                        </div>
-                    </div>
-                </div>
                 <div class="classify">
                     <ul class="classes">
                         <li class="choosed class_text"><a href="#">All</a></li>
@@ -140,13 +116,7 @@
 
                 </div>
                 <ul class="list">
-                    <li class="first">
-				<div class="list_content">
 
-
-
-                      </div>
-                  </li>
                     <li class="songlist_other">
                         <span>lalaldemaxiya</span>
                         <img src="img/play.png">
