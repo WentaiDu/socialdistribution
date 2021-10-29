@@ -421,21 +421,14 @@ class FollowerDetailView(APIView):
             author['github'] = author2.github
             author['profileImage'] =author2.profileImage
             author['following'] = author1.author_id
-            print("222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222")
-            print(author)
-            print(FollowerSerializer(author).is_valid())
-
-            serializer = FollowerSerializer(author)
-            #serializer.is_valid()
-            print(serializer.errors)
-            print("(!!!!!!!!!!!!"+serializer.data)
-            # serializer.validate()
+            serializer = FollowerSerializer(data = author)
+            serializer.is_valid()
             serializer.save()
 
             return Response(serializer.data)
-        except Exception:
+        except Exception as e:
             err_msg='No following relation'
-            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+            return Response(str(e),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
         try:
