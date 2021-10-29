@@ -12,6 +12,7 @@ from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -357,10 +358,47 @@ class LikedList(APIView):
         }
         return Response(response)
 
-class Follower(generics.ListAPIView):
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+class FollowerList(generics.ListAPIView):
+    serializer_class = FollowerSerializer
+    def get(self, request, *args, **kwargs):
+        queryset = Follower.objects.get(following_id =self.kwargs['author_id'])
+        serializer_class = FollowerSerializer(queryset)
+        return Response(serializer.data)
 
-    def get_queryset(self, **kwargs):
-        self.author = get_object_or_404(Author, name=self.kwargs['author_id'])
-        return Follower.objects.filter(following=self.author)
+#    def get_queryset(self, **kwargs):
+#        self.author = get_object_or_404(Author, author_id=self.kwargs['author_id'])
+#        return Follower.objects.filter(following_id=self.kwargs['author_id'])
+
+class FriendRequestView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        question = get_object_or_404(Question, pk=kwargs['question_id'])
+        serializer = QuestionDetailPageSerializer(question)
+        return Response(serializer.data)
+
+        try:
+            author1 = Author.objects.get(pk=author_id1)
+            author2 = Author.objects.filter(pk=author_id2)
+
+        except:
+            err_msg='Author does not exist.'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = PostSerializer(posts, many=True)
+
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        question = get_object_or_404(Question, pk=kwargs['question_id'])
+        serializer = QuestionDetailPageSerializer(question, data=request.data, partial=True)
+        if serializer.is_valid():
+            question = serializer.save()
+            return Response(QuestionDetailPageSerializer(question).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        question = get_object_or_404(Question, pk=kwargs['question_id'])
+        question.delete()
+        return Response("Question deleted", status=status.HTTP_204_NO_CONTENT)
