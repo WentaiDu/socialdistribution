@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
-
+import simplejson as json
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
@@ -372,19 +372,22 @@ class LikedList(APIView):
         return Response(response)
 
 class FollowerList(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
-        queryset = Follower.objects.filter(status = True, following=self.kwargs['author_id'])
-        serializer = FollowerSerializer(queryset)
-        try:
-            serializer.validate()
-            return Response(serializer.data)
-        except Exception as e:
-            err_msg = 'No followers.'
-            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
 
-#    def get_queryset(self, **kwargs):
-#        self.author = get_object_or_404(Author, author_id=self.kwargs['author_id'])
-#        return Follower.objects.filter(following_id=self.kwargs['author_id'])
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "authors.html"
+    # serializer_class = FollowerSerializer
+    # context_object_name = "authors"
+    # def get_queryset(self, **kwargs):
+    #    return Follower.objects.filter(following_id=self.kwargs['author_id'])
+
+    def get(self,request, author_id):
+        followers = Follower.objects.filter(following_id=author_id)
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = FollowerSerializer(followers, many=True)
+
+        return Response({'authors':serializer.data})
 
 class FollowerDetailView(APIView):
     serializer_class = FollowerSerializer
@@ -393,9 +396,8 @@ class FollowerDetailView(APIView):
         try:
             #author1 = Author.objects.get(pk=author_id1)
             #author2 = Author.objects.filter(pk=author_id2)
-            follower = Follower.objects.get(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
+            follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
             serializer = FollowerSerializer(follower)
-            serializer.validate()
 
         except Exception as e:
             err_msg='No following relation'
@@ -405,32 +407,33 @@ class FollowerDetailView(APIView):
     def put(self, request, *args, **kwargs):
 
         try:
-            author1 = Author.objects.get(pk=author_id1)
-            author2 = Author.objects.get(pk=author_id2)
-            follower = Follower.objects.filter(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
-            assert not follower.exists(), "already following"
+            author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
+            author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
+            follower = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+            assert len(follower) == 0, "have relation"
+
             author = {}
-            author['username'] = author2['username']
-            author['displayName'] = author2['displayName']
-            author['password'] = author2['password']
+            author['author_id'] = author2.author_id
             author["author_type"] = 'author'
-            author['host'] = author2['host']
-            author['url'] = author2['url']
-            author['profileImage'] =author2['profileImage']
-            author['github'] = author2['github']
-            author['following'] = author1['author_id']
+            author['displayName'] = author2.displayName
+            author['host'] = author2.host
+            author['url'] = author2.url
+            author['github'] = author2.github
+            author['profileImage'] =author2.profileImage
+            author['following'] = author1.author_id
             serializer = FollowerSerializer(data = author)
-            serializer.validate()
+            serializer.is_valid()
             serializer.save()
+
             return Response(serializer.data)
         except Exception as e:
             err_msg='No following relation'
-            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+            return Response(str(e),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
         try:
-            follower = Follower.objects.get(status = True, following=self.kwargs['author_id1'], id =self.kwargs['author_id2'])
+            follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
             follower.delete()
-            return Response()
+            return HttpResponseRedirect("/authors/")
         except Exception as e:
-            return Response(e,status=status.HTTP_404_NOT_FOUND)
+            return Response("no such following relation",status=status.HTTP_404_NOT_FOUND)
