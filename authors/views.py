@@ -244,7 +244,7 @@ class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'index.html'
+    template_name = 'postlist.html'
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
