@@ -2,10 +2,180 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05370d6b-58cb-4ba2-9718-a6117be9932b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/static/css/common.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/1/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/1/head1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/2/2.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/2/head2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/3/head3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/4/4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/4/5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/5/head5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/6/head6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/7/7.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/7/head7.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/999/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/999/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/999/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/999/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/add.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/addr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/bg_01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/biaoqian.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/birthday.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/change.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/chefu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/choose.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/expression.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/firstsong.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/found.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/game.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/good.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/guoxue.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head7.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head8.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/head_hot.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/home.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/huahua.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/jianjie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/lianjie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/logo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/message.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/more.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/movie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/my_user_icon.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/others.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/picture.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/ping.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/play.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/post.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/release_top.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/repost.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/review.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/right_arrow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/sanjiao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/search.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/search_arrow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/search_index.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/secondsong.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/settings.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/songimg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/star.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/thirdsong.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/topic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/user_icon.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/userbackground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/v.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/v7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/video.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/video.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/zan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/img/zhuan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/index2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/1.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/2.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/3.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/common.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/less/css3.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/less/reset.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/less/z.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/per.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/variables.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authors/templates/style/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/fall.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/fall_1oa1tHw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/fall_OaueLtS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/fall_PGfJp2j.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/login.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/.bin/loose-envify" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/.bin/loose-envify.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/.bin/loose-envify.ps1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/js-tokens/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/js-tokens/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/js-tokens/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/js-tokens/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/js-tokens/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/cli.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/custom.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/loose-envify.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/loose-envify/replace.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/object-assign/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/object-assign/license" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/object-assign/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/object-assign/readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/checkPropTypes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/factory.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/factoryWithThrowingShims.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/factoryWithTypeCheckers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/lib/ReactPropTypesSecret.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/prop-types.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/prop-types/prop-types.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/.babelrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/.travis.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/ReactFileReader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/__tests__/ReactFileReader.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/__tests__/__snapshots__/ReactFileReader.test.js.snap" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-file-reader/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/build-info.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/cjs/react-is.development.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/cjs/react-is.production.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/umd/react-is.development.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/react-is/umd/react-is.production.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/uuid4/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/uuid4/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/uuid4/browser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/uuid4/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/node_modules/uuid4/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/media/user.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media/user.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/migrations/0002_alter_author_url.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/authors/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authors/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/authors/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/authors/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Signup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/T.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/test.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +189,7 @@
         <entry file="file://$PROJECT_DIR$/authors/tests.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="495">
-              <caret line="33" column="65" lean-forward="true" selection-start-line="33" selection-start-column="65" selection-end-line="33" selection-end-column="65" />
+              <caret line="33" column="65" selection-start-line="33" selection-start-column="65" selection-end-line="33" selection-end-column="65" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -31,7 +201,7 @@
         <entry file="file://$PROJECT_DIR$/authors/pagination.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
-              <caret line="7" column="26" lean-forward="true" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+              <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
               <folding>
                 <element signature="e#0#59#0" expanded="true" />
               </folding>
@@ -43,7 +213,7 @@
         <entry file="file://$PROJECT_DIR$/authors/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="330">
-              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -54,8 +224,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/Signup.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="189" column="21" lean-forward="true" selection-start-line="189" selection-start-column="21" selection-end-line="189" selection-end-column="21" />
+            <state relative-caret-position="1376">
+              <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -72,8 +242,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/authors/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-31">
-              <caret line="52" column="43" selection-start-line="52" selection-start-column="43" selection-end-line="52" selection-end-column="43" />
+            <state relative-caret-position="-1">
+              <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -82,20 +252,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/authors/migrations/0002_alter_author_url.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/authors/migrations/0001_initial.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/service/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="331">
-              <caret line="44" column="33" lean-forward="true" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
+              <caret line="44" column="33" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -150,12 +310,6 @@
               <item name="CMPUT-404-Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="CMPUT-404-Project" type="462c0819:PsiDirectoryNode" />
               <item name="authors" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CMPUT-404-Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CMPUT-404-Project" type="462c0819:PsiDirectoryNode" />
-              <item name="authors" type="462c0819:PsiDirectoryNode" />
-              <item name="migrations" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CMPUT-404-Project" type="b2602c69:ProjectViewProjectNode" />
@@ -216,6 +370,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20014094" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -287,14 +442,14 @@
     <entry file="file://$PROJECT_DIR$/service/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
-          <caret line="44" column="33" lean-forward="true" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
+          <caret line="44" column="33" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/authors/pagination.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="7" column="26" lean-forward="true" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -304,7 +459,7 @@
     <entry file="file://$PROJECT_DIR$/authors/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
-          <caret line="33" column="65" lean-forward="true" selection-start-line="33" selection-start-column="65" selection-end-line="33" selection-end-column="65" />
+          <caret line="33" column="65" selection-start-line="33" selection-start-column="65" selection-end-line="33" selection-end-column="65" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
@@ -319,8 +474,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/Signup.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="189" column="21" lean-forward="true" selection-start-line="189" selection-start-column="21" selection-end-line="189" selection-end-column="21" />
+        <state relative-caret-position="1376">
+          <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -334,7 +489,7 @@
     <entry file="file://$PROJECT_DIR$/authors/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
@@ -343,8 +498,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/authors/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31">
-          <caret line="52" column="43" selection-start-line="52" selection-start-column="43" selection-end-line="52" selection-end-column="43" />
+        <state relative-caret-position="-1">
+          <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>

@@ -5,13 +5,13 @@ from authors.models import *
 from authors.serializers import *
 from rest_framework import generics
 from authors.pagination import *
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework import status
 from authors.pagination import *
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
-
 
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -24,12 +24,11 @@ class LoginAPI(generics.GenericAPIView):
             login(request,user)
             response = {
                 'detail': 'User logs in successfully!',
-                'id': user.author_id,
+                'id': Author.id,
             }
             return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
-
 
 class SignupAPI(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
@@ -43,8 +42,7 @@ class SignupAPI(generics.CreateAPIView):
             author["author_type"] = 'author'
             author['host'] = 'http://'+request.get_host()+'/'
             author['url'] = request.build_absolute_uri()
-            print(author['url'])
-            #author['profileImage'] = request.data['profileImage']
+            author['profileImage'] = request.data['profileImage']
             author['github'] = "http://github.com/"+request.data['github']
         except:
             response = {
@@ -231,25 +229,31 @@ class LikesCommentList(APIView):
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'index.html'
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
-    def get_queryset(self):
-        return self.posts
+    # def get_queryset(self):
+    #     return self.posts
 
 
-    def get(self, request, author_id):
+    def get(self,request, author_id):
 
         try:
             check=Author.objects.get(pk=author_id)
-            self.posts = Post.objects.filter(author_id=author_id)
+            posts = Post.objects.filter(author_id=author_id)
 
         except:
             err_msg='Author does not exist.'
             return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
 
-        response = super().list(request,author_id)
-        return response
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = PostSerializer(posts, many=True)
+
+        return Response({'serializer':serializer.data})
+
 
     def post(self,request,author_id):
         post_id=uuid.uuid4()
@@ -259,6 +263,9 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
+    '''
+    
+    '''
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -270,8 +277,8 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 if post.visibility != 'PUBLIC':
                     return Response(status=status.HTTP_403_FORBIDDEN)
                 else:
-                    serializer_class = PostSerializer(post, many=False)
-                    return Response(serializer_class.data)
+                    serializer = PostSerializer(post, many=False)
+                    return Response({'serializer':serializer.data})
             else:
                 raise Exception
         except:
@@ -288,7 +295,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 serializer = PostSerializer(post, data=request.data, partial=True)
                 if serializer.is_valid():
                     post=serializer.save()
-                    return Response(serializer.data)
+                    return Response({'serializer':serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
@@ -323,7 +330,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 if serializer.is_valid():
                     post=Post.objects.create(author=author,post_id=post_id)
                     post.save()
-                    return Response(serializer.data)
+                    return Response({'serializer':serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
