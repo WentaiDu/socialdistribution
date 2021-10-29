@@ -251,7 +251,7 @@ class PostList(generics.ListCreateAPIView):
         # response = super().list(request,author_id)
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = PostSerializer(posts, many=True)
-
+        print ('--------------->',request)
         return Response({'serializer':serializer.data})
 
 
@@ -263,9 +263,7 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
-    '''
-    
-    '''
+
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer

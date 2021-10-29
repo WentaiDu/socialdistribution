@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=s, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static "css/common.css" %}">
+    <link rel="stylesheet" href="{% static "css/per.css" %}">
+</head>
+<body class="personal-body">
+    <div class="header">
+        <div class="header_content">
+            <div class="logo"><a href="index.html">Weibo</a></div>
+            <div class="search">
+                <input type="text" class="search_input" placeholder="Everyone is searching: #XXXX">
+                <input type="text" class="search_btn" readonly="true">
+            </div>
+            <ul class="header_operate">
+                <li><a href="#" class="li_1">massage</a></li>
+                <li><a href="#" class="li_2">setting</a></li>
+                <li><a href="#" class="li_3">post a post</a></li>
+            </ul>
+            <ul class="header_nav">
+                <li>
+                    <a class="li_home li_home_pos " href="index.html">
+                        home page
+                   
+                    </a>
+                </li>
+
+                <li><a class="li_user" href="personal.html">Account
+					<span class="dian">
+					</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="top-header-info">
+        <div class="head-pic">
+           <img class="head-pic" src="./img/dragon.jpg" alt="">
+
+
+        </div>
+        <div class="nickname">
+            Dragon
+      </div>
+        <div class="common">
+            Shadowless man
+      </div>
+        <div class="action-btn">
+            <div class="bg-origne origen-1">Follow<img class="add" src="./img/add.png" alt=""></div>
+            <div class="bg-origne"><img class="add" src="./img/sanjiao.png" alt=""></div>
+            <div class="bg-brow brow-1">Massage</div>
+            <div class="bg-brow"><img class="add" src="./img/more.png" alt=""></div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="top-nav">
+            <div class="tabs">
+                <div class="u-line">My posts</div>
+
+            </div>
+        </div>
+
+    </div class="container">
+        <div class="main-content">
+            <div class="left-tab">
+                <div class="top-fans">
+                    <div class="item-fans">
+                        <div class="num">297</div>
+                        <div>Fllows</div>
+                    </div>
+                    <div class="item-fans">
+                        <div class="num">297</div>
+                        <div>Fans</div>
+                    </div>
+                    <div class="item-fans">
+                        <div class="num">297</div>
+                        <div>Posts</div>
+                    </div>
+                </div>
+                <div class="personal-info">
+   
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <img src="./img/addr.png" class="add">
+                            <span style="margin: 0 8px;">Edmonton, Ab</span>
+                        </div>
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <img src="./img/birthday.png" class="add">
+                            <span style="margin: 0 8px;">2000/02/02</span>
+                        </div>
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <img src="./img/jianjie.png" class="add">
+                            <span style="margin: 0 8px;">information： xxxxxxxxxxxxxxxxxxx</span>
+                        </div>
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <img src="./img/lianjie.png" class="add">
+                            <span style="margin: 0 8px;">Weibo：<a href="">http://weibo.com</a></span>
+                        </div>
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <img src="./img/biaoqian.png" class="add">
+                            <span style="margin: 0 8px;">Tag: Dragon Dragon Dragon Dragon Dragon Dragon Dragon Dragon Dragon</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="personal-info-bottom">More ></span>
+                    </div>
+                </div>
+                <div class="personal-info" style="margin-top: 20px;">
+                    <div class="personal-info-top">
+                        <div class="personal-info-item">
+                            <span style="font-weight: bold;font-size: 16px;">Follow</span>
+                        </div>
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item" style="display: felx;flex-direction: column;">
+                            <span style="font-weight: bold;font-size: 15px;align-self: start;">Following(187)</span>
+                            <div class="guanzhu">
+                                <div class="guanzhu-item mtop8">
+                                    <div class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>         
+                    </div>
+                    <div class="personal-info-top">
+                        <div class="personal-info-item" style="display: felx;flex-direction: column;">
+                            <span style="font-weight: bold;font-size: 15px;align-self: start;">Follows(187)</span>
+                            <div class="guanzhu">
+                                <div class="guanzhu-item mtop8">
+                                    <div class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                    <div  class="fans-list">
+                                        <img src="./img/dragon.jpg" class="weibo_usericon mlr8">
+                                        <span>dragon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="personal-info-bottom">查看更多 ></span>
+                    </div>
+                </div>
+
+                <div class="personal-info" style="margin-top: 20px;">
+
+
+
+
+                </div>
+            </div>
+            <div class="right">
+                <div class="left_content">
+                <div class="weibo">
+                    <div class="weibo_icon">
+                        <img src="./img/1/head1.jpg" class="weibo_usericon">
+                    </div>
+                    <div class="weibo_text">
+                        <h3>Weibo<img style="margin-left: 10px;" src="./img/v7.png" alt=""></h3>
+                        <p class="weibo_time">from Weibo weibo.com</p>
+                        <p class="weibo_content">
+                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。
+                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXrelease_buttonXXXXXXX<span
+                                class="activeColor">@Dragon</span>
+                            <span class="activeColor">#XXXX#</span>，Record your life。 ​​​​</p>
+                        <div class="imgbox">
+                            <img src="./img/999/1.png" alt="">
+                        </div>
+                    </div>
+                    <div class="weibo_operator">
+                        <ul class="weibo_button">
+                            <li><a class="repost" href="#">Share</a></li>
+                            <li><a class="review" href="#">Commont</a></li>
+                            <li class="last"><a class="good" href="#">Follow</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+        
+        
+
+                    <div class="readmore" style="background-color: #fff;">
+                        <a style="color: #d8c7b4;" href="#">See more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

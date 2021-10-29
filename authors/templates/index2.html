@@ -3,11 +3,7 @@
 {% load static %}
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>index</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+
     <link rel="stylesheet" href="{% static "css/common.css" %}">
 
 </head>
@@ -17,8 +13,6 @@
 <ul>
     {% for i in serializer %}
 
-
-
            <div class="weibo">
                     <div class="weibo_icon">
                         <img src="./img/1/head1.jpg" class="weibo_usericon">
@@ -27,8 +21,7 @@
                         <h3>Weibo<img style="margin-left: 10px;" src="./img/v7.png" alt=""></h3>
                         <p class="weibo_time">from Weibo weibo.com</p>
                         <p class="weibo_content">
-                            s
-                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXrelease_buttonXXXXXXX<span
+                            {{i.content}}<span
                                 class="activeColor">@Dragon</span>
                             <span class="activeColor">#XXXX#</span>，Record your life。 ​​​​</p>
                         <div class="imgbox">
@@ -43,12 +36,6 @@
                         </ul>
                     </div>
                 </div>
-
-
-
-
-
-
 
 
     {% endfor %}

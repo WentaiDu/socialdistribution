@@ -3,7 +3,7 @@
     margin: 0 auto;
 }
 .bg-dep{
-    background-color: #624c38;
+    background-color: #85a5ce;
     color: #ffffff;
 }
 .top-nav{
@@ -11,14 +11,15 @@
     justify-content: center;
     width: 1000px;
     margin: 0 auto;
-    background-color: #624c38;
+    background-color: #85a5ce;
     padding: 10px 0;
     padding-bottom: 0;
 }
 .top-header-info{
 	 width: 1000px;
     margin: 30px auto 0;
-	background:url(../img/bg_01.png) no-repeat center;
+	/* background:url(../img/dragon.jpg) no-repeat center; */
+    background-color: #85a5ce;
 	background-size:cover;
     display: flex;
     flex-direction: column;
@@ -97,7 +98,7 @@
    
 }
 .personal-body{
-    background-image: url('../img/bg.jpg');
+    background-color: rgba(70, 149, 194, 0.3);
 }
 .left-tab{
     width: 330px;
@@ -110,7 +111,7 @@
     width: 630px;
 }
 .top-fans{
-    background-color: #624c38;
+    background-color: #85a5ce;
     margin-bottom: 30px;
     height:60px;
     display: flex;
@@ -132,7 +133,7 @@
 }
 .personal-info{
     /* height: 300px; */
-    background-color: #624c38;
+    background-color: #85a5ce;
     color: #d8c7b4;
     /* padding: 10px; */
     font-size: 14px;
@@ -140,7 +141,7 @@
 }
 .personal-info-top{
     padding:10px;
-    border-bottom: 1px solid #453321;
+    background-color: #85a5ce;
 }
 .renzheng{
     width: 90px;
