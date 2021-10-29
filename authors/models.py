@@ -83,7 +83,7 @@ class Like(models.Model):
     object = models.URLField()
 
 class Follower(models.Model):
-    following_id = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='following_id')
+    following = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='following_id')
     author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
 
     author_type = models.CharField(max_length=30,default="author", blank=False)
@@ -92,6 +92,8 @@ class Follower(models.Model):
     url = models.CharField(max_length=100000,default='',blank=True,null=True)
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
+    status = models.BooleanField(default=False)
+
 
     def __str__(self):
         return "follower: "+ self.displayName
