@@ -83,7 +83,7 @@ class Like(models.Model):
     object = models.URLField()
 
 class Follower(models.Model):
-    following = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='following_id')
+    following = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='following')
     author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
 
     author_type = models.CharField(max_length=30,default="author", blank=False)

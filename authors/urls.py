@@ -12,7 +12,7 @@ urlpatterns = [
     re_path(r'author/(?P<author_id1>[(-z)]{36})/followers/(?P<author_id2>[(-z)]{36})', views.FollowerDetailView.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/followers', views.FollowerList.as_view()),
 
-    re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view(), name = "one_author"),
     path('login/',views.LoginAPI.as_view(),name='login'),
     path('author/',views.SignupAPI.as_view(),name='signup'),
     path('auth/', include('rest_auth.urls')),

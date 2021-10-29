@@ -53,7 +53,7 @@ REST_FRAMEWORK = {
     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication',
     'rest_framework.authentication.BasicAuthentication']
-  
+
 }
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -130,7 +130,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

@@ -71,9 +71,21 @@ class SignupAPI(generics.CreateAPIView):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AuthorList(generics.ListAPIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "authors.html"
+    # context_object_name = "context_authors"
+    # queryset = Author.objects.all()
+    # serializer_class = AuthorSerializer
+    # pagination_class = AuthorPagination
+
+    def get(self,request):
+        authors = Author.objects.all()
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = AuthorSerializer(authors, many=True)
+
+        return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
