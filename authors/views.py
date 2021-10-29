@@ -74,7 +74,7 @@ class SignupAPI(generics.CreateAPIView):
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
