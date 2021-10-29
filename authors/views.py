@@ -25,7 +25,7 @@ class LoginAPI(generics.GenericAPIView):
             login(request,user)
             response = {
                 'detail': 'User logs in successfully!',
-                'id': Author.id,
+                'id': user.author_id
             }
             return Response(response, status=status.HTTP_200_OK)
         else:
@@ -43,7 +43,8 @@ class SignupAPI(generics.CreateAPIView):
             author["author_type"] = 'author'
             author['host'] = 'http://'+request.get_host()+'/'
             author['url'] = request.build_absolute_uri()
-            author['profileImage'] = request.data['profileImage']
+            if request.data['profileImage'] != 'null':
+                author['profileImage'] = request.data['profileImage']
             author['github'] = "http://github.com/"+request.data['github']
         except:
             response = {

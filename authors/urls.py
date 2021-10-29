@@ -17,5 +17,5 @@ urlpatterns = [
     path('author/',views.SignupAPI.as_view(),name='signup'),
     path('auth/', include('rest_auth.urls')),
     path('authors/', views.AuthorList.as_view()),
-
+    re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
 ]
