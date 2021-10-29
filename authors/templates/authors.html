@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-
 <html>
-{% load static %}
+<!--{% load static %}-->
 
 <head>
     <meta charset="utf-8">
@@ -9,8 +7,10 @@
     <title>index</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <link rel="stylesheet" href="{% static "css/common.css" %}">
+<!--    <link rel="stylesheet" href="{% static "css/common.css" %}">-->
+    <link href="style/common.css" rel="stylesheet">
 
+</head>
 
 </head>
 
@@ -95,11 +95,6 @@
                         <li class="class_text"><a href="#">Music</a></li>
                         <li class="class_text"><a href="#">Article</a></li>
                     </ul>
-                    <div class="search">
-                        <input class="search_text" type="text" placeholder="search for the keyword">
-                        <input class="search_button" type="text" readonly="true">
-                        <input class="search_more" type="text">
-                    </div>
                 </div>
 
 
@@ -110,12 +105,10 @@
                                         <img src= "{{author.profileImage}}" class="weibo_usericon">
                                     </div>
                                     <div class="weibo_text">
-                                        <h3><a href="{% url 'authors:one_author' author.author_id %}">{{author.displayName}}</a><img style="margin-left: 10px;" src="./img/v7.png" alt=""></h3>
+                                        <h3><a href="{% url 'authors:one_author' author.author_id %}">{{author.displayName}}</a></h3>
                                     </div>
                                     <div class="weibo_operator">
                                         <ul class="weibo_button">
-                                            <li><a class="repost" href="#">Share</a></li>
-                                            <li><a class="review" href="#">Commont</a></li>
                                             <li class="last"><a class="good" href="#">Follow</a></li>
                                         </ul>
                                     </div>
@@ -132,7 +125,7 @@
         </div>
         <div class="right">
             <div class="usercard">
-                <img src="img/userbackground.png" class="background">
+<!--                <img src="img/userbackground.png" class="background">-->
                 <a href="./personal.html"><img src="img/user_icon.jpg" class="user_info_icon"></a>
                 <h3>Alton</h3>
                 <ul class="userinfo">
@@ -158,9 +151,7 @@
                         <span>lalaldemaxiya</span>
                         <img src="img/play.png">
                     </li>
-                    <li class="songlist_other last">
-                        <span class="thirdspan">wuwuwudemaxiya</span>
-                        <img src="img/play.png">
+
                     </li>
                 </ul>
 
