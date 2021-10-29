@@ -85,9 +85,9 @@ class CommentList(generics.ListCreateAPIView):
     # def post(self,request):
     #     try:
     #         if request.data['type'] == comment:
-                
 
-        
+
+
 
 
 class InboxList(generics.GenericAPIView):
@@ -120,7 +120,7 @@ class InboxList(generics.GenericAPIView):
                 inbox_post_serializer.save()
             else:
                 print(inbox_post_serializer.errors)
-                
+
         # if request.data['type'] == 'follow':
         #     items = inbox.data['follow_items']
         #     inbox_follow = {}
@@ -146,13 +146,13 @@ class InboxList(generics.GenericAPIView):
                 inbox_like_serializer.save()
             else:
                 print(inbox_like_serializer.errors)
-    
+
     def delete(self,request,author_id):
         inbox = self.get_inbox(author_id)
         inbox.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-            
+
 
 
 # class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -165,9 +165,9 @@ class InboxList(generics.GenericAPIView):
 #         new_post = request.data
 #         queryset = Inbox.objects.filter(inbox_author=self.request.POST.get("author_id"))
 
-    
-    
-    
+
+
+
 
 # #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
 
@@ -261,7 +261,7 @@ class PostList(generics.ListCreateAPIView):
 
 class PostDetail(generics.RetrieveUpdateAPIView):
     '''
-    
+
     '''
     lookup_field = 'post_id'
     queryset = Post.objects.all()
@@ -355,7 +355,9 @@ class LikedList(APIView):
         return Response(response)
 
 class Follower(generics.ListAPIView):
-    queryset = Follower.objects.all()
-    lookup_field = 'author_id'
     serializer_class = AuthorSerializer
     pagination_class = AuthorPagination
+
+    def get_queryset(self, **kwargs):
+        self.author = get_object_or_404(Author, name=self.kwargs['author_id'])
+        return Follower.objects.filter(following=self.author)

@@ -71,7 +71,7 @@ class Comment(models.Model):
     comment = models.TextField(default="", blank=False)
     contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     published = models.DateTimeField(auto_now_add=True)
-    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id") 
+    comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
 
 class Like(models.Model):
@@ -83,4 +83,23 @@ class Like(models.Model):
     object = models.URLField()
 
 class Follower(models.Model):
-    author_id = models.UUIDField(primary_key = True, default = uuid.uuid4)
+    following = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='commentsSrc')
+    author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
+
+    author_type = models.CharField(max_length=30,default="author", blank=False)
+    displayName = models.CharField(max_length=30, default="", blank=False, unique = True)
+    host = models.CharField(max_length=50)
+    url = models.CharField(max_length=100000,default='',blank=True,null=True)
+    github = models.CharField(null = True,blank=False, max_length=50)
+    profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
+
+    def __str__(self):
+        return "follower: "+ self.displayName
+
+class FriendRequest(models.Model):
+    summary = models.CharField(max_length=50,default="", blank=False)
+    actor = models.ForeignKey(Author, related_name='actor', on_delete=models.CASCADE)
+    object = models.ForeignKey(Author, related_name='object', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.summary
