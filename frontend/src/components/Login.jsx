@@ -91,7 +91,6 @@ function Login() {
           alignItems: "center",
           height: "100vh",
           justifyContent: "center",
-          backgroundImage:"login.jpg"
         }}
       >
         <Card
