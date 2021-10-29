@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import "./common.css";
 export default function SignUp() {
     const [state,setState] = useState({
       file: null
