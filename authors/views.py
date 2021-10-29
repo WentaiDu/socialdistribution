@@ -53,6 +53,9 @@ class SignupAPI(generics.CreateAPIView):
         author_serializer = AuthorSerializer(data=author)
         if author_serializer.is_valid():
             author_serializer.save()
+            new_author = Author.objects.get(username=author['username'])
+            new_author.set_password(author['password'])
+            new_author.save()
             new_author = Author.objects.filter(username=author['username'])
             id = author_serializer.data['author_id']
             new_author.update(url=author['url']+id)

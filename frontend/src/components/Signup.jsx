@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useState } from "react";
-import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
+import "./common.css";
 export default function SignUp() {
     const [state,setState] = useState({
       file: null
@@ -120,7 +120,7 @@ export default function SignUp() {
 
   return (
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
+        <CssBaseline/>
         <Box
           sx={{
             marginTop: 8,
@@ -130,6 +130,13 @@ export default function SignUp() {
           }}
         >
           <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Card
+            sx={{
+              minWidth: 100,
+              align: "center",
+              padding: "30px",
+              borderRadius: 7,
+            }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
               <TextField required id="username" label="username" variant="outlined" value={username}
@@ -172,9 +179,8 @@ export default function SignUp() {
                     onChange={(e) => setGithub(e.target.value)}/>
               </Grid>
             </Grid>
-
+            <br/>
             <input type="file" name="file" onChange={e => handleFile(e)} />
-            {/* <button onClick={e => handleUpload(e)}>Upload</button> */}
 
             <Button
               type="submit"
@@ -205,6 +211,7 @@ export default function SignUp() {
                 </Typography>
               </Grid>
             </Grid>
+            </Card>
           </Box>
         </Box>
       </Container>
