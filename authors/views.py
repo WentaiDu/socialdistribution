@@ -51,7 +51,6 @@ class SignupAPI(generics.CreateAPIView):
                 'detail': 'Bad Input!'
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        # author['profileImage'] = author.profileImage
         author_serializer = AuthorSerializer(data=author)
         if author_serializer.is_valid():
             author_serializer.save()
@@ -72,6 +71,7 @@ class SignupAPI(generics.CreateAPIView):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AuthorList(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "authors.html"
     # context_object_name = "context_authors"
@@ -89,9 +89,20 @@ class AuthorList(generics.ListAPIView):
         return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.AllowAny]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "personal.html"
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
+    def get(self,request):
+        authors = Author.objects.all()
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = AuthorSerializer(authors, many=True)
+
+        return Response({'author':serializer.data})
 
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()

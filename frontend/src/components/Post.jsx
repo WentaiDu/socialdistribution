@@ -1,104 +1,126 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
+import { Box, Link, Typography, TextField} from "@material-ui/core";
+import Grid from '@mui/material/Grid';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Card from "@mui/material/Card";
+import axios from "axios";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+export default function Post() {
+    const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+    const [title, setTitle] = React.useState("")  
+    const [content, setContent] = React.useState("")  
+    const [visi, setVisi] = React.useState('');
+    const handleVisiChange = (event) => {
+        setVisi(event.target.value);
+    };
+    // function handlePost() {
+    //     axios
+    //       .post(`${base_url}/author/${author_id}/posts`, {
+            // title: title,
+    //         content: value,
+    //         visibility: visi,
+    //       })
+    //       .then((res) => {
+    //         handleClick(true);
+    //         console.log(res.data);
+    //       })
+    //       .catch((res) => {
+    //         handleClick(false);
+    //       }); } 
+  
+    return (
+    <Box
+    sx={{
+        alignItems: "center",
+        justifyContent: "center",
+        width: 750, 
+        m:'auto', 
+        p:{xs:2},
+        flexGrow: 1
+    }}>
+        <Card
+            sx={{
+            m:2,
+            p:{xs:2},
+            align: "center",
+            padding: "30px",
+            borderRadius: 7,
+            }}>
 
-function refreshMessages() {
-  const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
+            <Grid item xs={12}>
+                <TextField
+                    required
+                    id="title"
+                    label="Title"
+                    fullWidth
+                    variant="standard"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+            </Grid>
+            <Grid container spacing={3}>
+            <Grid item xs={12}>
+                <TextField
+                    id="outlined-multiline-static"
+                    label="Put in your text"
+                    multiline
+                    fullWidth
+                    rows={4}
+                    defaultValue=""
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
+            </Grid>
 
-  return Array.from(new Array(50)).map(
-    () => messageExamples[getRandomInt(messageExamples.length)],
-  );
-}
-
-export default function FixedBottomNavigation() {
-  const [value, setValue] = React.useState(0);
-  const ref = React.useRef(null);
-  const [messages, setMessages] = React.useState(() => refreshMessages());
-
-  React.useEffect(() => {
-    ref.current.ownerDocument.body.scrollTop = 0;
-    setMessages(refreshMessages());
-  }, [value, setMessages]);
-
-  return (
-    <Box sx={{ pb: 7 }} ref={ref}>
-      <CssBaseline />
-      <List>
-        {messages.map(({ primary, secondary, person }, index) => (
-          <ListItem button key={index + person}>
-            <ListItemAvatar>
-              <Avatar alt="Profile Picture" src={person} />
-            </ListItemAvatar>
-            <ListItemText primary={primary} secondary={secondary} />
-          </ListItem>
-        ))}
-      </List>
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
-          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
-        </BottomNavigation>
-      </Paper>
+            <Grid item xs={12} sx={{minWidth: 120}}>
+            <Stack direction="row" spacing={5} sx={{width: 750, m:'auto', p:{xs:2}, }}>
+                <Box sx={{ minWidth: 120,}}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Visibility</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={visi}
+                        label="Visibility"
+                        onChange={handleVisiChange}
+                        >
+                        <MenuItem value={"PUBLIC"}>Public</MenuItem>
+                        <MenuItem value={"FRIENDS"}>Friend</MenuItem>
+                        <MenuItem value={"PRIVATE"}>Private</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                        width: 100,
+                        m:'auto',
+                        borderRadius: 15,
+                        backgroundColor: "#00428b",
+                    }}
+                    // onClick={handlePost}
+                >
+                    Submit
+                </Button>
+            </Stack>    
+            </Grid>
+            </Grid>
+        </Card>
     </Box>
   );
 }
-
-const messageExamples = [
-  {
-    primary: 'Brunch this week?',
-    secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
-    person: '/static/images/avatar/5.jpg',
-  },
-  {
-    primary: 'Birthday Gift',
-    secondary: `Do you have a suggestion for a good present for John on his work
-      anniversary. I am really confused & would love your thoughts on it.`,
-    person: '/static/images/avatar/1.jpg',
-  },
-  {
-    primary: 'Recipe to try',
-    secondary: 'I am try out this new BBQ recipe, I think this might be amazing',
-    person: '/static/images/avatar/2.jpg',
-  },
-  {
-    primary: 'Yes!',
-    secondary: 'I have the tickets to the ReactConf for this year.',
-    person: '/static/images/avatar/3.jpg',
-  },
-  {
-    primary: "Doctor's Appointment",
-    secondary: 'My appointment for the doctor was rescheduled for next Saturday.',
-    person: '/static/images/avatar/4.jpg',
-  },
-  {
-    primary: 'Discussion',
-    secondary: `Menus that are generated by the bottom app bar (such as a bottom
-      navigation drawer or overflow menu) open as bottom sheets at a higher elevation
-      than the bar.`,
-    person: '/static/images/avatar/5.jpg',
-  },
-  {
-    primary: 'Summer BBQ',
-    secondary: `Who wants to have a cookout this weekend? I just got some furniture
-      for my backyard and would love to fire up the grill.`,
-    person: '/static/images/avatar/1.jpg',
-  },
-];
