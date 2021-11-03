@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=s, initial-scale=1.0">
     <title>Document</title>
     <link href="style/common.css" rel="stylesheet">
-    <link rel="stylesheet" href="style/per.css">
+    <link rel="stylesheet" href="{% static "css/per.css" %}">
+
 </head>
 <body class="personal-body">
     <div class="header">
@@ -24,7 +27,7 @@
                 <li>
                     <a class="li_home li_home_pos " href="index.html">
                         home page
-                   
+
                     </a>
                 </li>
 
@@ -82,7 +85,7 @@
                     </div>
                 </div>
                 <div class="personal-info">
-   
+
                     <div class="personal-info-top">
                         <div class="personal-info-item">
                             <img src="./img/addr.png" class="add">
@@ -146,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>         
+                        </div>
                     </div>
                     <div class="personal-info-top">
                         <div class="personal-info-item" style="display: felx;flex-direction: column;">
@@ -213,8 +216,8 @@
                     </div>
                 </div>
 
-        
-        
+
+
 
                     <div class="readmore" style="background-color: #fff;">
                         <a style="color: #d8c7b4;" href="#">See more</a>
