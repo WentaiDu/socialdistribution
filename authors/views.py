@@ -294,6 +294,9 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'postdetail.html'
     def get(self,request,author_id,post_id):
         try:
             author = Author.objects.get(pk=author_id)

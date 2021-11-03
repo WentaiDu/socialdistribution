@@ -1,28 +1,30 @@
 <!doctype html>
 <html>
+{% load static %}
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BlogPost template by Adobe Dreamweaver</title>
-<link href="BlogPostAssets/styles/blogPostStyle.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{% static "css/blogPostStyle.css" %}">
 <script>var __adobewebfontsappname__="dreamweaver"</script><script src="http://use.edgefonts.net/montserrat:n4:default;source-sans-pro:n2:default.js" type="text/javascript"></script>
 </head>
 
 <body>
 <div id="mainwrapper">
-  <header> 
+  <header>
     <!--**************************************************************************
-    Header starts here. It contains Logo and 3 navigation links. 
+    Header starts here. It contains Logo and 3 navigation links.
     ****************************************************************************-->
     <div id="logo"><!-- <img src="logoImage.png" alt="sample logo"> --><!-- Company Logo text -->Logo</div>
     <nav> <a href="#" title="Link">Nav1</a> <a href="#" title="Link">Nav2</a><a href="#" title="Link">Nav3</a> </nav>
   </header>
   <div id="content">
-    <div class="notOnDesktop"> 
+    <div class="notOnDesktop">
       <!-- This search box is displayed only in mobile and tablet laouts and not in desktop layouts -->
       <input type="text" placeholder="Search">
     </div>
-    <section id="mainContent"> 
+    <section id="mainContent">
       <!--************************************************************************
     Main Blog content starts here
     ****************************************************************************-->
@@ -33,13 +35,13 @@ Post author&nbsp; and date</h3>
       <div id="bannerImage"><img src="BlogPostAssets/images/SliderLayerImage.png" alt=""/></div>
       <p>P1&nbsp; </p>
       <p>P2&nbsp; </p>
-      <aside id="authorInfo"> 
+      <aside id="authorInfo">
         <!-- The author information is contained here -->
         <h2>Author Name</h2>
         <p>author information&nbsp;</p>
       </aside>
     </section>
-    <section id="sidebar"> 
+    <section id="sidebar">
       <!--************************************************************************
     Sidebar starts here. It contains a searchbox, sample ad image and 6 links
     ****************************************************************************-->
@@ -56,7 +58,7 @@ Post author&nbsp; and date</h3>
         </ul>
       </nav>
     </section>
-    <footer> 
+    <footer>
       <!--************************************************************************
     Footer starts here
     ****************************************************************************-->
