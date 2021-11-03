@@ -1,10 +1,12 @@
 <!doctype html>
 <html>
+{% load static %}
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BlogPost template by Adobe Dreamweaver</title>
-<link href="postdetail author\styles/blogPostStyle.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{% static "css/postdetail_author.css" %}">
 <script>var __adobewebfontsappname__="dreamweaver"</script><script src="http://use.edgefonts.net/montserrat:n4:default;source-sans-pro:n2:default.js" type="text/javascript"></script>
 </head>
 
@@ -26,13 +28,10 @@
       <!--************************************************************************
     Main Blog content starts here
     ****************************************************************************-->
-		<textarea name="textarea" rows="4" cols="140">
-					Post Title
+		<textarea name="textarea" rows="4" cols="140">{{serializer.content}}
 		</textarea>
 		
-      <h3>
-        <!-- Tagline -->
-Post author&nbsp; and date</h3>
+
     <!-- 要将父布局的position设置为relative，父布局将无法包裹input -->
     <div style="position: relative;">
         <!--设置input的position为absolute，使其不按文档流排版，并设置其包裹整个布局 -->
@@ -54,8 +53,8 @@ Post author&nbsp; and date</h3>
 
       <aside id="authorInfo"> 
         <!-- The author information is contained here -->
-        <h2>Author Name</h2>
-        <p>author information&nbsp;</p>
+        <h2>Author: {{serializer.author.displayName}}</h2>
+        <p>Date: {{serializer.published}}&nbsp;</p>
       </aside>
     </section>
     <section id="sidebar"> 
