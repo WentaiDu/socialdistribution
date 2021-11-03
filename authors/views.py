@@ -290,7 +290,7 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateAPIView):
 
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'postdetail_author.html'
+    template_name = 'postdetail author.html'
     
     lookup_field = 'post_id'
     queryset = Post.objects.all()
