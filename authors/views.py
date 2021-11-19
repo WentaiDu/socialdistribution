@@ -204,8 +204,8 @@ class InboxList(generics.GenericAPIView):
 class Like(APIView):
     """GET a list of likes from other authors on author_id’s post post_id"""
     queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+    serializer_class = LikeSerializer
+
     def get(self, author_id, post_id):
         post=Post.objects.get(pk=post_id)
         if not Author.objects.get(pk=author_id):
@@ -224,8 +224,8 @@ class Like(APIView):
 
 class LikesCommentList(APIView):
     queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
+    serializer_class =CommentSerializer
+    pagination_class = CommentPagination
 
     """
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
