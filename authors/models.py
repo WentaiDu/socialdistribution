@@ -75,13 +75,22 @@ class Comment(models.Model):
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
 
 class Like(models.Model):
-    items = models.ForeignKey(LikeInbox, related_name='like_items', on_delete=models.CASCADE)
+    #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)
     content = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)
-    like_author = models.OneToOneField(Author,on_delete=models.CASCADE,verbose_name="author")
+    author = models.ForeignKey(Author,related_name='authors_list_lalal',on_delete=models.CASCADE,default='')
     object = models.URLField()
 
+class Liked(models.Model):
+    #item = models.ForeignKey(LikeInbox, related_name='liked_items', on_delete=models.CASCADE)
+    # context = models.URLField(default="", blank=False,verbose_name="@context")
+    # summary = models.CharField(max_length=100, default="", blank=False)
+    # type = models.CharField(max_length=100, default="", blank=False)
+    # author = models.ForeignKey(Author,related_name='authors_list',on_delete=models.CASCADE,default='')
+    # object = models.URLField()
+    type= models.CharField(max_length=100, default="", blank=False)
+    items=models.ForeignKey(Like,related_name='liked_detail',on_delete=models.CASCADE,default='')
 class Follower(models.Model):
     following = models.ForeignKey(Author,to_field = "author_id",on_delete=models.CASCADE,related_name='following')
     author_type = models.CharField(max_length=30,default="author", blank=False)
