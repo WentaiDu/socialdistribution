@@ -72,8 +72,8 @@ class SignupAPI(generics.CreateAPIView):
 
 class AuthorList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "authors.html"
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = "authors.html"
     # context_object_name = "context_authors"
     # queryset = Author.objects.all()
     # serializer_class = AuthorSerializer
@@ -90,19 +90,24 @@ class AuthorList(generics.ListAPIView):
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "personal.html"
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = "personal.html"
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
+<<<<<<< HEAD
     def get(self,request,*args,**kwargs):
         authors = Author.objects.all()
+=======
+    # def get(self, request, *args, **kwargs):
+    #     authors = Author.objects.all()
+>>>>>>> cbb550839be04bdd8f6de779c3063bc5edeb868e
 
-        # response = super().list(request,author_id)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
-        serializer = AuthorSerializer(authors, many=True)
+    #     # response = super().list(request,author_id)
+    #     # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+    #     serializer = AuthorSerializer(authors, many=True)
 
-        return Response({'author':serializer.data})
+    #     return Response({'author':serializer.data})
 
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
@@ -148,20 +153,6 @@ class InboxList(generics.GenericAPIView):
                 inbox_post_serializer.save()
             else:
                 print(inbox_post_serializer.errors)
-
-        # if request.data['type'] == 'follow':
-        #     items = inbox.data['follow_items']
-        #     inbox_follow = {}
-        #     inbox_follow['inbox_type'] = inbox_type
-        #     inbox_follow['inbox_author_id'] = inbox_author_id
-        #     items.append(request.data['post'])
-        #     inbox_follow['items'] = items
-        #     inbox_follow_serializer = InboxFollowSerializer(data = inbox_follow)
-        #     if inbox_follow_serializer.is_valid():
-        #         inbox_follow_serializer.save()
-        #     else:
-        #         print(inbox_follow_serializer.errors)
-
         if request.data['type'] == 'like':
             items = inbox.data['like_items']
             inbox_like = {}
@@ -179,83 +170,69 @@ class InboxList(generics.GenericAPIView):
         inbox = self.get_inbox(author_id)
         inbox.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
-# class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Inbox.objects.all()
-#     lookup_field = "author_id"
-#     serializer_class = InboxSerializer
-#     pagination_class = InboxPagination
-
-#     def create(self,request, *args, **kwargs):
-#         new_post = request.data
-#         queryset = Inbox.objects.filter(inbox_author=self.request.POST.get("author_id"))
-
-
-
-
-
-# #class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
-
-#     def get(self, request, *args, **kwargs):
-#         id = request.data['id']
-class Like(APIView):
+class Likes_list(generics.GenericAPIView):
     """GET a list of likes from other authors on author_id’s post post_id"""
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
-    def get(self, author_id, post_id):
+    queryset = Like.objects.all()
+    def get(self, request,author_id, post_id):
         post=Post.objects.get(pk=post_id)
-        if not Author.objects.get(pk=author_id):
-
+        author=Author.objects.get(pk=author_id)
+        if not author:
             error="Author id not found"
-            print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         elif not post:
             error="Post id not found"
-            print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-
-        likes = Like.objects.filter(object=post.url)
+        likes = Like.objects.filter(object=post_id)
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
-
-class LikesCommentList(APIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    pagination_class = AuthorPagination
-
+class LikesCommentList(generics.GenericAPIView):
     """
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
 
     def get(self, author_id, post_id, comment_id):
         comment_id = Comment.objects.get(pk=comment_id)
+        if comment_id!=post_id:
+            error="comment_id and post_id is not match!"
+            #print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not Author.objects.get(pk=author_id):
             error="Author id not found"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not Post.objects.get(pk=post_id):
             error="Post id not found"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not comment_id:
             error="Comment id not found"
-            print(error)
+            #print(error)
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        likes = Like.objects.filter(object=comment_id)
+        serializer = CommentSerializer(likes, many=True)
+        return Response(serializer.data)
+class LikedList(generics.GenericAPIView):
+    """
+    GET list what public things author_id liked
+    """
+    def get(self, request,author_id):
+        author=Author.objects.get(pk=author_id)
+        if not author:
+            error = "Author not found"
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
-        likes = Like.objects.filter(object=comment_id.url)
-        serializer = LikeSerializer(likes, many=True)
-        return Response(serializer.data)
-
-
+        liked = Like.objects.filter(author_id=author_id)
+        serializer = LikedSerializer(liked, many=True)
+        response = {
+            "type": "liked",
+            "items": serializer.data
+        }
+        return Response(response)
 
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'postlist.html'
+    #renderer_classes = [TemplateHTMLRenderer]
+   # template_name = 'postlist.html'
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
@@ -288,12 +265,16 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
-    '''
 
-    '''
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = 'postdetail author.html'
+    
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = 'postdetail.html'
     def get(self,request,author_id,post_id):
         try:
             author = Author.objects.get(pk=author_id)
@@ -363,30 +344,13 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             err_msg="Author is not found"
             return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
 
-class LikedList(APIView):
 
-    """
-    GET list what public things author_id liked
-    """
-    def get(self, author_id):
-        author=Author.objects.get(pk=author_id)
-        if not author:
-            error = "Author not found"
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
-
-        likes = Like.objects.filter(author_id=author_id)
-        serializer = LikeSerializer(likes, many=True)
-        response = {
-            "type": "liked",
-            "items": serializer.data
-        }
-        return Response(response)
 
 class FollowerList(generics.ListAPIView):
 
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "authors.html"
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = "authors.html"
     # serializer_class = FollowerSerializer
     # context_object_name = "authors"
     # def get_queryset(self, **kwargs):
