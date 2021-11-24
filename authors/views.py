@@ -188,22 +188,21 @@ class LikesCommentList(generics.GenericAPIView):
         comment_id = Comment.objects.get(pk=comment_id)
         if comment_id!=post_id:
             error="comment_id and post_id is not match!"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not Author.objects.get(pk=author_id):
             error="Author id not found"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not Post.objects.get(pk=post_id):
             error="Post id not found"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not comment_id:
             error="Comment id not found"
-            print(error)
+            #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        
-        likes = Like.objects.filter(object=comment_id.url)
+        likes = Like.objects.filter(object=comment_id)
         serializer = CommentSerializer(likes, many=True)
         return Response(serializer.data)
 class LikedList(generics.GenericAPIView):
