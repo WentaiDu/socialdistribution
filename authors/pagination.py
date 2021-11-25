@@ -21,7 +21,7 @@ class CommentPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response(OrderedDict([
             ('type', "comments"),
-            ('page',self.page.paginator.number),
+            # ('page',self.page.paginator.number),
             ('size',self.page.paginator.per_page),
             ('items', data)
          ]))

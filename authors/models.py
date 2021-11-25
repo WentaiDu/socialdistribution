@@ -17,16 +17,13 @@ class PostInbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
 
-
 class LikeInbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
 
-
 class FollowInbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-
 
 class Post(models.Model):
     class Visibility(models.TextChoices):
@@ -40,9 +37,6 @@ class Post(models.Model):
         APPLICATION = 'application/base64'
         IMAGE_PNG = 'image/png;base64'
         IMAGE_JPEG = 'image/jpeg;base64'
-
-
-
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
     type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
@@ -64,12 +58,18 @@ class Post(models.Model):
     visibility = models.CharField(max_length=20,choices=Visibility.choices , default=Visibility.PUBLIC)
     unlisted = models.BooleanField(default=False, null=False)
 
-
 class Comment(models.Model):
+    class ContentType(models.TextChoices):
+        MARKDOWN = 'text/markdown'
+        PLAIN = 'text/plain'
+        APPLICATION = 'application/base64'
+        IMAGE_PNG = 'image/png;base64'
+        IMAGE_JPEG = 'image/jpeg;base64'
+
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
     comment = models.TextField(default="", blank=False)
-    contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
     published = models.DateTimeField(auto_now_add=True)
     comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
