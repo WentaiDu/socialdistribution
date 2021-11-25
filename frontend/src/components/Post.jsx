@@ -32,11 +32,11 @@ class AddPost extends React.Component{
             source:`${base_url}/author/${author_id}/posts`,
             origin:`${base_url}/author/${author_id}/posts` ,
             description:"" ,
-            contentType:"",
+            contentType:"text/markdown",
             content:"",
             categories:[] ,
             published: false,
-            visibility:"",
+            visibility:"PUBLIC",
             unlisted: false
         }
     }
