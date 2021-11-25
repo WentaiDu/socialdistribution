@@ -8,6 +8,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
@@ -65,14 +66,17 @@ class AuthorList extends React.Component {
     return authors.length === 0
         ? (<CircularProgress />)
         : (authors.map(item => (
-          <Link to= {item.author_id}  style={{color:'black'}}>
 
           <ListItem key = {item.author_id}>
+            <Link to= {"/author/"+item.author_id +"/"} replace style={{color:'black'}}>
+
             <ListItemAvatar>
             <Avatar alt={item.username} src={item.profileImage} />
             </ListItemAvatar>
             <ListItemText primary={item.username} secondary={item.author_id} />
-          </ListItem></Link>)))
+            </Link>
+            <Button variant="contained">Contained</Button>
+          </ListItem>)))
 
         };
 
