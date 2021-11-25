@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -61,9 +62,7 @@ class AuthorList extends React.Component {
   renderAuthors(){
     const {authors} = this.state;
     return authors.length === 0
-        ? (<ListItem>             
-          <ListItemText primary="404 Not Found" secondary="" />
-          </ListItem>)
+        ? (<CircularProgress />)
         : (authors.map(item => (
           <ListItem key = {item.author_id}>
             <ListItemAvatar>
