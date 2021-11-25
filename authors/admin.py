@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
           'fields': ('username', 'password1', 'password2'),
       }),
   )
-  list_display = ['username', 'author_type', 'author_id', 'is_staff','displayName','host', 'url','github','profileImage']
+  list_display = ['username', 'author_type', 'author_id', 'is_staff','displayName','host', 'url','github','profileImage','auth_token']
   search_fields = ('username', 'author_type', 'author_id')
   ordering = ('username',)
 admin.site.register(Author, UserAdmin)

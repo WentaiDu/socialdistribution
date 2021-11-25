@@ -50,9 +50,11 @@ REST_FRAMEWORK = {
     ['rest_framework.permissions.IsAuthenticated',
     'rest_framework.permissions.AllowAny'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.TokenAuthentication',
     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication',
-    'rest_framework.authentication.BasicAuthentication']
+    ]
 
 }
 MIDDLEWARE = [
@@ -140,6 +142,20 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': False,
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
 
 CORS_ALLOW_ALL_ORIGINS  = True
 

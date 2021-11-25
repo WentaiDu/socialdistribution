@@ -3,6 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 import uuid
 from django.contrib.contenttypes.models import ContentType
+from rest_framework.authtoken.models import Token
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
 
 class Author(AbstractUser):
     author_type = models.CharField(max_length=30,default="author", blank=False)
@@ -103,3 +107,10 @@ class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="inbox", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False, primary_key=True)
     items = models.JSONField()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def created_auth_token(sender, instance=None, created=False, **kwargs):
+    # Create Token whenever a user is created
+    if created:
+        Token.objects.create(user=instance)
