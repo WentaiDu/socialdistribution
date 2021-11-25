@@ -6,6 +6,7 @@ from rest_framework.authtoken import views as drf_auth_views
 app_name = 'authors'
 urlpatterns = [
 
+
     re_path(r'author/(?P<author_id>[(-z)]{36})/posts/(?P<post_id>[(-z)]{36})/likes',views.Likes_list.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/liked',views.LikedList.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/posts/(?P<post_id>[(-z)]{36})/', views.PostDetail.as_view()),
