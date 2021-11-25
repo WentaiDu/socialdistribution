@@ -20,19 +20,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-# class PostImageSerializer(serializers.ModelSerializer):
-#     post_author = AuthorSerializer(read_only=True)
-#     class Meta:
-#         model = Post
-#         fields = ['post_type','title','post_id','source','origin','description','contentType','image_content'
-#         ,'post_author','comments','published','unlisted']
-
-# class PostTextSerializer(serializers.ModelSerializer):
-#     post_author = AuthorSerializer(read_only=True)
-#     class Meta:
-#         model = Post
-#         fields = ['post_type','title','post_id','source','origin','description','contentType','text_content'
-#         ,'post_author','comments','published','unlisted']
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
@@ -56,32 +43,20 @@ class LikedSerializer(serializers.ModelSerializer):
         model = Liked
         fields = ["type","item"]
 
-class InboxPostSerializer(serializers.ModelSerializer):
-    post_items = PostSerializer(many=True,read_only=True)
-    class Meta:
-        model = PostInbox
-        fields = '__all__'
-
-
-# class InboxLikeSerializer(serializers.ModelSerializer):
-#     like_items = LikeSerializer(many=True,read_only=True)
-#     class Meta:
-#         model = LikeInbox
-        # fields = '__all__'
-
-
-# class InboxFollowSerializer(serializers.ModelSerializer):
-#     follow_items = FollowSerializer(many=True,read_only=True)
-#     class Meta:
-#         model = FollowInbox
-#         fields = '__all__'
 
 class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follower
         fields = '__all__'
 
+
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
+        fields = '__all__'
+
+
+class InboxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inbox
         fields = '__all__'

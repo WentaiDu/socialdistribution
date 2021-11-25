@@ -13,17 +13,6 @@ class Author(AbstractUser):
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
-class PostInbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-
-class LikeInbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-
-class FollowInbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
 
 class Post(models.Model):
     class Visibility(models.TextChoices):
@@ -108,3 +97,9 @@ class FriendRequest(models.Model):
 
     def __str__(self):
         return self.summary
+
+
+class Inbox(models.Model):
+    inbox_type = models.CharField(max_length=100, default="inbox", blank=False)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False, primary_key=True)
+    items = models.JSONField()
