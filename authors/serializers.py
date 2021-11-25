@@ -48,7 +48,7 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = ["type","summary","author","object"]
 class LikedSerializer(serializers.ModelSerializer):
-    item=LikeSerializer(read_only=True)
+    item=LikeSerializer(many=True,read_only=True)
     class Meta:
         model = Liked
         fields = ["type","item"]

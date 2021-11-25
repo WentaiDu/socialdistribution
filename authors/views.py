@@ -108,7 +108,7 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
-    pagination_class = CommentPagination
+    #pagination_class = CommentPagination
 
     # def post(self,request):
     #     try:
@@ -179,17 +179,17 @@ class Likes_list(generics.GenericAPIView):
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         likes = Like.objects.filter(object=post_id)
         serializer = LikeSerializer(likes, many=True)
-        return Response(serializer.data)
+        return Response({'serializer':serializer.data})
 class LikesCommentList(generics.GenericAPIView):
     """
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
-
-    def get(self, author_id, post_id, comment_id):
+    queryset = Like.objects.all()
+    def get(self, request,author_id, post_id, comment_id):
         comment_id = Comment.objects.get(pk=comment_id)
-        if comment_id!=post_id:
-            error="comment_id and post_id is not match!"
-            #print(error)
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        # if comment_id!=post_id:
+        #     error="comment_id and post_id is not match!"
+        #     #print(error)
+        #     return Response(error, status=status.HTTP_404_NOT_FOUND)
         if not Author.objects.get(pk=author_id):
             error="Author id not found"
             #print(error)
@@ -204,7 +204,7 @@ class LikesCommentList(generics.GenericAPIView):
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         likes = Like.objects.filter(object=comment_id)
         serializer = CommentSerializer(likes, many=True)
-        return Response(serializer.data)
+        return Response(serializer)
 class LikedList(generics.GenericAPIView):
     """
     GET list what public things author_id liked
