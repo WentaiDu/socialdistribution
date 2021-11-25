@@ -72,8 +72,6 @@ class SignupAPI(generics.CreateAPIView):
 
 class AuthorList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "authors.html"
     # context_object_name = "context_authors"
     # queryset = Author.objects.all()
     # serializer_class = AuthorSerializer
@@ -90,20 +88,10 @@ class AuthorList(generics.ListAPIView):
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "personal.html"
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
-    def get(self, request, *args, **kwargs):
-        authors = Author.objects.all()
-
-        # response = super().list(request,author_id)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
-        serializer = AuthorSerializer(authors, many=True)
-
-        return Response({'author':serializer.data})
-
+    
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
@@ -254,8 +242,6 @@ class LikesCommentList(APIView):
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'postlist.html'
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
@@ -288,16 +274,10 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
-
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'postdetail author.html'
-    
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'postdetail.html'
     def get(self,request,author_id,post_id):
         try:
             author = Author.objects.get(pk=author_id)
@@ -389,8 +369,6 @@ class LikedList(APIView):
 class FollowerList(generics.ListAPIView):
 
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "authors.html"
     # serializer_class = FollowerSerializer
     # context_object_name = "authors"
     # def get_queryset(self, **kwargs):
