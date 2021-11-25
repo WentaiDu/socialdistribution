@@ -40,7 +40,7 @@ function Login() {
       .then((res) => {
         handleClick(true);
         console.log(res.data);
-        window.location.replace(`http://127.0.0.1:8000/authors/`);
+
       })
       .catch((res) => {
         handleClick(false);

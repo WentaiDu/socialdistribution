@@ -350,7 +350,7 @@ class PostList(generics.ListCreateAPIView):
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = PostSerializer(posts, many=True)
 
-        return Response({'serializer':serializer.data})
+        return Response({'posts':serializer.data})
 
 
     def post(self,request,author_id):
@@ -369,9 +369,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
     permission_classes = [permissions.AllowAny]
 
-    
-    lookup_field = 'post_id'
-    queryset = Post.objects.all()
+
     serializer_class = PostSerializer
 
     def get(self,request,author_id,post_id):
@@ -388,7 +386,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                     return Response(status=status.HTTP_403_FORBIDDEN)
                 else:
                     serializer = PostSerializer(post, many=False)
-                    return Response({'serializer':serializer.data})
+                    return Response({'post':serializer.data})
             else:
                 raise Exception
         except:
