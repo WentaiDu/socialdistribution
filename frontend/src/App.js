@@ -4,6 +4,7 @@ import Signup from "./components/Signup";
 import Post from "./components/Post";
 import Test from "./components/Test";
 import Authors from "./components/Authors";
+import Posts from "./components/PostList";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -25,7 +26,9 @@ function App() {
           <Route path="/Signup" exact component={Signup} />
           <Route path="/Post" exact component={Post} />
           <Route path="/Test" exact component={Test} />
-        // <Route path="/Authors" exact component={Authors} />
+          <Route path="/Authors" exact component={Authors} />
+          <Route path="/Author/:author_id/posts" component={Posts} />
+
         </Switch>
       </Router></>
   );

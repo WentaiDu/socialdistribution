@@ -21,6 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const author_id = "7a319c06-3711-4e71-9064-ea0c37c001b9"
 
 class AddPost extends React.Component{
     constructor(){
@@ -28,11 +29,10 @@ class AddPost extends React.Component{
         this.state={
             type:"post",
             title:"",
-            source:"",
-            origin:"" ,
+            source:`${base_url}/author/${author_id}/posts`,
+            origin:`${base_url}/author/${author_id}/posts` ,
             description:"" ,
             contentType:"",
-            author:"",
             content:"",
             categories:[] ,
             published: false,
@@ -59,19 +59,17 @@ class AddPost extends React.Component{
 
     handlePost = () => {
         console.log(this.state);
-        // axios
-        //   .post(`${base_url}/author/${author_id}/posts`, this.state)
-        //   .then((res) => {
-        //     handleClick(true);
-        //     console.log(res.data);
-        //   })
-        //   .catch((res) => {
-        //     handleClick(false);
-        //   }); 
+        axios
+          .post(`${base_url}/author/${author_id}/posts`, this.state)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((res) => {
+          }); 
         } 
 
     render(){
-        const {title,source,origin,description,contentType,author,content,categories,published,visibility,unlisted } = this.state;
+        const {title,source,origin,description,contentType,content,categories,published,visibility,unlisted } = this.state;
         return(
             <Box
             sx={{
@@ -107,14 +105,29 @@ class AddPost extends React.Component{
                         <TextField
                             required
                             name="description"
-                            label="Title"
+                            label="description"
                             fullWidth
                             variant="standard"
                             value={description}
                             onChange={this.handleForm}
                         />
                     </Grid>
-
+                    <Box sx={{ minWidth: 120,}}>
+                            <FormControl>
+                                <InputLabel>contentType</InputLabel>
+                                <Select
+                                name="contentType"
+                                value={contentType}
+                                onChange={this.handleForm}
+                                >
+                                <MenuItem value={"text/markdown"}>MARKDOWN</MenuItem>
+                                <MenuItem value={"text/plain"}>PLAIN</MenuItem>
+                                <MenuItem value={"application/base64"}>APPLICATION</MenuItem>
+                                <MenuItem value={"image/png;base64"}>IMAGE_PNG</MenuItem>
+                                <MenuItem value={"image/jpeg;base64"}>IMAGE_JPEG</MenuItem>
+                                </Select>
+                            </FormControl>
+                            </Box>
                     <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <TextField

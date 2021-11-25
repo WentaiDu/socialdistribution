@@ -243,7 +243,7 @@ class PostList(generics.ListCreateAPIView):
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = PostSerializer(posts, many=True)
 
-        return Response({'serializer':serializer.data})
+        return Response({'posts':serializer.data})
 
 
     def post(self,request,author_id):
