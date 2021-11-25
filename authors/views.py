@@ -170,6 +170,7 @@ class Likes_list(generics.GenericAPIView):
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id):
         post=Post.objects.get(pk=post_id)
+        
         author=Author.objects.get(pk=author_id)
         if not author:
             error="Author id not found"
@@ -177,15 +178,18 @@ class Likes_list(generics.GenericAPIView):
         elif not post:
             error="Post id not found"
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        likes = Like.objects.filter(object=post_id)
+        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id
+        likes = Like.objects.filter(object=a)
+        #serializer =PostSerializer(post, many=True)
+        
         serializer = LikeSerializer(likes, many=True)
-        return Response({'serializer':serializer.data})
+        return Response(serializer.data)
 class LikesCommentList(generics.GenericAPIView):
     """
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id, comment_id):
-        comment_id = Comment.objects.get(pk=comment_id)
+        comment_idk = Comment.objects.get(pk=comment_id)
         # if comment_id!=post_id:
         #     error="comment_id and post_id is not match!"
         #     #print(error)
@@ -202,9 +206,10 @@ class LikesCommentList(generics.GenericAPIView):
             error="Comment id not found"
             #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        likes = Like.objects.filter(object=comment_id)
-        serializer = CommentSerializer(likes, many=True)
-        return Response(serializer)
+        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
+        likes = Like.objects.filter(object=a)
+        serializer = LikeSerializer(likes, many=True)
+        return Response(serializer.data)
 class LikedList(generics.GenericAPIView):
     """
     GET list what public things author_id liked
@@ -216,13 +221,12 @@ class LikedList(generics.GenericAPIView):
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
         liked = Like.objects.filter(author_id=author_id)
-        serializer = LikedSerializer(liked, many=True)
+        serializer = LikeSerializer(liked, many=True)
         response = {
             "type": "liked",
             "items": serializer.data
         }
         return Response(response)
-
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
