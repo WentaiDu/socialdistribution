@@ -23,9 +23,9 @@ import Select from '@mui/material/Select';
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const author_id = "7a319c06-3711-4e71-9064-ea0c37c001b9"
 
-class AddPost extends React.Component{
-    constructor(){
-        super();
+export default class AddPost extends React.Component{
+    constructor(props){
+        super(props);
         this.state={
             type:"post",
             title:"",
@@ -66,6 +66,8 @@ class AddPost extends React.Component{
           })
           .catch((res) => {
           }); 
+        this.props.onClick();
+
         } 
 
     render(){
@@ -188,29 +190,29 @@ class AddPost extends React.Component{
 }
 
 
-export default function Post() {
-    // const [title, setTitle] = React.useState("")  
-    // const [content, setContent] = React.useState("")  
-    // const [visi, setVisi] = React.useState('');
-    // const handleVisiChange = (event) => {
-    //     setVisi(event.target.value);
-    // };
-    // function handlePost() {
-    //     axios
-    //       .post(`${base_url}/author/${author_id}/posts`, {
-    //         title: title,
-    //         content: value,
-    //         visibility: visi,
-    //       })
-    //       .then((res) => {
-    //         handleClick(true);
-    //         console.log(res.data);
-    //       })
-    //       .catch((res) => {
-    //         handleClick(false);
-    //       }); } 
+// export default function Post() {
+//     // const [title, setTitle] = React.useState("")  
+//     // const [content, setContent] = React.useState("")  
+//     // const [visi, setVisi] = React.useState('');
+//     // const handleVisiChange = (event) => {
+//     //     setVisi(event.target.value);
+//     // };
+//     // function handlePost() {
+//     //     axios
+//     //       .post(`${base_url}/author/${author_id}/posts`, {
+//     //         title: title,
+//     //         content: value,
+//     //         visibility: visi,
+//     //       })
+//     //       .then((res) => {
+//     //         handleClick(true);
+//     //         console.log(res.data);
+//     //       })
+//     //       .catch((res) => {
+//     //         handleClick(false);
+//     //       }); } 
   
-    return (
-        <AddPost />
-    );
-}
+//     return (
+//         <AddPost />
+//     );
+// }

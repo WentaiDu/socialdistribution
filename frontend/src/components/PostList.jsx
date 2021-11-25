@@ -11,6 +11,11 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
+import { Link } from 'react-router-dom';
+import AddPost from "./Post";
+import { useState } from "react";
+
+import Button from '@mui/material/Button';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -37,6 +42,8 @@ class PostList extends React.Component {
     })
   }
 
+ 
+
   renderPosts(){
     const {posts} = this.state;
     return posts.length === 0
@@ -44,9 +51,14 @@ class PostList extends React.Component {
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
         : (posts.map(item => (
+
           <ListItem key = {item.post_id}>
+            <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
+
             <ListItemText primary={item.title} secondary={item.description} />
-          </ListItem>)))
+            </Link>
+          </ListItem> ))
+          )
 
         };
 
@@ -58,13 +70,16 @@ class PostList extends React.Component {
           justifyContent="center"
           alignItems="center"
         >
+
           <List
             sx={{
               width: '100%',
               maxWidth: 360,
               bgcolor: 'background.paper',
             }}
-          >
+          ><ListItem key = "button">          
+            <Button onClick = {this.props.onClick}> Add Post</Button>
+            </ListItem>          
             {this.renderPosts()}
           </List>
         </Grid>
@@ -72,8 +87,28 @@ class PostList extends React.Component {
     }
 }
 
+
+
 export default function Posts(props) {
-    console.log(props);
     var authorId = props.match.params.author_id
-    return(<PostList authorId = {authorId}/>);
+    const [addPage, setAddPage] = useState(false);
+
+    function RenderAddButton(){
+      if (addPage){
+        return(<AddPost onClick = {submitORCancelOnClick}/>);
+      }
+      return null;
+    }
+
+    function addOnClick(){
+      console.log("add click");
+      setAddPage(true);
+    }
+
+    function submitORCancelOnClick(){
+      console.log("end click");
+      setAddPage(false);
+    }
+
+    return(<div><PostList authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
 }

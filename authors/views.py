@@ -411,7 +411,7 @@ class FollowerList(generics.ListAPIView):
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = FollowerSerializer(followers, many=True)
 
-        return Response({'authors':serializer.data})
+        return Response({'followers':serializer.data})
 
 class FollowerDetailView(APIView):
     serializer_class = FollowerSerializer
