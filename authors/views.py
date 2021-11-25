@@ -72,11 +72,6 @@ class SignupAPI(generics.CreateAPIView):
 
 class AuthorList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-<<<<<<< HEAD
-=======
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name = "authors.html"
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
     # context_object_name = "context_authors"
     # queryset = Author.objects.all()
     # serializer_class = AuthorSerializer
@@ -93,27 +88,11 @@ class AuthorList(generics.ListAPIView):
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.AllowAny]
-<<<<<<< HEAD
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
     
-=======
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name = "personal.html"
-    queryset = Author.objects.all()
-    lookup_field = 'author_id'
-    serializer_class = AuthorSerializer
-    # def get(self, request, *args, **kwargs):
-    #     authors = Author.objects.all()
 
-    #     # response = super().list(request,author_id)
-    #     # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
-    #     serializer = AuthorSerializer(authors, many=True)
-
-    #     return Response({'author':serializer.data})
-
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
 class CommentList(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Comment.objects.all()
@@ -240,13 +219,9 @@ class LikedList(generics.GenericAPIView):
         return Response(response)
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
-<<<<<<< HEAD
 
-=======
     permission_classes = [permissions.AllowAny]
-    #renderer_classes = [TemplateHTMLRenderer]
-   # template_name = 'postlist.html'
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
+
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
@@ -279,22 +254,14 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
-<<<<<<< HEAD
-=======
+
     permission_classes = [permissions.AllowAny]
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name = 'postdetail author.html'
+
     
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
     lookup_field = 'post_id'
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-<<<<<<< HEAD
-=======
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name = 'postdetail.html'
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
     def get(self,request,author_id,post_id):
         try:
             author = Author.objects.get(pk=author_id)
@@ -369,11 +336,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 class FollowerList(generics.ListAPIView):
 
 
-<<<<<<< HEAD
-=======
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name = "authors.html"
->>>>>>> d19d88cd5f882fa6bf5f8b94e3ef43f4424c0169
+
     # serializer_class = FollowerSerializer
     # context_object_name = "authors"
     # def get_queryset(self, **kwargs):
