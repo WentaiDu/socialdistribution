@@ -25,11 +25,13 @@ class LoginAPI(generics.GenericAPIView):
         username = request.data["username"]
         password = request.data["password"]
         user = authenticate(username=username, password=password)
+        print(user)
         if user is not None:
             login(request,user)
             response = {
                 'detail': 'User logs in successfully!',
-                'id': user.author_id
+                'id': user.author_id,
+                'token': Token.objects.get_or_create(user=user)[0].key
             }
             return Response(response, status=status.HTTP_200_OK)
         else:
@@ -64,24 +66,33 @@ class SignupAPI(generics.CreateAPIView):
             new_author = Author.objects.filter(username=author['username'])
             id = author_serializer.data['author_id']
             new_author.update(url=author['url']+id)
+            new_author = Author.objects.get(username=author['username'])
             response = {
-                'detail':'User created successfully!'
+                'detail': 'User creates succeed!',
+                'id': new_author.author_id,
+                'token': Token.objects.get_or_create(user=new_author)[0].key
             }
             return Response(response, status=status.HTTP_201_CREATED)
+
         else :
+            print(author_serializer.errors)
             response = {
                 'detail':'User created failed!'
             }
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AuthorList(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+
     # context_object_name = "context_authors"
     # queryset = Author.objects.all()
     # serializer_class = AuthorSerializer
     # pagination_class = AuthorPagination
 
     def get(self,request):
+        auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
+        token = auth_header.split(' ')[1] # get token
+        user = get_object_or_404(Author, auth_token = token) # validate if the token is valid
+
         authors = Author.objects.all()
 
         # response = super().list(request,author_id)
@@ -113,6 +124,10 @@ class InboxView(generics.GenericAPIView):
     serializer_class = InboxSerializer
 
     def get(self, request, *args, **kwargs):
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         author_id = self.kwargs['author_id']
 
         queryset = Inbox.objects.get(inbox_author_id=author_id)
@@ -155,6 +170,10 @@ class InboxView(generics.GenericAPIView):
     )
 
     def post(self, request, *args, **kwargs):
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
@@ -196,6 +215,11 @@ class InboxView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
@@ -218,6 +242,11 @@ class Likes_list(generics.GenericAPIView):
     """GET a list of likes from other authors on author_id’s post post_id"""
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         post=Post.objects.get(pk=post_id)
         
         author=Author.objects.get(pk=author_id)
@@ -240,6 +269,11 @@ class LikesCommentList(generics.GenericAPIView):
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id, comment_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         comment_idk = Comment.objects.get(pk=comment_id)
         # if comment_id!=post_id:
         #     error="comment_id and post_id is not match!"
@@ -268,6 +302,10 @@ class LikedList(generics.GenericAPIView):
     GET list what public things author_id liked
     """
     def get(self, request,author_id):
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         author=Author.objects.get(pk=author_id)
         if not author:
             error = "Author not found"
@@ -296,6 +334,10 @@ class PostList(generics.ListCreateAPIView):
 
     def get(self,request, author_id):
 
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         try:
             check=Author.objects.get(pk=author_id)
             posts = Post.objects.filter(author_id=author_id)
@@ -312,6 +354,11 @@ class PostList(generics.ListCreateAPIView):
 
 
     def post(self,request,author_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         post_id=uuid.uuid4()
         return PostDetail().put(request,author_id,post_id)
 
@@ -328,6 +375,11 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer
 
     def get(self,request,author_id,post_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         try:
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
@@ -345,6 +397,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
     def post(self,request,author_id,post_id):
         # permission_class=[permissions.IsAuthenticatedOrReadOnly]
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
+
         try:
 
             author = Author.objects.get(pk=author_id)
@@ -363,6 +421,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 
     def delete(self,request,author_id, post_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
+
         try:
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
@@ -377,6 +441,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 
     def put(self, request,author_id,post_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
+
         try:
             author = Author.objects.get(pk=author_id)
             try:
@@ -408,6 +478,11 @@ class FollowerList(generics.ListAPIView):
     #    return Follower.objects.filter(following_id=self.kwargs['author_id'])
 
     def get(self,request, author_id):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         followers = Follower.objects.filter(following_id=author_id)
         # response = super().list(request,author_id)
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
@@ -419,6 +494,11 @@ class FollowerDetailView(APIView):
     serializer_class = FollowerSerializer
 
     def get(self, request, *args, **kwargs):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         try:
             #author1 = Author.objects.get(pk=author_id1)
             #author2 = Author.objects.filter(pk=author_id2)
@@ -431,6 +511,10 @@ class FollowerDetailView(APIView):
         return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         try:
             author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
@@ -457,6 +541,11 @@ class FollowerDetailView(APIView):
             return Response(str(e),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         try:
             follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
             follower.delete()
