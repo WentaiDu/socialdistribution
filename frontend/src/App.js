@@ -6,6 +6,7 @@ import Test from "./components/Test";
 import Authors from "./components/Authors";
 import Author from "./components/Author";
 import Posts from "./components/PostList";
+import Followers from "./components/Followers";
 import PostDetail from "./components/PostDetail";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
@@ -39,6 +40,8 @@ function App() {
           <Route path="/Test" exact component={Test} />
           <Route path="/Author/:author_id/posts/:post_id" component={PostDetail} />
           <Route path="/Author/:author_id/posts" component={Posts} />
+          <Route path="/Author/:author_id/followers" exact component={Followers} />
+
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
 
