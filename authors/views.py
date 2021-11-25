@@ -13,7 +13,11 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 import simplejson as json
+
+
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
@@ -105,56 +109,111 @@ class CommentList(generics.ListCreateAPIView):
     #         if request.data['type'] == comment:
 
 
+class InboxView(generics.GenericAPIView):
+    serializer_class = InboxSerializer
 
+    def get(self, request, *args, **kwargs):
+        author_id = self.kwargs['author_id']
 
-
-class InboxList(generics.GenericAPIView):
-    #permission_classes = [permissions.AllowAny]
-    serializer_class = InboxPostSerializer
-    def get_inbox(self,author_id,request):
-        try:
-            return PostInbox.objects.get(inbox_author_id=author_id)
-        except PostInbox.DoesNotExist:
-            return Http404
-
-    def get(self,request, author_id):
-        queryset = self.get_inbox(author_id)
-        serializer = InboxPostSerializer(queryset)
+        queryset = Inbox.objects.get(inbox_author_id=author_id)
+        serializer = InboxSerializer(queryset)
         return Response(serializer.data)
 
-    def post(self,request,author_id):
-        inbox = self.get_inbox(author_id)
-        inbox_type = inbox.data['inbox_type']
-        inbox_author_id = inbox.data['inbox_author_id']
-        if request.data['type'] == 'post':
-            items = inbox.data['post_items']
-            inbox_post = {}
-            inbox_post['inbox_type'] = inbox_type
-            inbox_post['inbox_author_id'] = inbox_author_id
-            items.append(request.data['post'])
-            inbox_post['items'] = items
-            inbox_post_serializer = InboxPostSerializer(data = inbox_post)
-            if inbox_post_serializer.is_valid():
-                inbox_post_serializer.save()
-            else:
-                print(inbox_post_serializer.errors)
-        if request.data['type'] == 'like':
-            items = inbox.data['like_items']
-            inbox_like = {}
-            inbox_like['inbox_type'] = inbox_type
-            inbox_like['inbox_author_id'] = inbox_author_id
-            items.append(request.data['like'])
-            inbox_like['items'] = items
-            inbox_like_serializer = InboxLikeSerializer(data = inbox_like)
-            if inbox_like_serializer.is_valid():
-                inbox_like_serializer.save()
-            else:
-                print(inbox_like_serializer.errors)
 
-    def delete(self,request,author_id):
-        inbox = self.get_inbox(author_id)
-        inbox.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @swagger_auto_schema(
+    request_body= PostSerializer,
+       responses = {
+            "201" : openapi.Response(
+                description = "Create Inbox Post Succeeds",
+                examples={
+                    'application/json': {
+                            "type": "post",
+                            "title": "string",
+                            "source": "http://lastplaceigotthisfrom.com/posts/yyyyy",
+                            "origin": "http://whereitcamefrom.com/posts/zzzzz",
+                            "description": "string",
+                            "contentType": "text/markdown",
+                            "content": "string",
+                            "author": {
+                                "username": "string",
+                                "password": "string",
+                                "author_type": "string",
+                                "author_id": "e38e962a-24e9-4199-be01-86eb68114f14",
+                                "host": "string",
+                                "displayName": "string",
+                                "url": "http://127.0.0.1:5454/author/e38e962a-24e9-4199-be01-86eb68114f14",
+                                "github": "string"
+                            },
+                            "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments",
+                            "visibility": "PUBLIC",
+                            "unlisted": True
+                    }
+                }
+            )
+       },
+        tags=['Inbox']
+    )
+
+    def post(self, request, *args, **kwargs):
+        author_id = self.kwargs['author_id']
+        try:
+            inbox = Inbox.objects.get(inbox_author_id=author_id)
+        except:
+            items = []
+            items.append(request.data)
+            items = json.dumps(items)
+            Inbox.objects.create(inbox_author_id=author_id, items=items)
+            response = {
+                'detail': 'succeed'
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+        items = inbox.items
+        items = json.loads(items)
+
+        if request.data['type'] == 'post':
+            serializer = PostSerializer(data=request.data)
+        elif request.data['type'] == 'like':
+            serializer = LikeSerializer(data=request.data)
+        elif request.data['type'] == 'follow':
+            serializer = FollowerSerializer(data=request.data)
+
+        if serializer.is_valid():
+            items.append(serializer.data)
+            items = json.dumps(items)
+
+            inbox = Inbox.objects.filter(inbox_author_id=author_id)
+            inbox.update(items=items)
+            response = {
+                'detail': 'put post succeed'
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            response = {
+                'detail': 'put post failed'
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        author_id = self.kwargs['author_id']
+        try:
+            inbox = Inbox.objects.get(inbox_author_id=author_id)
+            inbox.delete()
+            response = {
+                'detail': 'Inbox delete succeed'
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        except:
+            response = {
+                'detail': 'Inbox delete failed'
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 class Likes_list(generics.GenericAPIView):
     """GET a list of likes from other authors on author_id’s post post_id"""
     queryset = Like.objects.all()
@@ -174,6 +233,8 @@ class Likes_list(generics.GenericAPIView):
         
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
+
+
 class LikesCommentList(generics.GenericAPIView):
     """
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
@@ -200,6 +261,8 @@ class LikesCommentList(generics.GenericAPIView):
         likes = Like.objects.filter(object=a)
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
+
+
 class LikedList(generics.GenericAPIView):
     """
     GET list what public things author_id liked
@@ -217,6 +280,8 @@ class LikedList(generics.GenericAPIView):
             "items": serializer.data
         }
         return Response(response)
+
+
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
 
