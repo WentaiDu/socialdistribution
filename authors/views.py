@@ -105,6 +105,7 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     #     return Response({'author':serializer.data})
 
 class CommentList(generics.ListCreateAPIView):
+    permission_classes = [permissions.AllowAny]
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
@@ -225,7 +226,7 @@ class LikedList(generics.GenericAPIView):
 
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
-
+    permission_classes = [permissions.AllowAny]
     #renderer_classes = [TemplateHTMLRenderer]
    # template_name = 'postlist.html'
     queryset = Post.objects.all()
@@ -260,7 +261,7 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateAPIView):
-
+    permission_classes = [permissions.AllowAny]
     #renderer_classes = [TemplateHTMLRenderer]
     #template_name = 'postdetail author.html'
     
