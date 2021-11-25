@@ -95,13 +95,8 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
-<<<<<<< HEAD
-    def get(self,request,*args,**kwargs):
-        authors = Author.objects.all()
-=======
     # def get(self, request, *args, **kwargs):
     #     authors = Author.objects.all()
->>>>>>> cbb550839be04bdd8f6de779c3063bc5edeb868e
 
     #     # response = super().list(request,author_id)
     #     # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))

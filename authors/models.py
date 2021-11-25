@@ -69,11 +69,16 @@ class Comment(models.Model):
     comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
     comment = models.TextField(default="", blank=False)
-    contentType = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
     published = models.DateTimeField(auto_now_add=True)
     comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
-
+    class ContentType(models.TextChoices):
+        MARKDOWN = 'text/markdown'
+        PLAIN = 'text/plain'
+        APPLICATION = 'application/base64'
+        IMAGE_PNG = 'image/png;base64'
+        IMAGE_JPEG = 'image/jpeg;base64'
 class Like(models.Model):
     #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)
     content = models.URLField(default="", blank=False,verbose_name="@context")
