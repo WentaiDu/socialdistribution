@@ -42,23 +42,19 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['type','title','post_id','source','origin','description','contentType','content'
         ,'author','comments','published','visibility','unlisted']
 
-
 class LikeSerializer(serializers.ModelSerializer):
-    # type is only provided to satisfy API format
-    #type = serializers.CharField(default="Like", source="get_api_type", read_only=True)
-
-    # author will be created and validated separately
-    #author = AuthorSerializer(required=False)
+    #author = AuthorSerializer(read_only=True)
+    author = AuthorSerializer(required=False)
+    object = serializers.URLField()
     class Meta:
         model = Like
-        fields = '__all__'
-        # fields = [
-        #     "type",
-        #     "summary",
-        #     "author",
-        #     "object"
-        # ]
-
+        fields = ["type","summary","author","object"]
+class LikedSerializer(serializers.ModelSerializer):
+    item=LikeSerializer(required=False)
+    object = serializers.URLField()
+    class Meta:
+        model = Liked
+        fields = ["type","item"]
 
 class InboxPostSerializer(serializers.ModelSerializer):
     post_items = PostSerializer(many=True,read_only=True)
