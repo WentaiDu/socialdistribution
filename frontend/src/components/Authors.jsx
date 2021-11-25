@@ -10,108 +10,94 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
-import PrimarySearchAppBar from './Sidebar';
-import CircularProgress from '@mui/material/CircularProgress';
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-
+function OneAuthor(props) {
+  return (
+    <ListItem>
+      <ListItemAvatar>
+      <Avatar alt={props.username} src={props.profileImage} />
+      </ListItemAvatar>
+      <ListItemText primary={props.username} secondary={props.author_id} />
+    </ListItem>
+  );
+}
 
 class AuthorList extends React.Component {
-  constructor(){
-    super();
-    this.state = {
-      authors: []
-      // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
-    }
+
+
+  renderOneAuthor(i) {
+    return(
+      <OneAuthor
+        value={this.props.authors[i]}
+        onClick={() => this.props.onClick(i)}
+      />
+    );
   }
 
-  // constructor(async_param){
-  //   if (typeof async_param === 'undefined') {
-  //     throw new Error('Cannot be called directly');
-  //   }
-  //   console.log(async_param.data);
-  //   this.state = {};
-  // }
-    // const showingList = authorList.map((item) => (
-    //   <ListItem key = {item.author_id}>
-    //       <ListItemAvatar>
-    //       <Avatar alt={item.username} src={item.profileImage} />
-    //       </ListItemAvatar>
-    //       <ListItemText primary={item.username} secondary={item.author_id} />
-    //     </ListItem>
-    // ));
+  render() {
+    return (
+      <div>
+      {this.renderOneAuthor(0)}
+      </div>
+    );
+  }
+}
 
-    // static async build (){
-    //   let res = await axios.get(`${base_url}/authors/`,);
-    //   // authorList = res.data.authors;
-    //   // this.setState(authorList);
-    //   // console.log(this.state);
-    //   return new AuthorList(res);
-    // }
+class Controller extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
 
-  componentDidMount() {
-    axios.get(`${base_url}/authors/`)
+  getState(){
+    var authors;
+    axios.get(`${base_url}/authors/`,)
       .then(res => {
-        const authors = res.data;
+        authors = res.data;
+        this.setState(authors);
         console.log(authors);
-        this.setState( authors );
-    })
+    });
+    console.log(authors);
+    console.log(this.state.authors);
   }
 
-  renderAuthors(){
-    const {authors} = this.state;
-    return authors.length === 0
-        ? (<CircularProgress />)
-        : (authors.map(item => (
-          <ListItem key = {item.author_id}>
-            <ListItemAvatar>
-            <Avatar alt={item.username} src={item.profileImage} />
-            </ListItemAvatar>
-            <ListItemText primary={item.username} secondary={item.author_id} />
-          </ListItem>)))
+  handleClick(i){
+    console.log(i);
+  }
 
-        };
 
-    render(){
-      return (
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
+  render() {
+    this.getState();
+    return (
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <List
+          sx={{
+            width: '100%',
+            maxWidth: 360,
+            bgcolor: 'background.paper',
+          }}
         >
-          <List
-            sx={{
-              width: '100%',
-              maxWidth: 360,
-              bgcolor: 'background.paper',
-            }}
-          >
-            {this.renderAuthors()}
-          </List>
-        </Grid>
-      )
-    }
+        <AuthorList
+          authors={this.authors}
+          onClick={i => this.handleClick(i)}
+        />
+        </List>
+      </Grid>
+    );
+  }
+
 }
 
 export default function Authors() {
-  // var result;
-  // axios.get(`${base_url}/authors/`,).then(
-  //   res => {
-  //     result = res.data.authors;
-  //     console.log(result);
-  //     return(<AuthorList authors = {result}/>);
-  //   }).catch(e => {
-  //     return(<li>404 Not Found</li>);
-  //   });
-
-  // async function getAuthors(){
-  //   let res = await axios.get(`${base_url}/authors/`,);
-  //   result = res.data.authors;
-  // }
-  // const getterAuthorList = window.setInterval(getAuthors(),1000);
-  // console.log(result);
-
-  return(<AuthorList />);
+  return (
+    <Controller />
+  )
 }
