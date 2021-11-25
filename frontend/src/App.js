@@ -4,7 +4,7 @@ import Signup from "./components/Signup";
 import Post from "./components/Post";
 import Test from "./components/Test";
 import Authors from "./components/Authors";
-import Author from "./components/Author";
+import Author from "./components/Authors";
 import Posts from "./components/PostList";
 import PostDetail from "./components/PostDetail";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -16,6 +16,12 @@ import Toolbar from '@mui/material/Toolbar';
 
 
 function App() {
+  const join = (base, path) => {
+    return base.charAt(base.length-1) === '/'
+      ? base.slice(0, -1) + path
+      : base + '/' + path
+  }
+
   return (
     <><React.Fragment>
       <AppBar position="fixed">
@@ -24,6 +30,8 @@ function App() {
       <Toolbar />
     </React.Fragment><Router>
         <Switch>
+        <Route path={join(match.url, '/rest')} component={Login} />
+
           <Route path="/" exact component={Login} />
           <Route path="/Signup" exact component={Signup} />
           <Route path="/Post" exact component={Post} />

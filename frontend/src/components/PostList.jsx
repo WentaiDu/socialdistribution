@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
+import { Link } from 'react-router-dom';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -37,6 +38,8 @@ class PostList extends React.Component {
     })
   }
 
+ 
+
   renderPosts(){
     const {posts} = this.state;
     return posts.length === 0
@@ -44,9 +47,14 @@ class PostList extends React.Component {
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
         : (posts.map(item => (
+
           <ListItem key = {item.post_id}>
+            <Link to={item.post_id}  style={{color:'black'}}>
+
             <ListItemText primary={item.title} secondary={item.description} />
-          </ListItem>)))
+            </Link>
+          </ListItem> ))
+          )
 
         };
 

@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from 'react-router-dom';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -64,12 +65,14 @@ class AuthorList extends React.Component {
     return authors.length === 0
         ? (<CircularProgress />)
         : (authors.map(item => (
+          <Link to= {item.author_id}  style={{color:'black'}}>
+
           <ListItem key = {item.author_id}>
             <ListItemAvatar>
             <Avatar alt={item.username} src={item.profileImage} />
             </ListItemAvatar>
             <ListItemText primary={item.username} secondary={item.author_id} />
-          </ListItem>)))
+          </ListItem></Link>)))
 
         };
 
