@@ -19,11 +19,15 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 
 
-class AuthorList extends React.Component {
-  constructor(){
-    super();
+export default class Followers extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(props);
+    // authorId = props.match.params.author_id
+
     this.state = {
-      authors: []
+        followers: []
+
       // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
     }
   }
@@ -53,19 +57,19 @@ class AuthorList extends React.Component {
     // }
 
   componentDidMount() {
-    axios.get(`${base_url}/authors/`)
+    axios.get(`${base_url}/author/${this.props.match.params.author_id}/followers`)
       .then(res => {
-        const authors = res.data;
-        console.log(authors);
-        this.setState( authors );
+        const followers = res.data;
+        console.log(followers);
+        this.setState( followers );
     })
   }
 
   renderAuthors(){
-    const {authors} = this.state;
-    return authors.length === 0
+    const {followers} = this.state;
+    return followers.length === 0
         ? (<CircularProgress />)
-        : (authors.map(item => (
+        : (followers.map(item => (
 
           <ListItem key = {item.author_id}>
             <Link to= {"/author/"+item.author_id +"/"} replace style={{color:'black'}}>
@@ -100,25 +104,4 @@ class AuthorList extends React.Component {
         </Grid>
       )
     }
-}
-
-export default function Authors() {
-  // var result;
-  // axios.get(`${base_url}/authors/`,).then(
-  //   res => {
-  //     result = res.data.authors;
-  //     console.log(result);
-  //     return(<AuthorList authors = {result}/>);
-  //   }).catch(e => {
-  //     return(<li>404 Not Found</li>);
-  //   });
-
-  // async function getAuthors(){
-  //   let res = await axios.get(`${base_url}/authors/`,);
-  //   result = res.data.authors;
-  // }
-  // const getterAuthorList = window.setInterval(getAuthors(),1000);
-  // console.log(result);
-
-  return(<AuthorList />);
 }

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import django_on_heroku # top of the file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,9 +51,11 @@ REST_FRAMEWORK = {
     ['rest_framework.permissions.IsAuthenticated',
     'rest_framework.permissions.AllowAny'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.TokenAuthentication',
     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication',
-    'rest_framework.authentication.BasicAuthentication']
+    ]
 
 }
 MIDDLEWARE = [
@@ -141,7 +144,22 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': False,
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
 CORS_ALLOW_ALL_ORIGINS  = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+django_on_heroku.settings(locals()) # bottom of the file
