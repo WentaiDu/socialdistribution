@@ -13,19 +13,11 @@ class Author(AbstractUser):
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
-class PostInbox(models.Model):
+
+class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-
-
-class LikeInbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
-
-
-class FollowInbox(models.Model):
-    inbox_type = models.CharField(max_length=100, default="", blank=False)
-    inbox_author_id = models.CharField(max_length=100, default="", blank=False,primary_key=True)
+    inbox_author_id = models.CharField(max_length=100, default="", blank=False, primary_key=True)
+    items = models.JSONField()
 
 
 class Post(models.Model):
@@ -40,9 +32,6 @@ class Post(models.Model):
         APPLICATION = 'application/base64'
         IMAGE_PNG = 'image/png;base64'
         IMAGE_JPEG = 'image/jpeg;base64'
-
-
-
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
     type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
@@ -60,9 +49,14 @@ class Post(models.Model):
     #count = models.IntegerField()
     #scrcomment
     comments = models.URLField()
-    published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py
+    published = models.DateTimeField(auto_now_add=True, verbose_name='published')#USE_TZ=True in settings.py
     visibility = models.CharField(max_length=20,choices=Visibility.choices , default=Visibility.PUBLIC)
     unlisted = models.BooleanField(default=False, null=False)
+
+    class Meta:
+        db_table = "post"
+        ordering = ("-published",)
+
 
 
 class Comment(models.Model):
@@ -75,7 +69,6 @@ class Comment(models.Model):
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
 
 class Like(models.Model):
-    items = models.ForeignKey(LikeInbox, related_name='like_items', on_delete=models.CASCADE)
     content = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)
