@@ -43,12 +43,15 @@ class PostSerializer(serializers.ModelSerializer):
         ,'author','comments','published','visibility','unlisted']
 
 class LikeSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
+    #author = AuthorSerializer(read_only=True)
+    author = AuthorSerializer(required=False)
+    object = serializers.URLField()
     class Meta:
         model = Like
         fields = ["type","summary","author","object"]
 class LikedSerializer(serializers.ModelSerializer):
-    item=LikeSerializer(read_only=True)
+    item=LikeSerializer(required=False)
+    object = serializers.URLField()
     class Meta:
         model = Liked
         fields = ["type","item"]
