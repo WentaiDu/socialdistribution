@@ -100,7 +100,7 @@ export default function Posts(props) {
     const token = localStorage.getItem('jwtToken')
     function RenderAddButton(){
       if (addPage){
-        return(<AddPost onClick = {submitORCancelOnClick}/>);
+        return(<AddPost onClick = {submitORCancelOnClick} authorId = {authorId}/>);
       }
       return null;
     }
