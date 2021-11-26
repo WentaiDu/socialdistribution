@@ -104,9 +104,15 @@ DATABASES = {
     }
 }
 CORS_ORIGIN_WHITELIST = (
+<<<<<<< HEAD
   'http://localhost:8000',
   'http://127.0.0.1:8000',
   'https://socialdistribution-t02.herokuapp.com'
+=======
+  'http://localhost:8000/',
+  'http://127.0.0.1:8000/',
+  'https://socialdistribution-t02.herokuapp.com/'
+>>>>>>> 7c69a08797f849a7cccb258b8940533b7af53d4f
 )
 
 # Password validation
