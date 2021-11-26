@@ -31,20 +31,19 @@ class Post(models.Model):
         IMAGE_PNG = 'image/png;base64'
         IMAGE_JPEG = 'image/jpeg;base64'
 
-    # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
     type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
-    post_id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
+    id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     source = models.URLField(default="")
     origin = models.URLField(default="")
     description = models.TextField(default="")
     contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
-    # image_content = models.FileField()
-    # text_content = models.CharField(max_length=500, default='',blank=True, null=True)
+    text_content = models.CharField(max_length=500, default='', blank=True, null=True)
+    image_content = models.FileField()
     author = models.ForeignKey(Author,related_name='author',on_delete=models.CASCADE,default='')
     content=models.TextField(blank=True)
-    #categories = ArrayField(models.CharField(max_length=200), blank=True)
-    #count = models.IntegerField()
+    # categories = ArrayField(models.CharField(max_length=200), blank=True)
+    count = models.IntegerField()
     #scrcomment
     comments = models.URLField()
     published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py

@@ -18,5 +18,36 @@ from drf_yasg import openapi
 import simplejson as json
 
 
+class AuthorServerAPI(generics.GenericAPIView):
+
+    def get(self,author_id):
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)
+        author = get_object_or_404(Author, author_id=author_id)
+        serializer = AuthorSerializer(data=author)
+        if serializer.is_valid():
+            return Response(serializer.data)
+        else:
+            print(serializer.errors)
+
+class AuthorDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Author.objects.all()
+    lookup_field = 'author_id'
+    serializer_class = AuthorSerializer
+
+class PostServerAPI(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)
+        post_id = self.kwargs['']
+
+
+
+
+
 
 
