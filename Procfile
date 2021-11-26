@@ -1,1 +1,1 @@
-web: gunicorn amoslee.wsgi
+web: gunicorn ourbackend.wsgi
