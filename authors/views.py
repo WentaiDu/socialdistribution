@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import simplejson as json
+from datetime import datetime
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -349,15 +350,12 @@ class LikedList(generics.GenericAPIView):
 
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
-
     permission_classes = [permissions.AllowAny]
-
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
     # def get_queryset(self):
     #     return self.posts
-
 
     def get(self,request, author_id):
 
@@ -475,14 +473,31 @@ class PostDetail(generics.RetrieveUpdateAPIView):
         try:
             author = Author.objects.get(pk=author_id)
             try:
-                post=Post.objects.get(pk=post_id)
+                get_post=Post.objects.get(pk=post_id)
                 err_msg = "Post already exists"
                 return Response(err_msg, status=status.HTTP_409_CONFLICT)
             except:
-                serializer = PostSerializer(data=request.data)
+                post={}
+                postid=request.data['id']+post_id
+                post['title']=request.data['title']
+                post['post_id']=postid
+                post['source']=request.data['source']
+                post['origin']=request.data['origin']
+                post['description']=request.data['description']
+                post['contentType']=request.data['contentType']
+                post['author']=author
+                post['content']=request.data['content']
+                post['comments']=request.data['comments']
+                post['published']=datetime.today().strftime('%Y-%m-%d %H:%M')
+                post['visibility']=request.data['visibility']
+
+                print(request.data['unlisted'])
+                post['unlisted']=request.data['unlisted']
+
+                serializer = PostSerializer(data=post)
                 if serializer.is_valid():
-                    post=Post.objects.create(author=author,post_id=post_id)
-                    post.save()
+                    create_post = Post.objects.create(author=author,post_id=post_id)
+                    create_post.save()
                     return Response({'serializer':serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

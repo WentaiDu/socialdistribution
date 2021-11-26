@@ -21,6 +21,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// const base_url = 'http://localhost:8000';
+
 const token = localStorage.getItem('jwtToken');
 
 export default class AddPost extends React.Component{
@@ -31,7 +33,9 @@ export default class AddPost extends React.Component{
             title:"",
             source:`${base_url}/author/${this.props.authorId}/posts`,
             origin:`${base_url}/author/${this.props.authorId}/posts` ,
+            id:`${base_url}/author/${this.props.authorId}/posts` ,
             description:"" ,
+            comments:"",
             contentType:"text/markdown",
             content:"",
             categories:[] ,
