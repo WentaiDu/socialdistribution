@@ -31,7 +31,12 @@ class PostList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.authorId}/posts/`)
+    axios.get(`${base_url}/author/${this.props.authorId}/posts/`,    
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const posts = res.data;
         console.log(posts);
@@ -47,7 +52,7 @@ class PostList extends React.Component {
   renderPosts(){
     const {posts} = this.state;
     return posts.length === 0
-        ? (<ListItem>             
+        ? (<ListItem>
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
         : (posts.map(item => (
@@ -92,7 +97,7 @@ class PostList extends React.Component {
 export default function Posts(props) {
     var authorId = props.match.params.author_id
     const [addPage, setAddPage] = useState(false);
-
+    const token = localStorage.getItem('jwtToken')
     function RenderAddButton(){
       if (addPage){
         return(<AddPost onClick = {submitORCancelOnClick}/>);
@@ -110,5 +115,5 @@ export default function Posts(props) {
       setAddPage(false);
     }
 
-    return(<div><PostList authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
+    return(<div><PostList token = {token} authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
 }

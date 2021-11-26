@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -14,6 +14,7 @@ import "./common.css";
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import Avatar from '@mui/material/Avatar';
 export default function SignUp() {
+    const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [state,setState] = useState({
       file: null
     });
@@ -95,30 +96,28 @@ export default function SignUp() {
     function handleLogin() {
         history.push("");
       }
-      const uploadImage = async file => {
-        const target = new FormData()
-        target.append("username",username)
-        target.append("displayName",displayName)
-        target.append("password",password)
-        target.append("github",github)
-        target.append("profileImage",file)
-        console.log(target.get("username"))
-        console.log(target.get("profileImage"))
-        axios
-          .post(`http://127.0.0.1:8000/author/`, target,{
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-          console.log(res);
-          console.log(res.data);
-
-          })
-          .catch((res) => {
-          });
-        history.push("");
-        }
+    const uploadImage = async file => {
+      const target = new FormData()
+      target.append("username",username)
+      target.append("displayName",displayName)
+      target.append("password",password)
+      target.append("github",github)
+      target.append("profileImage",file)
+      axios
+        .post(`${base_url}`, target,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        // .then((res) => {
+        // console.log("123")
+        // console.log(res.data);
+        // userCtx.signUp(res.data.token, res.data.id);
+        // })
+        // .catch((res) => {
+        // });
+      history.push("");
+      }
 
   return (
       <Container component="main" maxWidth="xs">
