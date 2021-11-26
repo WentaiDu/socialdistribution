@@ -106,7 +106,7 @@ class FriendRequest(models.Model):
 class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="inbox", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False, primary_key=True)
-    items = models.JSONField()
+    items = models.JSONField(blank=True,null=True)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

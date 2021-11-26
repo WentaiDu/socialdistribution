@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Connection from "./components/connection";
 
 const URL = window.location.href;
 
@@ -35,6 +36,8 @@ function App() {
     </React.Fragment><Router>
         <Switch>
           <Route path="/" exact component={Login} />
+          <Route path="/Connection" exact component={Connection} />
+
           <Route path="/Signup" exact component={Signup} />
           <Route path="/Post" exact component={Post} />
           <Route path="/Test" exact component={Test} />
