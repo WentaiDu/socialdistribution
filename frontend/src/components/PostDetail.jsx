@@ -18,7 +18,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
+const token = localStorage.getItem('jwtToken');
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -37,7 +37,12 @@ class Post extends React.Component {
 
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.authorId}/posts/${this.props.postId}/`)
+    axios.get(`${base_url}/author/${this.props.authorId}/posts/${this.props.postId}/`,
+    {
+      headers: {
+        Authorization: "token " + token,
+      },
+    })
       .then(res => {
         const post = res.data;
         console.log(post);

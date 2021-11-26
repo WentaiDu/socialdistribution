@@ -1,6 +1,7 @@
 import "./App.css";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import Inbox from "./components/Inbox";
 import Post from "./components/Post";
 import Test from "./components/Test";
 import Authors from "./components/Authors";
@@ -40,6 +41,7 @@ function App() {
           <Route path="/Signup" exact component={Signup} />
           <Route path="/Post" exact component={Post} />
           <Route path="/Test" exact component={Test} />
+          <Route path="/Author/:author_id/Inbox" exact component={Inbox} />
           <Route path="/Author/:author_id/posts/:post_id" component={PostDetail} />
           <Route path="/Author/:author_id/posts" component={Posts} />
           <Route path="/Author/:author_id/followers" exact component={Followers} />

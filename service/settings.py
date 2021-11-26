@@ -53,10 +53,10 @@ REST_FRAMEWORK = {
     ['rest_framework.permissions.IsAuthenticated',
     'rest_framework.permissions.AllowAny'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework.authentication.BasicAuthentication',
-    'rest_framework.authentication.TokenAuthentication',
-    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    'rest_framework.authentication.SessionAuthentication',
+    # 'rest_framework.authentication.BasicAuthentication',
+    # 'rest_framework.authentication.TokenAuthentication',
+    # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    # 'rest_framework.authentication.SessionAuthentication',
     ]
 
 }
@@ -103,8 +103,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://socialdistribution-t02.herokuapp.com'
+)
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -174,7 +177,7 @@ prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 
 CORS_ORIGIN_WHITELIST = (
-  'http://localhost:8000/',
-  'http://127.0.0.1:8000/',
-  'https://socialdistribution-t02.herokuapp.com/'
+  'http://localhost:8000',
+  'http://127.0.0.1:8000',
+  'https://socialdistribution-t02.herokuapp.com'
 )

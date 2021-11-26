@@ -23,10 +23,11 @@ class ConnectComponent extends React.Component {
   constructor(){
     super();
     this.state = {
-        token: "d24dab8fb212465e7c88b7d165456a482e26a6ff",
+        token: "037cab5a8de12bea557cc01fb27858a51aea8914",
         url: "https://socialdistribution-t02.herokuapp.com",
-        authorId:"91348e6a-1bcb-43c7-8108-2a77cc6c15d2",
+        authorId:"53d64912-08fc-4884-b785-881d54678b24",
         value:[],
+        posts:[]
     }
   }
 
@@ -38,7 +39,7 @@ class ConnectComponent extends React.Component {
     axios.get(`${base_url}/author/${this.state.authorId}/posts/`,    
     {
       headers: {
-        Authorization: "token " + this.state.token,
+        Authorization:"Token " + this.state.token,
       },
     })
       .then(res => {
@@ -66,12 +67,12 @@ class ConnectComponent extends React.Component {
     }
 
   renderValue(){
-    const {value} = this.state;
-    return value.length === 0
+    const {posts} = this.state;
+    return posts.length === 0
         ? (<ListItem>
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
-        : (value.map(item => (
+        : (posts.map(item => (
           <ListItem key = {item.post_id}>
             <ListItemText primary={item.title} secondary={item.description} />
           </ListItem> ))
