@@ -46,8 +46,9 @@ function Login() {
         handleClick(true);
         history.push("/author/"+res.data.id);
       })
-      .catch((res) => {
+      .catch((e) => {
         handleClick(false);
+        console.log(e)
       });
 
   }
