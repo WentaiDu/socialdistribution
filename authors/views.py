@@ -174,9 +174,9 @@ class InboxView(generics.GenericAPIView):
     )
 
     def post(self, request, *args, **kwargs):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author_id = self.kwargs['author_id']
         try:
