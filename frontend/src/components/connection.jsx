@@ -35,7 +35,7 @@ class ConnectComponent extends React.Component {
     console.log(this.state.token);
     console.log(this.state.authorId);
 
-    axios.get(`${this.state.url}/author/${this.state.authorId}/posts/`,    
+    axios.get(`${base_url}/author/${this.state.authorId}/posts/`,    
     {
       headers: {
         Authorization: "token " + this.state.token,
