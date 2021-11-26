@@ -31,7 +31,7 @@ class PostList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.authorId}/posts/`,    
+    axios.get(`${base_url}/author/${this.props.authorId}/posts/`,
     {
       headers: {
         Authorization: "token " + this.props.token,
