@@ -577,3 +577,25 @@ class FollowerDetailView(APIView):
             return HttpResponseRedirect("/authors/")
         except Exception as e:
             return Response("no such following relation",status=status.HTTP_404_NOT_FOUND)
+
+class FriendRequest(generics.GenericAPIView):
+    #serializer_class = FriendRequestSerializer
+    def put(self, request, author_id, author_url):
+
+        author1 = Author.objects.get(id=author_id)
+        author2 = Author.objects.get(url=author_url)
+        #follow_object = FriendRequest_M.objects.get(actor=author1,object=author2)
+        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+        if not follow_request:
+            error="Author not found"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        else:
+            follow_request.friend_state=FriendRequest_M.State.APPROVE
+            serializer = FriendRequestSerializer(follow_request, many=True)
+            serializer.is_valid()
+            serializer.save()
+            return Response(serializer.data)
+    
+        
+        
+
