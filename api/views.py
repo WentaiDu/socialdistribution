@@ -135,7 +135,11 @@ class InboxView(generics.GenericAPIView):
 
         queryset = Inbox.objects.get(inbox_author_id=author_id)
         serializer = InboxSerializer(queryset)
-        return Response(serializer.data)
+        response = {
+            "query": "get on InboxView(",
+            "items": {'followers':{'serializer':serializer.data}}
+        }
+        return Response(response)
 
 
     @swagger_auto_schema(
@@ -494,7 +498,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 if serializer.is_valid():
                     post=Post.objects.create(author=author,post_id=post_id)
                     post.save()
-                    return Response({'serializer':serializer.data})
+                    response = {
+                        "query": "put on post(",
+                        "items": {'followers':{'serializer':serializer.data}}
+                    }
+                    return Response(response)
+    
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
