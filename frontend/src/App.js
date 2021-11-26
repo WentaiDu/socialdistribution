@@ -15,7 +15,6 @@ import Toolbar from '@mui/material/Toolbar';
 
 const URL = window.location.href;
 
-
 function App() {
 
   // function redir (){
