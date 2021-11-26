@@ -104,7 +104,7 @@ export default function SignUp() {
       target.append("github",github)
       target.append("profileImage",file)
       axios
-        .post(`${base_url}`, target,{
+        .post(`${base_url}/author/`, target,{
           headers: {
             "Content-Type": "multipart/form-data",
           },
