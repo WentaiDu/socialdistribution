@@ -21,12 +21,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const token = localStorage.getItem('jwtToken');
 
 export default class AddPost extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            token : localStorage.getItem('jwtToken'),
             type:"post",
             title:"",
             source:`${base_url}/author/${this.props.authorId}/posts`,
@@ -63,7 +63,7 @@ export default class AddPost extends React.Component{
           .post(`${base_url}/author/${this.props.authorId}/posts`, this.state,    
           {
             headers: {
-              Authorization: "token " + this.props.token,
+              Authorization: "token " + token,
             },
           })
           .then((res) => {
