@@ -102,7 +102,7 @@ class AuthorList(generics.ListAPIView):
         return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.AllowAny]
+
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
@@ -194,6 +194,19 @@ class InboxView(generics.GenericAPIView):
             serializer = PostSerializer(data=request.data)
         elif request.data['type'] == 'like':
             serializer = LikeSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                response = {
+                    'detail': 'save like succeed'
+                }
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                response = {
+                    'detail': 'save like failed'
+                }
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                print(serializer.errors)
+
         elif request.data['type'] == 'follow':
             serializer = FollowerSerializer(data=request.data)
 

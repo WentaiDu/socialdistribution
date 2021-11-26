@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./common.css";
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -13,7 +13,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function Login() {
-  
   const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   const history = useHistory();
   const [username, setUsername] = useState("");
@@ -38,9 +37,14 @@ function Login() {
         password: password,
       })
       .then((res) => {
+        console.log(res.data)
+        console.log(res.data.token)
+        localStorage.setItem("jwtToken", res.data.token);
+        localStorage.setItem("userID",res.data.id);
+        // const imb = localStorage.getItem('jwtToken')
+        // console.log(imb)
         handleClick(true);
-        console.log(res.data);
-
+        history.push("/author/"+res.data.id);
       })
       .catch((res) => {
         handleClick(false);

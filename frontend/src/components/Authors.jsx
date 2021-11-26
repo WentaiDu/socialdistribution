@@ -53,7 +53,12 @@ class AuthorList extends React.Component {
     // }
 
   componentDidMount() {
-    axios.get(`${base_url}/authors/`)
+    axios.get(`${base_url}/authors/`,    
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const authors = res.data;
         console.log(authors);
@@ -103,6 +108,7 @@ class AuthorList extends React.Component {
 }
 
 export default function Authors() {
+  const token = localStorage.getItem('jwtToken')
   // var result;
   // axios.get(`${base_url}/authors/`,).then(
   //   res => {
@@ -120,5 +126,5 @@ export default function Authors() {
   // const getterAuthorList = window.setInterval(getAuthors(),1000);
   // console.log(result);
 
-  return(<AuthorList />);
+  return(<AuthorList token = {token} />);
 }

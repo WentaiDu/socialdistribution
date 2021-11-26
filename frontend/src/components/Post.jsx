@@ -27,6 +27,7 @@ export default class AddPost extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            token : localStorage.getItem('jwtToken'),
             type:"post",
             title:"",
             source:`${base_url}/author/${author_id}/posts`,
@@ -60,7 +61,12 @@ export default class AddPost extends React.Component{
     handlePost = () => {
         console.log(this.state);
         axios
-          .post(`${base_url}/author/${author_id}/posts`, this.state)
+          .post(`${base_url}/author/${author_id}/posts`, this.state,    
+          {
+            headers: {
+              Authorization: "token " + this.props.token,
+            },
+          })
           .then((res) => {
             console.log(res.data);
           })

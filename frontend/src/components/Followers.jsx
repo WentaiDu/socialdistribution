@@ -26,6 +26,7 @@ export default class Followers extends React.Component {
     // authorId = props.match.params.author_id
 
     this.state = {
+        token : localStorage.getItem('jwtToken'),
         followers: []
 
       // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
@@ -57,7 +58,12 @@ export default class Followers extends React.Component {
     // }
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.match.params.author_id}/followers`)
+    axios.get(`${base_url}/author/${this.props.match.params.author_id}/followers`,
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const followers = res.data;
         console.log(followers);
