@@ -11,3 +11,16 @@ Contributors:
 -Siyuan Wu  
   
 External Source Code:  
+
+
+
+
+# Deployed Server
+
+Frontend:
+Backend:
+
+
+# API
+
+Docs:
