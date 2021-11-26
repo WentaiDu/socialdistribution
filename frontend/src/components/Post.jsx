@@ -60,7 +60,12 @@ export default class AddPost extends React.Component{
     handlePost = () => {
         console.log(this.state);
         axios
-          .post(`${base_url}/author/${author_id}/posts`, this.state)
+          .post(`${base_url}/author/${author_id}/posts`, this.state,    
+          {
+            headers: {
+              Authorization: "token " + this.props.token,
+            },
+          })
           .then((res) => {
             console.log(res.data);
           })

@@ -10,7 +10,7 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import{ useContext } from 'react';
 import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
 import Paper from '@mui/material/Paper';
@@ -34,16 +34,19 @@ class MainPage extends React.Component {
     }
   }
 
-
-
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.authorId}/`)
+
+    axios.get(`${base_url}/author/${this.props.authorId}/`,
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const author = res.data;
-        console.log(author);
+        // console.log(author);
         this.setState(author);
-        console.log(this.state);
-
+        // console.log(this.state);
     })
   }
 
@@ -60,7 +63,6 @@ class MainPage extends React.Component {
     }
 }
 
-
     render(){
       return (
         <Stack spacing={1}>
@@ -71,7 +73,9 @@ class MainPage extends React.Component {
 }
 
 export default function Author(props) {
+    const token = localStorage.getItem('jwtToken')
+    // console.log(imb)
     console.log(props);
     var authorId = props.match.params.author_id
-    return(<MainPage authorId = {authorId}/>);
+    return(<MainPage token = {token} authorId = {authorId}/>);
 }

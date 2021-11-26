@@ -57,7 +57,12 @@ export default class Followers extends React.Component {
     // }
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.match.params.author_id}/followers`)
+    axios.get(`${base_url}/author/${this.props.match.params.author_id}/followers`,
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const followers = res.data;
         console.log(followers);

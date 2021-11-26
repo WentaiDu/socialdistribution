@@ -53,7 +53,12 @@ class AuthorList extends React.Component {
     // }
 
   componentDidMount() {
-    axios.get(`${base_url}/authors/`)
+    axios.get(`${base_url}/authors/`,    
+    {
+      headers: {
+        Authorization: "token " + this.props.token,
+      },
+    })
       .then(res => {
         const authors = res.data;
         console.log(authors);
