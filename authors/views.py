@@ -130,6 +130,7 @@ class InboxView(generics.GenericAPIView):
 
         author_id = self.kwargs['author_id']
 
+        queryset = get_object_or_404(Inbox, inbox_author_id=author_id)
         queryset = Inbox.objects.get(inbox_author_id=author_id)
         serializer = InboxSerializer(queryset)
         return Response(serializer.data)
