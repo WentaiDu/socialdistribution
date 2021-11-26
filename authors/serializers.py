@@ -52,7 +52,7 @@ class FollowerSerializer(serializers.ModelSerializer):
 
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FriendRequest
+        model = FriendRequest_M
         fields = '__all__'
 
 

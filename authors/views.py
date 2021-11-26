@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import simplejson as json
+from datetime import datetime
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -88,9 +89,9 @@ class AuthorList(generics.ListAPIView):
     # pagination_class = AuthorPagination
 
     def get(self,request):
-        auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
-        token = auth_header.split(' ')[1] # get token
-        user = get_object_or_404(Author, auth_token = token) # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1] # get token
+        # user = get_object_or_404(Author, auth_token = token) # validate if the token is valid
 
         authors = Author.objects.all()
 
@@ -349,15 +350,12 @@ class LikedList(generics.GenericAPIView):
 
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
-
     permission_classes = [permissions.AllowAny]
-
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
     # def get_queryset(self):
     #     return self.posts
-
 
     def get(self,request, author_id):
 
@@ -475,14 +473,31 @@ class PostDetail(generics.RetrieveUpdateAPIView):
         try:
             author = Author.objects.get(pk=author_id)
             try:
-                post=Post.objects.get(pk=post_id)
+                get_post=Post.objects.get(pk=post_id)
                 err_msg = "Post already exists"
                 return Response(err_msg, status=status.HTTP_409_CONFLICT)
             except:
-                serializer = PostSerializer(data=request.data)
+                post={}
+                postid=request.data['id']+post_id
+                post['title']=request.data['title']
+                post['post_id']=postid
+                post['source']=request.data['source']
+                post['origin']=request.data['origin']
+                post['description']=request.data['description']
+                post['contentType']=request.data['contentType']
+                post['author']=author
+                post['content']=request.data['content']
+                post['comments']=request.data['comments']
+                post['published']=datetime.today().strftime('%Y-%m-%d %H:%M')
+                post['visibility']=request.data['visibility']
+
+                print(request.data['unlisted'])
+                post['unlisted']=request.data['unlisted']
+
+                serializer = PostSerializer(data=post)
                 if serializer.is_valid():
-                    post=Post.objects.create(author=author,post_id=post_id)
-                    post.save()
+                    create_post = Post.objects.create(author=author,post_id=post_id)
+                    create_post.save()
                     return Response({'serializer':serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -504,9 +519,9 @@ class FollowerList(generics.ListAPIView):
 
     def get(self,request, author_id):
 
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         followers = Follower.objects.filter(following_id=author_id)
         # response = super().list(request,author_id)
@@ -577,3 +592,56 @@ class FollowerDetailView(APIView):
             return HttpResponseRedirect("/authors/")
         except Exception as e:
             return Response("no such following relation",status=status.HTTP_404_NOT_FOUND)
+
+class FriendRequest(generics.GenericAPIView):
+    serializer_class = FriendRequestSerializer
+    def put(self, request, author_id1, author_id2):
+    # def put(self, request, *args, **kwargs):
+        # author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
+        # author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
+        # follow_request = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+        author1 = Author.objects.get(id=author_id1)
+        author2 = Author.objects.get(id=author_id2)
+
+        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+        if not follow_request:
+            error="Author not found"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        else:
+            follow_request.friend_state=FriendRequest_M.State.APPROVE
+            serializer = FriendRequestSerializer(follow_request, many=True)
+            serializer.is_valid()
+            serializer.save()
+            return Response(serializer.data)
+    def delete(self, request, author_id1, author_id2):
+        
+        author1 = Author.objects.get(id=author_id1)
+        author2 = Author.objects.get(id=author_id2)
+        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+        if not follow_request:
+            error="Author not found OR no FriendRequest"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        follow_request.delete()
+        response = {
+            'response': 'Friend Request delete succeed'
+        }
+        return Response(response, status=status.HTTP_200_OK)
+    def get(self, request, author_id1, author_id2):
+        
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        author1 = Author.objects.get(id=author_id1)
+        author2 = Author.objects.get(id=author_id2)
+        if not author1:
+            error="Author 1 id not found"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        elif not author2:
+            error="Author 2 id not found"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        follow_request = FriendRequest_M.objects.filter(actor=author1, object =author2,status=FriendRequest_M.State.PENDING)
+
+        #serializer =PostSerializer(post, many=True)
+        
+        serializer = FriendRequestSerializer(follow_request, many=True)
+        return Response(serializer.data)

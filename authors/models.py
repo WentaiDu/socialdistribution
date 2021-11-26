@@ -32,9 +32,9 @@ class Post(models.Model):
         IMAGE_JPEG = 'image/jpeg;base64'
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
-    type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
+    type = models.CharField(max_length=100, default="post", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
-    post_id = models.UUIDField(primary_key = True, auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
+    post_id = models.UUIDField(primary_key = True,editable = False,verbose_name="id")
     source = models.URLField(default="")
     origin = models.URLField(default="")
     description = models.TextField(default="")
@@ -94,7 +94,12 @@ class Follower(models.Model):
     github = models.CharField(null = True,blank=False, max_length=50)
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
-class FriendRequest(models.Model):
+class FriendRequest_M(models.Model):
+    class State(models.TextChoices):
+        PENDING = "PENDING"
+        APPROVE = "APPROVE"
+    friend_state = models.CharField(max_length=50, choices=State.choices, default=State.PENDING)
+    type = models.CharField(max_length=100, default="", blank=False)
     summary = models.CharField(max_length=50,default="", blank=False)
     actor = models.ForeignKey(Author, related_name='actor', on_delete=models.CASCADE)
     object = models.ForeignKey(Author, related_name='object', on_delete=models.CASCADE)

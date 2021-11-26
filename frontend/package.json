@@ -89,8 +89,8 @@
     "test": "node scripts/test.js"
   },
   "engines": {
-   "node": "14.17.1"
- },
+    "node": "14.17.1"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
