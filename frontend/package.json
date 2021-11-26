@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://ourbackend.herokuapp.com",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@emotion/react": "^11.4.1",
@@ -83,10 +84,13 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "node server/server.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
+  "engines": {
+   "node": "14.17.1"
+ },
   "eslintConfig": {
     "extends": [
       "react-app",
