@@ -25,7 +25,6 @@ class LoginAPI(generics.GenericAPIView):
         username = request.data["username"]
         password = request.data["password"]
         user = authenticate(username=username, password=password)
-        print(user)
         if user is not None:
             login(request,user)
             response = {
@@ -130,10 +129,14 @@ class InboxView(generics.GenericAPIView):
 
         author_id = self.kwargs['author_id']
 
-        queryset = get_object_or_404(Inbox, inbox_author_id=author_id)
-        queryset = Inbox.objects.get(inbox_author_id=author_id)
-        serializer = InboxSerializer(queryset)
-        return Response(serializer.data)
+        try:
+            queryset = Inbox.objects.get(inbox_author_id=author_id)
+            serializer = InboxSerializer(queryset)
+            return Response(serializer.data)
+        except:
+            queryset = Inbox.objects.create(inbox_author_id=author_id)
+            serializer = InboxSerializer(queryset)
+            return Response(serializer.data)
 
 
     @swagger_auto_schema(
@@ -171,13 +174,23 @@ class InboxView(generics.GenericAPIView):
     )
 
     def post(self, request, *args, **kwargs):
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
+            if inbox.items == None:
+                items = []
+                items.append(request.data)
+                items = json.dumps(items)
+                inbox.items = items
+                inbox.save()
+                response = {
+                    'detail': 'succeed'
+                }
+                return Response(response, status=status.HTTP_200_OK)
         except:
             items = []
             items.append(request.data)
