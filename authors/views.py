@@ -610,7 +610,16 @@ class FriendRequest(generics.GenericAPIView):
             serializer.is_valid()
             serializer.save()
             return Response(serializer.data)
-    
+    def delete(self, request, author_id, author_url):
         
-        
-
+        author1 = Author.objects.get(id=author_id)
+        author2 = Author.objects.get(url=author_url)
+        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+        if not follow_request:
+            error="Author not found OR no FriendRequest"
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+        follow_request.delete()
+        response = {
+            'response': 'Friend Request delete succeed'
+        }
+        return Response(response, status=status.HTTP_200_OK)
