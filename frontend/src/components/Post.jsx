@@ -27,6 +27,7 @@ export default class AddPost extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            token : localStorage.getItem('jwtToken'),
             type:"post",
             title:"",
             source:`${base_url}/author/${author_id}/posts`,

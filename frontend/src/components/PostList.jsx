@@ -52,7 +52,7 @@ class PostList extends React.Component {
   renderPosts(){
     const {posts} = this.state;
     return posts.length === 0
-        ? (<ListItem>             
+        ? (<ListItem>
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
         : (posts.map(item => (
@@ -97,7 +97,7 @@ class PostList extends React.Component {
 export default function Posts(props) {
     var authorId = props.match.params.author_id
     const [addPage, setAddPage] = useState(false);
-
+    const token = localStorage.getItem('jwtToken')
     function RenderAddButton(){
       if (addPage){
         return(<AddPost onClick = {submitORCancelOnClick}/>);
@@ -115,5 +115,5 @@ export default function Posts(props) {
       setAddPage(false);
     }
 
-    return(<div><PostList authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
+    return(<div><PostList token = {token} authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
 }

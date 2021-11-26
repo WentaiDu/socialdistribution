@@ -26,6 +26,7 @@ export default class Followers extends React.Component {
     // authorId = props.match.params.author_id
 
     this.state = {
+        token : localStorage.getItem('jwtToken'),
         followers: []
 
       // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]

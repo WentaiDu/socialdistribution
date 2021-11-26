@@ -108,6 +108,7 @@ class AuthorList extends React.Component {
 }
 
 export default function Authors() {
+  const token = localStorage.getItem('jwtToken')
   // var result;
   // axios.get(`${base_url}/authors/`,).then(
   //   res => {
@@ -125,5 +126,5 @@ export default function Authors() {
   // const getterAuthorList = window.setInterval(getAuthors(),1000);
   // console.log(result);
 
-  return(<AuthorList />);
+  return(<AuthorList token = {token} />);
 }
