@@ -102,7 +102,7 @@ class AuthorList(generics.ListAPIView):
         return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.AllowAny]
+
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
