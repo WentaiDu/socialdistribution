@@ -21,17 +21,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-const author_id = "7a319c06-3711-4e71-9064-ea0c37c001b9"
+const token = localStorage.getItem('jwtToken');
 
 export default class AddPost extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            token : localStorage.getItem('jwtToken'),
             type:"post",
             title:"",
-            source:`${base_url}/author/${author_id}/posts`,
-            origin:`${base_url}/author/${author_id}/posts` ,
+            source:`${base_url}/author/${this.props.authorId}/posts`,
+            origin:`${base_url}/author/${this.props.authorId}/posts` ,
             description:"" ,
             contentType:"text/markdown",
             content:"",
@@ -61,10 +60,10 @@ export default class AddPost extends React.Component{
     handlePost = () => {
         console.log(this.state);
         axios
-          .post(`${base_url}/author/${author_id}/posts`, this.state,    
+          .post(`${base_url}/author/${this.props.authorId}/posts`, this.state,    
           {
             headers: {
-              Authorization: "token " + this.props.token,
+              Authorization: "token " + token,
             },
           })
           .then((res) => {

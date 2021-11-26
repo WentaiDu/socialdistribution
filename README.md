@@ -17,11 +17,11 @@ External Source Code:
 
 # Deployed Server
 
-Frontend:
+Frontend: https://socialdistribution-t02.herokuapp.com
 
-Backend:
+Backend:https://ourbackend.herokuapp.com
 
 
 # API
 
-Docs:
+Docs:https://ourbackend.herokuapp.com/docs/
