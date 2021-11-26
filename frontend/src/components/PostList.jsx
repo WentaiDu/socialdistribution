@@ -38,6 +38,7 @@ class PostList extends React.Component {
       },
     })
       .then(res => {
+        console.log(res);
         const posts = res.data;
         console.log(posts);
 
