@@ -32,26 +32,30 @@ export default function Inbox() {
     const token = localStorage.getItem('jwtToken')
     const id = localStorage.getItem('userID')
     const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-    const data = getMockData()
+    // const messages = getMockData().items
     const [messages, setMessages] = useState([]);
-    // useEffect(()=>{
-    //         axios.get(`${base_url}/author/${id}/inbox/`,
-    //         {
-    //           headers: {
-    //             Authorization: "token " + token,
-    //           },
-    //         })
-    //           .then(res => {
-    //             console.log(res.data);
-    //             setMessages(res.data.items);
-    //         })
-    //           .catch(e =>{
-    //             console.log(e)
-    //           })
-    // })
+    useEffect(()=>{
+            axios.get(
+              `${base_url}/author/${id}/inbox/`,
+            {
+              headers: {
+                Authorization: "token " + token,
+              },
+            })
+              .then(res => {
+                console.log(res.data);
+                if (res.data.items){
+                  setMessages(res.data.items);
+                }
+                
+            })
+              .catch(e =>{
+                console.log(e)
+              })
+    })
     return (
       <ThemeProvider>
-        {data.items.map((message, index) => (
+        {messages.map((message, index) => (
         <Card key = {index}
           sx={{
             minWidth: "80vw",
@@ -73,16 +77,4 @@ export default function Inbox() {
       ))}
       </ThemeProvider>
     );
-    // return inboxList.length === 0
-    //     ? (<ListItem>
-    //       <ListItemText primary="404 Not Found" secondary="" />
-    //       </ListItem>)
-    //     : (inboxList.map(item => (
-
-    //       <ListItem key = {item.post_id}>
-    //         {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}> */}
-
-    //         <ListItemText primary={item.title} secondary={item.description} />
-    //       </ListItem> ))
-    //       )
 }
