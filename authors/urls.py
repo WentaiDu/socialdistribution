@@ -23,6 +23,7 @@ urlpatterns = [
 
     re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
 
+    path('pendingsignup/',views.PendingAuthorListAPI.as_view(),name='pending_signup'),
     path('login/',views.LoginAPI.as_view(),name='login'),
     path('author/',views.SignupAPI.as_view(),name='signup'),
     path('auth/', include('rest_auth.urls')),
