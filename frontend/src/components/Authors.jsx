@@ -20,8 +20,8 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 //
 
 class AuthorList extends React.Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       authors: []
       // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]

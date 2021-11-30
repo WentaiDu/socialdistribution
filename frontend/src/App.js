@@ -14,6 +14,7 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Connection from "./components/connection";
+import Try from "./components/try";
 
 const URL = window.location.href;
 
@@ -48,6 +49,7 @@ function App() {
 
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
+          <Route path="/try" exact component={Try} />
 
         </Switch>
       </Router></>

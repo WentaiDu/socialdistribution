@@ -18,16 +18,18 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 // const curent_url = window.location.href;
 const curent_url = "http://localhost:3000";
 //
+const t10_url = "https://social-distribution-t10.herokuapp.com/app/posts"
 
 class ConnectComponent extends React.Component {
   constructor(){
     super();
     this.state = {
-        token: "037cab5a8de12bea557cc01fb27858a51aea8914",
-        url: "https://socialdistribution-t02.herokuapp.com",
-        authorId:"53d64912-08fc-4884-b785-881d54678b24",
+        token: "",
+        url: "",
+        authorId:"",
         value:[],
-        posts:[]
+        posts:[],
+        data:[]
     }
   }
 
@@ -36,10 +38,13 @@ class ConnectComponent extends React.Component {
     console.log(this.state.token);
     console.log(this.state.authorId);
 
-    axios.get(`${base_url}/author/${this.state.authorId}/posts/`,    
+    axios.get(`${this.state.url}/author/${this.state.authorId}/posts/`
+    ,    
     {
       headers: {
+        "X-CSRFToken": "57ddbefa32fbdc602755462b0700a1c3ebd75171",
         Authorization:"Token " + this.state.token,
+
       },
     })
       .then(res => {
@@ -67,12 +72,12 @@ class ConnectComponent extends React.Component {
     }
 
   renderValue(){
-    const {posts} = this.state;
-    return posts.length === 0
+    const {data} = this.state;
+    return data.length === 0
         ? (<ListItem>
           <ListItemText primary="404 Not Found" secondary="" />
           </ListItem>)
-        : (posts.map(item => (
+        : (data.map(item => (
           <ListItem key = {item.post_id}>
             <ListItemText primary={item.title} secondary={item.description} />
           </ListItem> ))
