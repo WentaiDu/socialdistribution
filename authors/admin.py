@@ -27,6 +27,7 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(Author, UserAdmin)
 admin.site.register(models.Post)
 admin.site.register(models.Comment)
+admin.site.register(models.PendingAuthor)
 admin.site.register(models.Like)
 admin.site.register(models.Liked)
 admin.site.register(models.Inbox)

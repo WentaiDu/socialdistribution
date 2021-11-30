@@ -18,6 +18,12 @@ class Author(AbstractUser):
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
 
+class PendingAuthor(models.Model):
+    # The default value is 'pending', if admin accept user sign up to server, change the accept to 'accept', if admin
+    # reject, then change the accept to 'reject'.
+    accept = models.CharField(max_length=100, default='pending')
+    pending_author = models.JSONField(blank=True,null=True,verbose_name="pending_author")
+
 class Post(models.Model):
     class Visibility(models.TextChoices):
         PUBLIC='PUBLIC'
