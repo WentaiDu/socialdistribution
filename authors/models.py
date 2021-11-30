@@ -32,9 +32,9 @@ class Post(models.Model):
         IMAGE_JPEG = 'image/jpeg;base64'
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
-    type = models.CharField(max_length=100, default="post", blank=False,verbose_name="type")
+    type = models.CharField(max_length=100,editable=False,default="post", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
-    post_id = models.UUIDField(primary_key = True,editable = False,verbose_name="id")
+    post_id = models.UUIDField(primary_key = True,auto_created = True,verbose_name="id",default=uuid.uuid4)
     source = models.URLField(default="")
     origin = models.URLField(default="")
     description = models.TextField(default="")

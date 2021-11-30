@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState, useContext, useEffect } from "react";
+import InboxList from "./InboxType/InboxList";
+import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Link, Typography, TextField} from "@material-ui/core";
 import Grid from '@mui/material/Grid';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -23,12 +25,18 @@ import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import {getMockData} from '../mockdata.js';
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+
 export default function Inbox() {
     const token = localStorage.getItem('jwtToken')
     const id = localStorage.getItem('userID')
     const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+    // const messages = getMockData().items
+    const [messages, setMessages] = useState([]);
     useEffect(()=>{
-            axios.get(`${base_url}/author/${id}/inbox/`,
+            axios.get(
+              `${base_url}/author/${id}/inbox/`,
             {
               headers: {
                 Authorization: "token " + token,
@@ -36,28 +44,37 @@ export default function Inbox() {
             })
               .then(res => {
                 console.log(res.data);
+                if (res.data.items){
+                  setMessages(res.data.items);
+                }
+                
             })
               .catch(e =>{
                 console.log(e)
               })
     })
     return (
-        <Stack spacing={2} direction="row">
-          <Button variant="text">Text</Button>
-          <Button variant="contained">Contained</Button>
-          <Button variant="outlined">Outlined</Button>
-        </Stack>
-      );
-    // return inboxList.length === 0
-    //     ? (<ListItem>
-    //       <ListItemText primary="404 Not Found" secondary="" />
-    //       </ListItem>)
-    //     : (inboxList.map(item => (
-
-    //       <ListItem key = {item.post_id}>
-    //         {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}> */}
-
-    //         <ListItemText primary={item.title} secondary={item.description} />
-    //       </ListItem> ))
-    //       )
+      <ThemeProvider>
+        {messages.map((message, index) => (
+        <Card key = {index}
+          sx={{
+            minWidth: "80vw",
+            align: "center",
+            padding: "50px",
+            borderRadius: 7,
+          }}
+        >
+          <Box sx={{ width: "100%" }}>
+            <InboxList
+              type={message.type}
+              title={message.title}
+              author={message.author.displayName}
+              description={message.description}
+              content={message.content}
+            />
+          </Box>
+        </Card>
+      ))}
+      </ThemeProvider>
+    );
 }

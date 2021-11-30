@@ -16,7 +16,6 @@ import PrimarySearchAppBar from './Sidebar';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const Item = styled(Paper)(({ theme }) => ({
