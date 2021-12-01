@@ -538,11 +538,11 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             except:
                 post = {}
                 path = request.build_absolute_uri()
-                pid = path + str(post_id)
+                pid = path + str(post_id)+'/'
                 post['title'] = request.data['title']
                 # post['post_id'] = pid
-                post['source'] = request.data['source']
-                post['origin'] = request.data['origin']
+                post['source'] = pid
+                post['origin'] = pid
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
