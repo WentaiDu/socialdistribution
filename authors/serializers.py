@@ -42,7 +42,7 @@ class LikeSerializer(serializers.ModelSerializer):
     object = serializers.URLField()
     class Meta:
         model = Like
-        fields = ["type","summary","author","object"]
+        fields = ["context","type","summary","author","object"]
 class LikedSerializer(serializers.ModelSerializer):
     item=LikeSerializer(required=False)
     object = serializers.URLField()
