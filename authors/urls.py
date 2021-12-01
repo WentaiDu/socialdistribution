@@ -24,7 +24,7 @@ urlpatterns = [
     re_path(r'author/(?P<author_id1>[(-z)]{36})/followers/', views.FriendRequest.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/followers', views.FollowerList.as_view()),
 
-    re_path(r'author/(?P<author_id>[(-z)]{36})/public/', views.publicpost.as_view()),
+    re_path(r'public/', views.publicpost.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
 
     path('login/',views.LoginAPI.as_view(),name='login'),
