@@ -10,10 +10,12 @@ import Followers from "./components/Followers";
 import PostDetail from "./components/PostDetail";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
+// import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Connection from "./components/connection";
-
+import CommentList from "./components/Comment";
+import Try from "./components/try";
+// import {AppAp} from "./components/Sidebar";
 const URL = window.location.href;
 
 function App() {
@@ -28,12 +30,11 @@ function App() {
 
   return (
     <><React.Fragment>
-      <AppBar position="fixed">
-        <Toolbar>{/* content */}</Toolbar>
-      </AppBar>
-      <Toolbar />
+
     </React.Fragment><Router>
         <Switch>
+          <Route path="/aaa" exact component={Try} />
+          <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
           <Route path="/" exact component={Login} />
           <Route path="/Connection" exact component={Connection} />
           <Route path="/Signup" exact component={Signup} />
