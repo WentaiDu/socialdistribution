@@ -131,9 +131,9 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
 class AuthorList(generics.ListAPIView):
 
     # context_object_name = "context_authors"
-    # queryset = Author.objects.all()
-    # serializer_class = AuthorSerializer
-    # pagination_class = AuthorPagination
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    pagination_class = AuthorPagination
 
     def get(self,request):
         # auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
@@ -238,7 +238,6 @@ class InboxView(generics.GenericAPIView):
                 response = {
                     'detail': 'succeed'
                 }
-                return Response(response, status=status.HTTP_200_OK)
         except:
             items = []
             items.append(request.data)
@@ -247,22 +246,24 @@ class InboxView(generics.GenericAPIView):
             response = {
                 'detail': 'succeed'
             }
-            return Response(response, status=status.HTTP_200_OK)
 
         items = inbox.items
         items = json.loads(items)
-
+        print(request.data)
         if request.data['type'] == 'post':
             serializer = PostSerializer(data=request.data)
         elif request.data['type'] == 'like':
             serializer = LikeSerializer(data=request.data)
+            print("request = like")
             if serializer.is_valid():
+                print("valid!!!")
                 serializer.save()
                 response = {
                     'detail': 'save like succeed'
                 }
                 return Response(response, status=status.HTTP_200_OK)
             else:
+                print(serializer.errors)
                 response = {
                     'detail': 'save like failed'
                 }
@@ -291,9 +292,9 @@ class InboxView(generics.GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
 
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author_id = self.kwargs['author_id']
         try:
@@ -318,9 +319,9 @@ class Likes_list(generics.GenericAPIView):
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id):
 
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         post=Post.objects.get(pk=post_id)
         
@@ -345,9 +346,9 @@ class LikesCommentList(generics.GenericAPIView):
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id, comment_id):
 
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         comment_idk = Comment.objects.get(pk=comment_id)
         # if comment_id!=post_id:
@@ -377,9 +378,9 @@ class LikedList(generics.GenericAPIView):
     GET list what public things author_id liked
     """
     def get(self, request,author_id):
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author=Author.objects.get(pk=author_id)
         if not author:
@@ -409,6 +410,7 @@ class PostList(generics.ListCreateAPIView):
         # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
         # token = auth_header.split(' ')[1]  # get token
         # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        print("user111111111111111111")
 
         try:
             check=Author.objects.get(pk=author_id)

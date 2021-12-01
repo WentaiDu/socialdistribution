@@ -40,6 +40,7 @@ function Login() {
         console.log(res.data.token)
         localStorage.setItem("jwtToken", res.data.token);
         localStorage.setItem("userID",res.data.id);
+
         // const imb = localStorage.getItem('jwtToken')
         // console.log(imb)
         handleClick(true);

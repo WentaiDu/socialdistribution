@@ -75,7 +75,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)
-    content = models.URLField(default="", blank=False,verbose_name="@context")
+    context = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)
     author = models.ForeignKey(Author,related_name='authors_list_lalal',on_delete=models.CASCADE,default='')

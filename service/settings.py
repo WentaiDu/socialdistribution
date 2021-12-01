@@ -175,3 +175,9 @@ PROJECT_ROOT   =   os.path.join(os.path.abspath(__file__))
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+
+CORS_ORIGIN_WHITELIST = (
+  'http://localhost:8000',
+  'http://127.0.0.1:8000',
+  'https://socialdistribution-t02.herokuapp.com'
+)
