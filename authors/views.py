@@ -160,12 +160,33 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
-    print('>>>>>>>>><<<<<<<<<<')
     #pagination_class = CommentPagination
 
     # def post(self,request):
     #     try:
     #         if request.data['type'] ==:
+    def get(self,request, post_id,author_id):
+
+        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        # token = auth_header.split(' ')[1]  # get token
+        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
+        try:
+            post=Post.objects.get(pk=post_id)
+            author = Author.objects.get(pk=author_id)
+            Comments = Comment.objects.filter(comment_post=post)
+            print(Comments.comment_author)
+        except:
+            err_msg='Author does not exist.'
+            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = CommentSerializer(Comments, many=True)
+
+        return Response({'comments':serializer.data})
+
+
 
 
 class InboxView(generics.GenericAPIView):
