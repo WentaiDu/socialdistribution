@@ -8,41 +8,25 @@ import Author from "./components/Author";
 import Posts from "./components/PostList";
 import Followers from "./components/Followers";
 import PostDetail from "./components/PostDetail";
+import MainPage from "./components/Mainpage";
+
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
 import {withRouter} from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
+
 import UserInfo from './components/userInfo/UserInfo';
 import './components/userInfo/userInfo.css'
 import Header from "./components/userInfo/header";
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
 
 
 import CommentList from "./components/postActionComponents/Comment";
 import Sidebar from "./components/Sidebar";
-
-
-
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-// import {AppAp} from "./components/Sidebar";
 
 const URL = window.location.href;
 
@@ -280,6 +264,8 @@ function App() {
 
     <Router>
         <Switch>
+        <Route path="/Main" exact component={MainPage} />
+
           <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
           <Route path="/" exact component={Login} />
           <Route path="/Connection" exact component={Connection} />

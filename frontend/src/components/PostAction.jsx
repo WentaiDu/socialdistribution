@@ -104,7 +104,7 @@ export default class PostAction extends React.Component{
                 "github": "http://github.com/3",
                 "profileImage": "http://127.0.0.1:8000/media/user.jpg"
             },
-            object: URL,
+            object: this.props.post.source,
         }
         axios.post(`${base_url}/author/${authorId}/inbox`, postData,
         {
