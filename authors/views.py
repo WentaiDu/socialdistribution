@@ -160,6 +160,7 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
+    print('>>>>>>>>><<<<<<<<<<')
     #pagination_class = CommentPagination
 
     # def post(self,request):
@@ -277,8 +278,6 @@ class InboxView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_200_OK)
 
         else:
-            print('1')
-            print(serializer.errors)
             response = {
                 'detail': 'put post failed'
             }

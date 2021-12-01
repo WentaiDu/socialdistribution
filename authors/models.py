@@ -65,7 +65,7 @@ class Comment(models.Model):
         IMAGE_PNG = 'image/png;base64'
         IMAGE_JPEG = 'image/jpeg;base64'
 
-    comment_type = models.CharField(max_length=100, default="", blank=False,verbose_name="type")
+    comment_type = models.CharField(max_length=100, default="comment", editable=False,blank=False,verbose_name="type")
     comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
     comment = models.TextField(default="", blank=False)
     contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
