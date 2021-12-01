@@ -114,6 +114,15 @@ export class SinglePost extends React.Component {
             image="/static/images/cards/contemplative-reptile.jpg"
             alt="green iguana"
           /> */}
+                <Stack
+                direction="row"
+                divider={<Divider orientation="vertical" flexItem />}
+                spacing={2}
+                >
+        <Avatar
+        alt={post.author.profileImage} src={post.author.profileImage}
+        sx={{ width: 50, height: 50 }}
+         />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {post.description}
@@ -121,7 +130,7 @@ export class SinglePost extends React.Component {
             <Typography variant="body2" color="text.secondary">
              {this.renderContent()}
             </Typography>
-          </CardContent>
+          </CardContent></Stack>
         </CardActionArea>
         <CardActions>
         <PostAction post = {post} userId = {this.props.userId}/>
