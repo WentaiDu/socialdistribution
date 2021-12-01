@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import "./common.css";
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import Avatar from '@mui/material/Avatar';
 export default function SignUp() {
