@@ -17,6 +17,7 @@ import { useState } from "react";
 
 import Button from '@mui/material/Button';
 import PostAction from "./PostAction";
+import { SinglePost } from "./baseElement/baseElement";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -60,10 +61,11 @@ class PostList extends React.Component {
         : (posts.map(item => (
 
           <ListItem key = {item.post_id}>
-            <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
+            {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
 
             <ListItemText primary={item.title} secondary={item.description} />
-            </Link>
+            </Link> */}
+            <SinglePost />
             <PostAction />
           </ListItem> ))
           )

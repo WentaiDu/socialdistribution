@@ -13,15 +13,20 @@ export default class Like extends React.Component{
     }
 
 
+    renderIcon(){
+        if (this.props.like)
 
+        return(
+            <ThumbUpAltIcon />
+        )
+    }
 
     render(){
         return (
             <li>
             {/* <Avatar alt={item.username} src={item.profileImage} />
             <Text primary={item.username} secondary={item.author_id} /> */}
-
-            <ThumbUpAltIcon />
+            {this.renderIcon()}
             </li>
         )
     }

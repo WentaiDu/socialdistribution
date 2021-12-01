@@ -1,8 +1,4 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
@@ -16,14 +12,12 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
-
+import { Button, CardActionArea, CardActions } from '@mui/material';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -93,20 +87,41 @@ export class SinglePost extends React.Component {
     this.state = {
     }
   }
-
+  
+  renderContent(){
+    if (this.props.contentType == "image/png;base64" || this.props.contentType == "image/jpeg;base64"){
+      console.log("pic!!")
+      return(
+        <li>I am daddy!</li>
+      )
+    }
+  
+  }
     render(){
       return (
-        <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "100vh",
-          justifyContent: "center",
-        }}>
-
-
-      </Box>
+        <Card sx={{ maxWidth: 345 }}>
+        <CardActionArea>
+          {/* <CardMedia
+            component="img"
+            height="140"
+            image="/static/images/cards/contemplative-reptile.jpg"
+            alt="green iguana"
+          /> */}
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {this.props.description}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+             {this.renderContent()}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button size="small" color="primary">
+            Share
+          </Button>
+        </CardActions>
+      </Card>
       )
     }
 }

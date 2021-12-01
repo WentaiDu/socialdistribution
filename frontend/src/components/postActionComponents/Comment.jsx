@@ -11,7 +11,6 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
-import PrimarySearchAppBar from './Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
 

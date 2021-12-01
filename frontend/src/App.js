@@ -14,7 +14,7 @@ import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import Connection from "./components/connection";
 
-import CommentList from "./components/Comment";
+import CommentList from "./components/postActionComponents/Comment";
 import Try from "./components/try";
 // import {AppAp} from "./components/Sidebar";
 
