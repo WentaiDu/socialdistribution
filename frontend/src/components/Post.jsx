@@ -31,8 +31,8 @@ export default class AddPost extends React.Component{
         this.state={
             type:"post",
             title:"",
-            source:`${base_url}/author/${this.props.authorId}/posts`,
-            origin:`${base_url}/author/${this.props.authorId}/posts` ,
+            source:"auto",
+            origin:"auto",
             id:`${base_url}/author/${this.props.authorId}/posts` ,
             description:"" ,
             comments:"",

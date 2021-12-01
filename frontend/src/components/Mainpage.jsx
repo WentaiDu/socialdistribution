@@ -21,30 +21,29 @@ import { SinglePost } from "./baseElement/baseElement";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+const token = localStorage.getItem('jwtToken')
+const userID = localStorage.getItem('userID')
 
-class MainPage extends React.Component {
+class PostList extends React.Component {
   constructor(props){
     super(props);
     console.log(props);
     this.state = {
-      posts: []
     }
   }
 
   componentDidMount() {
-    axios.get(`${base_url}/author/${this.props.authorId}/posts/`,
+    axios.get(`${base_url}/public/`,
     {
       headers: {
-        Authorization: "token " + this.props.token,
+        Authorization: "token " + token,
       },
     })
       .then(res => {
         console.log(res);
-        const posts = res.data;
-        console.log(posts);
 
-        this.setState(posts);
-        console.log(this.state.posts);
+        this.setState(res.data);
+        console.log(this.state);
 
     })
   }
@@ -52,24 +51,30 @@ class MainPage extends React.Component {
  
 
   renderPosts = () =>{
-    const {posts} = this.state;
-    return posts.length === 0
-        ? (<ListItem>
-          <ListItemText primary="404 Not Found" secondary="" />
-          </ListItem>)
-        : (posts.map(item => (
-
-          <ListItem key = {item.post_id}>
-            {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
-
-            <ListItemText primary={item.title} secondary={item.description} />
-            </Link> */}
-            <SinglePost userId = {this.props.authorId} post = {item} />
-          </ListItem> ))
-          )
-
-        };
-
+      try{
+        const posts = this.state.results;
+        return posts.length === 0
+            ? (<ListItem>
+              <ListItemText primary="404 Not Found" secondary="" />
+              </ListItem>)
+            : (posts.map(item => (
+    
+              <ListItem key = {item.post_id}>
+                {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
+    
+                <ListItemText primary={item.title} secondary={item.description} />
+                </Link> */}
+                <SinglePost userId = {this.props.authorId} post = {item} />
+              </ListItem> ))
+              )
+    
+        }
+      
+      catch(e){
+          console.log(e)
+          return null;
+      }
+    }
     render(){
       return (
         <Grid
@@ -95,7 +100,7 @@ class MainPage extends React.Component {
 
 
 
-export default function Posts(props) {
+export default function MainPage(props) {
   const jwtToken = localStorage.getItem('jwtToken');
   const userID = localStorage.getItem('userID');
   console.log(jwtToken)
@@ -103,37 +108,7 @@ export default function Posts(props) {
   
     var authorId = props.match.params.author_id
     const [addPage, setAddPage] = useState(false);
-    const token = localStorage.getItem('jwtToken')
-    function RenderAddButton(){
-      if (addPage){
-        return(<AddPost onClick = {submitORCancelOnClick} authorId = {authorId}/>);
-      }
-      return null;
-    }
 
-    function RenderAddAddButton(){
-      if (authorId == userID){
-        return(
-        
-          <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-        > <Button onClick = {addOnClick}> Add Post</Button><RenderAddButton/></Grid> 
-        );
-      }
-      return null;
-    }
-    function addOnClick(){
-      console.log("add click");
-      setAddPage(true);
-    }
-
-    function submitORCancelOnClick(){
-      console.log("end click");
-      setAddPage(false);
-    }
 
     return(
         <Grid
@@ -141,5 +116,5 @@ export default function Posts(props) {
     direction="row"
     justifyContent="center"
     alignItems="center"
-  >      <RenderAddAddButton/>   <div><PostList token = {token} authorId = {authorId} /></div></Grid> );
+  >      <div><PostList token = {token} authorId = {authorId} /></div></Grid> );
 }

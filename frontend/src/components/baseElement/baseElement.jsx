@@ -152,7 +152,7 @@ export class SinglePost extends React.Component {
           </CardContent></Stack>
         </CardActionArea>
         <CardActions>
-        <PostAction post = {post} userId = {this.props.userId}/>
+        <PostAction post = {post}/>
         </CardActions>
       </Card>
       )

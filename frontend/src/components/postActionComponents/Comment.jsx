@@ -27,6 +27,10 @@ export default class LikeList extends React.Component {
   renderComments(){
     const comments = this.props.comments.results;
     console.log(comments);
+    if (comments === undefined) {
+      return null
+    } 
+    
     try{
       return comments.length === 0
       ? null
@@ -37,6 +41,7 @@ export default class LikeList extends React.Component {
       }
     
     catch(e){
+      console.log(e);
       return (<CircularProgress />)
     }
   }
