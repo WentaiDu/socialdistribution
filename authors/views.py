@@ -221,11 +221,7 @@ class InboxView(generics.GenericAPIView):
        },
         tags=['Inbox']
     )
-
     def post(self, request, *args, **kwargs):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author_id = self.kwargs['author_id']
         try:
@@ -239,37 +235,33 @@ class InboxView(generics.GenericAPIView):
                 response = {
                     'detail': 'succeed'
                 }
+                return Response(response, status=status.HTTP_200_OK)
         except:
             items = []
             items.append(request.data)
             items = json.dumps(items)
             Inbox.objects.create(inbox_author_id=author_id, items=items)
+            if request.data['type'] == 'like':
+                author = Author.objects.get(author_id=request.data['author']["author_id"])
+                like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
+                                           summary=request.data["summary"], object=request.data["object"])
             response = {
                 'detail': 'succeed'
             }
+            return Response(response, status=status.HTTP_200_OK)
 
         items = inbox.items
         items = json.loads(items)
-        print(request.data)
-        if request.data['type'] == 'post':
+
+        if request.data['type'] == 'like':
+            author = Author.objects.get(author_id=request.data['author']["author_id"])
+            like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
+                                       summary=request.data["summary"], object=request.data["object"])
+            serializer = LikeSerializer(data=like.__dict__)
+
+
+        elif request.data['type'] == 'post':
             serializer = PostSerializer(data=request.data)
-        elif request.data['type'] == 'like':
-            serializer = LikeSerializer(data=request.data)
-            print("request = like")
-            if serializer.is_valid():
-                print("valid!!!")
-                serializer.save()
-                response = {
-                    'detail': 'save like succeed'
-                }
-                return Response(response, status=status.HTTP_200_OK)
-            else:
-                print(serializer.errors)
-                response = {
-                    'detail': 'save like failed'
-                }
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
-                print(serializer.errors)
 
         elif request.data['type'] == 'follow':
             serializer = FollowerSerializer(data=request.data)
