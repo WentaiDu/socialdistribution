@@ -18,6 +18,12 @@ class Author(AbstractUser):
     profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
 
+class PendingAuthor(models.Model):
+    # The default value is 'pending', if admin accept user sign up to server, change the accept to 'accept', if admin
+    # reject, then change the accept to 'reject'.
+    accept = models.CharField(max_length=100, default='pending')
+    pending_author = models.JSONField(blank=True,null=True,verbose_name="pending_author")
+
 class Post(models.Model):
     class Visibility(models.TextChoices):
         PUBLIC='PUBLIC'
@@ -32,9 +38,9 @@ class Post(models.Model):
         IMAGE_JPEG = 'image/jpeg;base64'
 
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
-    type = models.CharField(max_length=100, default="post", blank=False,verbose_name="type")
+    type = models.CharField(max_length=100,editable=False,default="post", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
-    post_id = models.UUIDField(primary_key = True,editable = False,verbose_name="id")
+    post_id = models.UUIDField(primary_key = True,auto_created = True,verbose_name="id",default=uuid.uuid4)
     source = models.URLField(default="")
     origin = models.URLField(default="")
     description = models.TextField(default="")
@@ -69,7 +75,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)
-    content = models.URLField(default="", blank=False,verbose_name="@context")
+    context = models.URLField(default="", blank=False,verbose_name="@context")
     summary = models.CharField(max_length=100, default="", blank=False)
     type = models.CharField(max_length=100, default="", blank=False)
     author = models.ForeignKey(Author,related_name='authors_list_lalal',on_delete=models.CASCADE,default='')

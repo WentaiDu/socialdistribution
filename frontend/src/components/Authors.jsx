@@ -14,14 +14,15 @@ import axios from "axios";
 import PrimarySearchAppBar from './Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
+import { SingleAuthor } from "./baseElement/baseElement";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 //
 
 class AuthorList extends React.Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       authors: []
       // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
@@ -56,7 +57,9 @@ class AuthorList extends React.Component {
     axios.get(`${base_url}/authors/`,    
     {
       headers: {
-        Authorization: "token " + this.props.token,
+        // "X-CSRFToken": this.props.token
+        Authorization:"Token " + this.props.token,
+
       },
     })
       .then(res => {
@@ -64,6 +67,7 @@ class AuthorList extends React.Component {
         console.log(authors);
         this.setState( authors );
     })
+
   }
 
   renderAuthors(){
@@ -73,14 +77,7 @@ class AuthorList extends React.Component {
         : (authors.map(item => (
 
           <ListItem key = {item.author_id}>
-            <Link to= {"/author/"+item.author_id +"/"} replace style={{color:'black'}}>
-
-            <ListItemAvatar>
-            <Avatar alt={item.username} src={item.profileImage} />
-            </ListItemAvatar>
-            <ListItemText primary={item.username} secondary={item.author_id} />
-            </Link>
-            <Button variant="contained">Contained</Button>
+                <SingleAuthor author = {item}/>
           </ListItem>)))
 
         };

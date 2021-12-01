@@ -14,10 +14,18 @@ import * as React from 'react';
 import {withRouter} from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
-import CommentList from "./components/Comment";
+
+
 import Try from "./components/try";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
+
+
+import CommentList from "./components/postActionComponents/Comment";
+import Sidebar from "./components/Sidebar";
+
+
+
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -35,6 +43,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 // import {AppAp} from "./components/Sidebar";
+
 const URL = window.location.href;
 
 
@@ -301,7 +310,6 @@ function App() {
 
     <Router>
         <Switch>
-          <Route path="/aaa" exact component={Try} />
           <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
           <Route path="/" exact component={Login} />
           <Route path="/Connection" exact component={Connection} />

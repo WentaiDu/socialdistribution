@@ -15,6 +15,13 @@ class LoginSerializer(serializers.ModelSerializer):
         ref_name = 'LogIn'
         fields = ['username','password']
 
+        
+class PendingAuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PendingAuthor
+        fields = ['id', 'accept','pending_author']
+
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
