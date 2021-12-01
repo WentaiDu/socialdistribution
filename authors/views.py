@@ -410,7 +410,6 @@ class PostList(generics.ListCreateAPIView):
         # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
         # token = auth_header.split(' ')[1]  # get token
         # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-        print("user111111111111111111")
 
         try:
             check=Author.objects.get(pk=author_id)
@@ -510,46 +509,48 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 
 
-    def put(self, request,author_id,post_id):
+        def put(self, request,author_id,post_id):
         # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
         # token = auth_header.split(' ')[1]  # get token
         # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
-
         try:
+
             author = Author.objects.get(pk=author_id)
+
             try:
                 get_post=Post.objects.get(pk=post_id)
                 err_msg = "Post already exists"
                 return Response(err_msg, status=status.HTTP_409_CONFLICT)
             except:
-                post={}
-                postid=author_id+'/posts/'+post_id
-                post['title']=request.data['title']
-                post['post_id']=postid
-                post['source']=request.data['source']
-                post['origin']=request.data['origin']
-                post['description']=request.data['description']
-                post['contentType']=request.data['contentType']
-                post['author']=author
-                post['content']=request.data['content']
-                post['comments']=request.data['comments']
-                post['published']=datetime.today().strftime('%Y-%m-%d %H:%M')
-                post['visibility']=request.data['visibility']
-
-                post['unlisted']=request.data['unlisted']
-
+                post = {}
+                path = request.build_absolute_uri()
+                pid = path + str(post_id)
+                post['title'] = request.data['title']
+                # post['post_id'] = pid
+                post['source'] = request.data['source']
+                post['origin'] = request.data['origin']
+                post['description'] = request.data['description']
+                post['contentType'] = request.data['contentType']
+                post['author'] = author
+                post['content'] = request.data['content']
+                post['comments'] = pid+'/comments'
+                post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+                post['visibility'] = request.data['visibility']
+                post['unlisted'] = request.data['unlisted']
                 serializer = PostSerializer(data=post)
                 if serializer.is_valid():
-                    create_post = Post.objects.create(author=author,post_id=post_id)
-                    create_post.save()
-                    return Response({'serializer':serializer.data})
+                    post = Post.objects.create(**serializer.validated_data, author=author, post_id=post_id)
+                    post.save()
+                    return Response({'serializer': serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        except:
+
+        except Exception as e:
             err_msg="Author is not found"
             return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
+
+
 
 
 
