@@ -160,6 +160,7 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
+    print('>>>>>>>>><<<<<<<<<<')
     #pagination_class = CommentPagination
 
     # def post(self,request):
