@@ -638,6 +638,7 @@ class FollowerDetailView(APIView):
             return Response(serializer.data)
         except Exception as e:
             err_msg='No following relation'
+            
             return Response(str(e),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):

@@ -8,17 +8,7 @@ import axios from "axios";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormHelperText from '@mui/material/FormHelperText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -28,19 +18,7 @@ export default class AddComment extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            type:"post",
-            title:"",
-            source:`${base_url}/author/${this.props.authorId}/posts`,
-            origin:`${base_url}/author/${this.props.authorId}/posts` ,
-            id:`${base_url}/author/${this.props.authorId}/posts` ,
-            description:"" ,
-            comments:"",
-            contentType:"text/markdown",
-            content:"",
-            categories:[] ,
-            published: false,
-            visibility:"PUBLIC",
-            unlisted: false
+
         }
     }
 
@@ -110,50 +88,8 @@ export default class AddComment extends React.Component{
                             onChange={this.handleForm}
                         />
                     </Grid>
-                            
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            name="description"
-                            label="description"
-                            fullWidth
-                            variant="standard"
-                            value={description}
-                            onChange={this.handleForm}
-                        />
-                    </Grid>
-                    <Box sx={{ minWidth: 120,}}>
-                            <FormControl>
-                                <InputLabel>contentType</InputLabel>
-                                <Select
-                                name="contentType"
-                                value={contentType}
-                                onChange={this.handleForm}
-                                >
-                                <MenuItem value={"text/markdown"}>MARKDOWN</MenuItem>
-                                <MenuItem value={"text/plain"}>PLAIN</MenuItem>
-                                <MenuItem value={"application/base64"}>APPLICATION</MenuItem>
-                                <MenuItem value={"image/png;base64"}>IMAGE_PNG</MenuItem>
-                                <MenuItem value={"image/jpeg;base64"}>IMAGE_JPEG</MenuItem>
-                                </Select>
-                            </FormControl>
-                            </Box>
-                    <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            name="content"
-                            label="Put in your text"
-                            multiline
-                            fullWidth
-                            rows={4}
-                            value={content}
-                            onChange={this.handleForm}
-                        />
-                    </Grid>
         
-                    <Grid item xs={12} sx={{minWidth: 120}}>
-                    <Stack direction="row" spacing={5} sx={{width: 750, m:'auto', p:{xs:2}, }}>
-                    <Box sx={{ minWidth: 120,}}>
+                    {/* <Box sx={{ minWidth: 120,}}>
                             <FormControl fullWidth>
                                 <InputLabel>Visibility</InputLabel>
                                 <Select
@@ -166,15 +102,8 @@ export default class AddComment extends React.Component{
                                 <MenuItem value={"PRIVATE"}>Private</MenuItem>
                                 </Select>
                             </FormControl>
-                            </Box>
-                        <Box sx={{ minWidth: 120,}}>
-                        <FormControlLabel control={<Checkbox  />} label="Published" name = "published" checked = {published} onChange={this.handleForm}/>
+                            </Box> */}
 
-                        </Box>
-                        <Box sx={{ minWidth: 120,}}>
-                        <FormControlLabel control={<Checkbox />} label="unlisted" name = "unlisted"  checked = {unlisted} onChange={this.handleForm}/>
-
-                        </Box>
                         <Button
                             type="submit"
                             variant="contained"
@@ -188,9 +117,6 @@ export default class AddComment extends React.Component{
                         >
                             Submit
                         </Button>
-                    </Stack>    
-                    </Grid>
-                    </Grid>
                 </Card>
             </Box>
         )

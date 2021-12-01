@@ -25,13 +25,13 @@ export default class LikeList extends React.Component {
   }
 
   renderComments(){
-    const comments = this.props.comments;
+    const comments = this.props.comments.results;
     console.log(comments);
     try{
       return comments.length === 0
-      ? (<CircularProgress />)
+      ? null
       : (comments.map(item => (
-        <li>@{item.author.displayName}: {item.comments} </li>
+        <li>@Somebody: {item.comment} </li>
      )))
 
       }
