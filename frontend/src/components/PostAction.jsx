@@ -92,16 +92,17 @@ export default class PostAction extends React.Component{
         const postData = {
             type: "like",
             summary: "try",
-            author:        {
-                "username": "Jinglong",
-                "password": "pbkdf2_sha256$216000$5VAXRBnJ9D6k$mfXEgQYr4NWVFuPaqEV1OJrMk9v+VoY+RFrCTEgw1gQ=",
+            context: "http://127.0.0.1:8000/",
+            author:  {
+                "username": "1",
+                "password": "pbkdf2_sha256$216000$f2jl8xXvHJJw$8+ulbnZxvcnE9dIXotuBleZi2Rk4bLeK3VW0xccqofo=",
                 "author_type": "author",
-                "author_id": "bc03844a-8630-400b-a335-e840026bee4d",
+                "author_id": "cec7aa33-1963-4dad-9ce7-4ca61178bba9",
                 "host": "http://127.0.0.1:8000/",
-                "displayName": "Jinglong",
-                "url": "http://127.0.0.1:8000/author/bc03844a-8630-400b-a335-e840026bee4d",
-                "github": "http://github.com/Jinglong",
-                "profileImage": "/media/user.jpg"
+                "displayName": "3",
+                "url": "http://127.0.0.1:8000/authors/08923451-b5da-4043-a5f9-12b5289c9a25",
+                "github": "http://github.com/3",
+                "profileImage": "http://127.0.0.1:8000/media/user.jpg"
             },
             object: URL,
         }
