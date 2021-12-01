@@ -37,6 +37,7 @@ const bull = (
 );
 
 
+
 export class SingleAuthor extends React.Component {
   constructor(props){
     super(props);
@@ -84,7 +85,7 @@ export class SingleAuthor extends React.Component {
 }
 }
 
-class SinglePost extends React.Component {
+export class SinglePost extends React.Component {
   constructor(props){
     super(props);
     console.log("singlePost")
