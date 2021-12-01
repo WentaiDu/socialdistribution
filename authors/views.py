@@ -37,49 +37,96 @@ class LoginAPI(generics.GenericAPIView):
         else:
             return Response({'detail': 'Incorrect Credentials'},status=status.HTTP_400_BAD_REQUEST)
 
-class SignupAPI(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny]
-    serializer_class = AuthorSerializer
+
+class SignupAPI(generics.GenericAPIView):
+    serializer_class = PendingAuthorSerializer
+
     def post(self, request, *args, **kwargs):
         try:
-            author = {}
-            author['username'] = request.data['username']
-            author['displayName'] = request.data['displayName']
-            author['password'] = request.data['password']
-            author["author_type"] = 'author'
-            author['host'] = 'http://'+request.get_host()+'/'
-            author['url'] = request.build_absolute_uri()
-            if request.data['profileImage'] != 'null':
-                author['profileImage'] = request.data['profileImage']
-            author['github'] = "http://github.com/"+request.data['github']
+            PendingAuthor.objects.create(accept='pending',pending_author=json.dumps(request.data))
+
+            response={
+                'details': "Thanks for your sign up, please wait for admin's reply.",
+            }
+            return Response(response,status.HTTP_200_OK)
         except:
             response = {
-                'detail': 'Bad Input!'
+                'details': "Bad Request!"
             }
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        author_serializer = AuthorSerializer(data=author)
-        if author_serializer.is_valid():
-            author_serializer.save()
-            new_author = Author.objects.get(username=author['username'])
-            new_author.set_password(author['password'])
-            new_author.save()
-            new_author = Author.objects.filter(username=author['username'])
-            id = author_serializer.data['author_id']
-            new_author.update(url=author['url']+id)
-            new_author = Author.objects.get(username=author['username'])
-            response = {
-                'detail': 'User creates succeed!',
-                'id': new_author.author_id,
-                'token': Token.objects.get_or_create(user=new_author)[0].key
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response(response, status.HTTP_400_BAD_REQUEST)
 
-        else :
-            print(author_serializer.errors)
+
+class PendingAuthorListAPI(generics.ListCreateAPIView):
+    queryset = PendingAuthor.objects.all()
+    serializer_class = PendingAuthorSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
+        token = auth_header.split(' ')[1] # get token
+        user = get_object_or_404(Author, auth_token = token)
+        if user.is_staff:
+            pending_author = PendingAuthorSerializer(request.data)
+            if pending_author.data['accept'] == 'accept':
+                new_author = json.loads(pending_author.data['pending_author'])
+                pending_author_id = pending_author.data['id']
+                try:
+                    author = {}
+                    author['username'] = new_author['username']
+                    author['displayName'] = new_author['displayName']
+                    author['password'] = new_author['password']
+                    author["author_type"] = 'author'
+                    author['host'] = 'http://' + request.get_host() + '/'
+                    author['url'] = request.build_absolute_uri()
+                    if new_author['profileImage'] != 'null':
+                        author['profileImage'] = new_author['profileImage']
+                    author['github'] = "http://github.com/" + new_author['github']
+                except:
+                    response = {
+                        'detail': 'Bad Input!'
+                    }
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                author_serializer = AuthorSerializer(data=author)
+                if author_serializer.is_valid():
+                    author_serializer.save()
+                    new_author = Author.objects.get(username=author['username'])
+                    new_author.set_password(author['password'])
+                    new_author.save()
+                    new_author = Author.objects.filter(username=author['username'])
+                    id = author_serializer.data['author_id']
+                    new_author.update(url=author['url'] + id)
+                    new_author = Author.objects.get(username=author['username'])
+                    response = {
+                        'detail': 'User creates succeed!',
+                        'id': new_author.author_id,
+                        'token': Token.objects.get_or_create(user=new_author)[0].key
+                    }
+                    author_request = PendingAuthor.objects.get(id = pending_author_id)
+                    author_request.delete()
+                    return Response(response, status=status.HTTP_201_CREATED)
+
+                else:
+                    print(author_serializer.errors)
+                    response = {
+                        'detail': 'User created failed!'
+                    }
+                    return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            elif pending_author.data['accept'] == 'reject':
+                id = request.data['id']
+                author = PendingAuthor.objects.get(id=id)
+                author.delete()
+                response ={
+                    'details':'This user has been reject to sign up on our server'
+                }
+                return Response(response, status.HTTP_200_OK)
+
+        else:
             response = {
-                'detail':'User created failed!'
+                'details': "Only Admin can accept/reject sign up requests!"
             }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
 
 class AuthorList(generics.ListAPIView):
 

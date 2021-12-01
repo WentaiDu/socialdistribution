@@ -7,7 +7,6 @@ import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import "./common.css";
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -98,6 +97,7 @@ function Login() {
           alignItems: "center",
           height: "100vh",
           justifyContent: "center",
+          backgroundColor: "#000000"
         }}
       >
         <Card
@@ -107,6 +107,7 @@ function Login() {
             align: "center",
             padding: "30px",
             borderRadius: 7,
+            
           }}
         >
 
@@ -116,6 +117,7 @@ function Login() {
                 variant="h6"
                 align="center"
                 fontFamily="Arial"
+                
               >
                 CMPUT404-project
               </Typography>
@@ -177,7 +179,7 @@ function Login() {
                 variant="contained"
                 style={{
                   borderRadius: 15,
-                  backgroundColor: "#00428b",
+                  backgroundColor: "#000000",
                 }}
                 disabled={!username || !password}
                 onClick={handleLogin}
