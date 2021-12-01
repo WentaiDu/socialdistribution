@@ -15,8 +15,6 @@ import {withRouter} from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
 
-
-import Try from "./components/try";
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
 
