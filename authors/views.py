@@ -509,10 +509,10 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 
 
-        def put(self, request,author_id,post_id):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+    def put(self, request,author_id,post_id):
+    # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+    # token = auth_header.split(' ')[1]  # get token
+    # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
         try:
 
             author = Author.objects.get(pk=author_id)
