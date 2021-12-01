@@ -707,3 +707,10 @@ class FriendRequest(generics.GenericAPIView):
         serializer = FriendRequestSerializer(follow_request, many=True)
         return Response(serializer.data)
 
+
+class publicpost(generics.ListCreateAPIView):
+    # permission=[permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
+    queryset = Post.objects.all()
+    serializer_class=PostSerializer
+
