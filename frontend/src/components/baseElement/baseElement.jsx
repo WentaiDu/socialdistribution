@@ -82,7 +82,7 @@ export class SingleAuthor extends React.Component {
 
          <CardActions>
          <Button size="small" onClick = {this.followClicked}>Follow</Button>
-         <Button size="small" href= {author.url}>Detail</Button>
+         <Link to={{pathname:'/UserInfo', query:{author_id:this.props.author.author_id}}}><Button size="small">Detail</Button></Link>
          </CardActions>
        </Card>
 

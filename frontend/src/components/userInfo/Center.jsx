@@ -4,7 +4,7 @@ import { Box, Link, Typography } from "@material-ui/core";
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import userBg from '../img/userBg.png'
-
+import Author from '../Author'
 function TabPanel (props) {
     const { children, value, index, ...other } = props;
 
@@ -25,7 +25,7 @@ function TabPanel (props) {
     );
 }
 
-const Center = () => {
+const Center = (props) => {
     const info = {
         fence: 9999,
         focus: 999,
@@ -57,10 +57,12 @@ const Center = () => {
 
                 <div className="userInfo_Center_user">
                     <div>
-                        <div className="userInfo_logo"></div>
+                        <div className="userInfo_logo">
+                        <img src={props?.value?.profileImage} alt="" />
+                        </div>
                     </div>
                     <div>
-                        <div className="userName">{info.userName}</div>
+                        <div className="userName">{props?.value?.username}</div>
                         <div className="fense">
                             <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
                             <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span>
@@ -84,7 +86,12 @@ const Center = () => {
                 </div>
                 <div className="userInfo_tab_Content">
                     <TabPanel value={value} index={0} className="tab_content">
-                    None1
+                        {
+                            Object.keys(props?.value)?.map(key => (
+                                
+                                    <li>{key}:{props?.value[key]}</li>
+                            ))
+                        }
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">
                     None2

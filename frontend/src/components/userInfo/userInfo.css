@@ -122,10 +122,13 @@
     top: -40px;
     width: 80px;
     height: 80px;
+    overflow: hidden;
     border: 4px solid #fff;
-    background: url('../img/userBg.png');
-    background-position-y: 80%;
     border-radius: 80px;
+}
+.userInfo_logo img{
+    width: 80px;
+    height: 80px;
 }
 .userName{
     margin: 6px 0;
@@ -163,6 +166,11 @@
     width: 100%;
     background-color: #fff;
     margin-top: 10px;
+}
+.userInfo_tab_Content li{
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #ccc;
 }
 .tab_content{
     text-align: center;
