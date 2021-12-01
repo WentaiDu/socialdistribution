@@ -18,8 +18,11 @@ import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import PostAction from "../PostAction";
+import axios from "axios";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const userID = localStorage.getItem('userID')
+const token = localStorage.getItem('jwtToken')
 
 const bull = (
   <Box
@@ -39,6 +42,22 @@ export class SingleAuthor extends React.Component {
     console.log(props);
     this.state = {
     }
+  }
+
+
+  followClicked = () =>{
+    console.log(this.props);
+    axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},    
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((res) => {
+      }); 
   }
 
     render(){
@@ -62,7 +81,7 @@ export class SingleAuthor extends React.Component {
          </CardContent>
 
          <CardActions>
-         <Button size="small">Follow</Button>
+         <Button size="small" onClick = {this.followClicked}>Follow</Button>
          <Button size="small" href= {author.url}>Detail</Button>
          </CardActions>
        </Card>
@@ -138,4 +157,29 @@ export class SinglePost extends React.Component {
       </Card>
       )
     }
+}
+
+
+
+
+export class FollowerCount extends React.Component {
+  constructor(props){
+    super(props);
+    console.log("FollowerCount")
+    console.log(props);
+    this.state = {
+    }
+  }
+
+  render(){
+    return(
+      <Link >
+      Follower {this.props.count}
+      </Link>
+    )
+  }
+
+
+
+
 }

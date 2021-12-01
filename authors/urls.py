@@ -17,8 +17,9 @@ urlpatterns = [
     re_path(r'author/(?P<author_id>[(-z)]{36})/posts/(?P<post_id>[(-z)]{36})/comments', views.CommentList.as_view()),
   
     re_path(r'author/(?P<author_id>[(-z)]{36})/inbox', views.InboxView.as_view()),
-    re_path(r'author/(?P<author_id1>[(-z)]{36})/followers/', views.FriendRequest.as_view()),
     re_path(r'author/(?P<author_id1>[(-z)]{36})/followers/(?P<author_id2>[(-z)]{36})', views.FollowerDetailView.as_view()),
+
+    re_path(r'author/(?P<author_id1>[(-z)]{36})/followers/', views.FriendRequest.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/followers', views.FollowerList.as_view()),
 
     re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),
