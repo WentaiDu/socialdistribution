@@ -61,10 +61,7 @@ class MainPage extends React.Component {
       console.log(this.state)
       return (
         <Stack spacing={1}>
-          <SingleAuthor 
-          profileImage = {this.state.profileImage} 
-          displayName = {this.state.displayName} 
-          url = {this.state.url}/>
+          <SingleAuthor author = {this.state}/>
         </Stack>
       )
     }

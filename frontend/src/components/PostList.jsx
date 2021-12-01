@@ -52,7 +52,7 @@ class PostList extends React.Component {
 
  
 
-  renderPosts(){
+  renderPosts = () =>{
     const {posts} = this.state;
     return posts.length === 0
         ? (<ListItem>
@@ -65,8 +65,7 @@ class PostList extends React.Component {
 
             <ListItemText primary={item.title} secondary={item.description} />
             </Link> */}
-            <SinglePost />
-            <PostAction />
+            <SinglePost userId = {this.props.authorId} post = {item} />
           </ListItem> ))
           )
 
@@ -87,9 +86,7 @@ class PostList extends React.Component {
               maxWidth: 360,
               bgcolor: 'background.paper',
             }}
-          ><ListItem key = "button">          
-            <Button onClick = {this.props.onClick}> Add Post</Button>
-            </ListItem>          
+          >         
             {this.renderPosts()}
           </List>
         </Grid>
@@ -100,6 +97,11 @@ class PostList extends React.Component {
 
 
 export default function Posts(props) {
+  const jwtToken = localStorage.getItem('jwtToken');
+  const userID = localStorage.getItem('userID');
+  console.log(jwtToken)
+  console.log(userID)
+  
     var authorId = props.match.params.author_id
     const [addPage, setAddPage] = useState(false);
     const token = localStorage.getItem('jwtToken')
@@ -110,6 +112,20 @@ export default function Posts(props) {
       return null;
     }
 
+    function RenderAddAddButton(){
+      if (authorId == userID){
+        return(
+        
+          <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        > <Button onClick = {addOnClick}> Add Post</Button><RenderAddButton/></Grid> 
+        );
+      }
+      return null;
+    }
     function addOnClick(){
       console.log("add click");
       setAddPage(true);
@@ -120,5 +136,11 @@ export default function Posts(props) {
       setAddPage(false);
     }
 
-    return(<div><PostList token = {token} authorId = {authorId} onClick = {addOnClick} /><RenderAddButton/></div> );
+    return(
+        <Grid
+    container
+    direction="row"
+    justifyContent="center"
+    alignItems="center"
+  >      <RenderAddAddButton/>   <div><PostList token = {token} authorId = {authorId} /></div></Grid> );
 }

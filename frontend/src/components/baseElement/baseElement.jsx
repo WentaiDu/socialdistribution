@@ -7,7 +7,6 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import{ useContext } from 'react';
-import axios from "axios";
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -18,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import PostAction from "../PostAction";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -42,21 +42,19 @@ export class SingleAuthor extends React.Component {
   }
 
     render(){
-
+      const author = this.props.author;
       try {
       return (
-
-
 
          <Card sx={{ maxWidth: 345 }}>
 
         <Avatar
-        alt={this.props.profileImage} src={this.props.profileImage}
+        alt={author.profileImage} src={author.profileImage}
         sx={{ width: 100, height: 100 }}
          />
          <CardContent>
            <Typography gutterBottom variant="h5" component="div">
-           {this.props.displayName}
+           {author.displayName}
            </Typography>
            <Typography variant="body2" color="text.secondary">
 
@@ -65,7 +63,7 @@ export class SingleAuthor extends React.Component {
 
          <CardActions>
          <Button size="small">Follow</Button>
-         <Button size="small" href= {this.props.url}>Detail</Button>
+         <Button size="small" href= {author.url}>Detail</Button>
          </CardActions>
        </Card>
 
@@ -89,7 +87,8 @@ export class SinglePost extends React.Component {
   }
   
   renderContent(){
-    if (this.props.contentType == "image/png;base64" || this.props.contentType == "image/jpeg;base64"){
+    const post = this.props.post;
+    if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
       console.log("pic!!")
       return(
         <li>I am daddy!</li>
@@ -98,8 +97,16 @@ export class SinglePost extends React.Component {
   
   }
     render(){
+      const post = this.props.post;
+
       return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card variant="outlined" sx={{            
+          minWidth: 400,
+          maxWidth: 600,
+          align: "center",
+          padding: "10px",
+          borderRadius: 7, }}>
+
         <CardActionArea>
           {/* <CardMedia
             component="img"
@@ -109,7 +116,7 @@ export class SinglePost extends React.Component {
           /> */}
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {this.props.description}
+              {post.description}
             </Typography>
             <Typography variant="body2" color="text.secondary">
              {this.renderContent()}
@@ -117,9 +124,7 @@ export class SinglePost extends React.Component {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Share
-          </Button>
+        <PostAction post = {post} userId = {this.props.userId}/>
         </CardActions>
       </Card>
       )

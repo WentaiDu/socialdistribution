@@ -1,9 +1,7 @@
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import * as React from 'react';
-
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 
 
 export default class Like extends React.Component{
@@ -14,11 +12,17 @@ export default class Like extends React.Component{
 
 
     renderIcon(){
-        if (this.props.like)
+        if (this.props.alreadyLiked){
+            return(
+                <Button onClick = {this.props.onClickLike}><ThumbUpAltIcon /></Button>
+            )
+        }
+        else{
+            return(
+                <Button onClick = {this.props.onClickLike}><ThumbUpOffAltIcon /></Button>
+            )
+        }
 
-        return(
-            <ThumbUpAltIcon />
-        )
     }
 
     render(){

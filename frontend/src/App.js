@@ -15,7 +15,7 @@ import * as React from 'react';
 import Connection from "./components/connection";
 
 import CommentList from "./components/postActionComponents/Comment";
-import Try from "./components/try";
+import Sidebar from "./components/Sidebar";
 
 
 import { styled, alpha } from '@mui/material/styles';
@@ -263,7 +263,6 @@ function App() {
     
     <Router>
         <Switch>
-          <Route path="/aaa" exact component={Try} />
           <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
           <Route path="/" exact component={Login} />
           <Route path="/Connection" exact component={Connection} />
@@ -276,7 +275,6 @@ function App() {
 
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
-          <Route path="/try" exact component={Try} />
 
         </Switch>
       </Router></>

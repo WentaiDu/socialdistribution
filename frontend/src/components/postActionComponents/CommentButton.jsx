@@ -5,9 +5,10 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import Icon from '@mui/material/Icon';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import ShareIcon from '@mui/icons-material/Share';
 
-export default class Like extends React.Component{
+import CommentIcon from '@mui/icons-material/Comment';
+
+export default class Comment extends React.Component{
     constructor(props){
         super(props);
         console.log(this.props);
@@ -16,7 +17,7 @@ export default class Like extends React.Component{
 
     renderIcon(){
         return(
-            <Button onClick = {this.props.onClickShare}><ShareIcon /></Button>
+            <Button onClick = {this.props.onClickComment}><CommentIcon /></Button>
         )
     }
 

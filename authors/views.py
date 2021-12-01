@@ -238,7 +238,6 @@ class InboxView(generics.GenericAPIView):
                 response = {
                     'detail': 'succeed'
                 }
-                return Response(response, status=status.HTTP_200_OK)
         except:
             items = []
             items.append(request.data)
@@ -247,22 +246,24 @@ class InboxView(generics.GenericAPIView):
             response = {
                 'detail': 'succeed'
             }
-            return Response(response, status=status.HTTP_200_OK)
 
         items = inbox.items
         items = json.loads(items)
-
+        print(request.data)
         if request.data['type'] == 'post':
             serializer = PostSerializer(data=request.data)
         elif request.data['type'] == 'like':
             serializer = LikeSerializer(data=request.data)
+            print("request = like")
             if serializer.is_valid():
+                print("valid!!!")
                 serializer.save()
                 response = {
                     'detail': 'save like succeed'
                 }
                 return Response(response, status=status.HTTP_200_OK)
             else:
+                print(serializer.errors)
                 response = {
                     'detail': 'save like failed'
                 }

@@ -77,10 +77,7 @@ class AuthorList extends React.Component {
         : (authors.map(item => (
 
           <ListItem key = {item.author_id}>
-                      <SingleAuthor 
-          profileImage = {item.profileImage} 
-          displayName = {item.displayName} 
-          url = {item.url}/>
+                <SingleAuthor author = {item}/>
           </ListItem>)))
 
         };
