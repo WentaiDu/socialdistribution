@@ -29,9 +29,7 @@ function App() {
   // redir()
 
   return (
-    <><React.Fragment>
-
-    </React.Fragment><Router>
+    <><Router>
         <Switch>
           <Route path="/aaa" exact component={Try} />
           <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
