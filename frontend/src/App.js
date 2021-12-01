@@ -21,6 +21,7 @@ import UserInfo from './components/userInfo/UserInfo';
 import './components/userInfo/userInfo.css'
 import Header from "./components/userInfo/header";
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
 
 
