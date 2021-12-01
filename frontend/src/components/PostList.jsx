@@ -16,6 +16,7 @@ import AddPost from "./Post";
 import { useState } from "react";
 
 import Button from '@mui/material/Button';
+import PostAction from "./PostAction";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -63,6 +64,7 @@ class PostList extends React.Component {
 
             <ListItemText primary={item.title} secondary={item.description} />
             </Link>
+            <PostAction />
           </ListItem> ))
           )
 

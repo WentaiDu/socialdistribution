@@ -16,6 +16,9 @@ import PrimarySearchAppBar from './Sidebar';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import { SingleAuthor } from "./baseElement/baseElement";
+
+
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -34,38 +37,34 @@ class MainPage extends React.Component {
   }
 
   componentDidMount() {
-
+    
     axios.get(`${base_url}/author/${this.props.authorId}/`,
     {
       headers: {
-        Authorization: "token " + this.props.token,
+        // "X-CSRFToken":  this.props.token,
+        Authorization:"Token " + this.props.token,
+
       },
     })
       .then(res => {
-        const author = res.data;
-        // console.log(author);
-        this.setState(author);
-        // console.log(this.state);
+        const value = res.data;
+
+        console.log(value);
+        this.setState( value );
+    }).catch(e => {
+        console.log("get failed")
     })
+
   }
 
-  renderPosts(){
-    try {
-
-        return (  Object.entries(this.state)
-        .map(([key,value]) => (
-            <Item>{key}: {value}</Item>)))
-    }
-    catch(e){
-        console.log(e);
-        return <CircularProgress />;
-    }
-}
-
     render(){
+      console.log(this.state)
       return (
         <Stack spacing={1}>
-            {this.renderPosts()}
+          <SingleAuthor 
+          profileImage = {this.state.profileImage} 
+          displayName = {this.state.displayName} 
+          url = {this.state.url}/>
         </Stack>
       )
     }
