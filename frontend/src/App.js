@@ -278,6 +278,7 @@ function App() {
 
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
+          <Route path="/UserInfo" exact component={UserInfo} />
 
         </Switch>
       </Router></>
