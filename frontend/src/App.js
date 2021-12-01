@@ -11,12 +11,13 @@ import PostDetail from "./components/PostDetail";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
-
+import {withRouter} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
 import CommentList from "./components/Comment";
 import Try from "./components/try";
-
-
+import Button from '@mui/material/Button';
+import { useHistory } from "react-router-dom";
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -76,6 +77,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+
+
 function App() {
 
   // function redir (){
@@ -85,24 +89,60 @@ function App() {
   // }
 
   // redir()
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleProfileMenuOpen1 = (event) => {
+    // history.push("/signup");
+    window.location.href="/Author/:author_id/Inbox"
+    // setAnchorEl(event.currentTarget);
+    
   };
+
+  const handleProfileMenuOpen2 = (event) => {
+    // history.push("/signup");
+    window.location.href="http://localhost:3000/Author"
+    // setAnchorEl(event.currentTarget);
+    
+  };
+
+  const handleProfileMenuOpen3 = (event) => {
+    // history.push("/signup");
+    window.location.href="http://localhost:3000/Author"
+    // setAnchorEl(event.currentTarget);
+    
+  };
+
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+    
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+    window.location.href="http://localhost:3000/Signup"
+    //history.push("/Signup");
+    // href="/signup"
+    // this.props.history.push('/signup');
+    // history.replace("/signup");
+    // setAnchorEl(null);
+    // handleMobileMenuClose();
   };
+  const handleMenuClosee = () => {
+    window.location.href="http://localhost:3000/Signup"
+    //history.push("/Signup");
+    // href="/signup"
+    // this.props.history.push('/signup');
+    // history.replace("/signup");
+    // setAnchorEl(null);
+    // handleMobileMenuClose();
+  };
+
+
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -125,8 +165,11 @@ function App() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+
+      
+      <MenuItem>Profile</MenuItem>
+    
+      <MenuItem>Profile</MenuItem>
     </Menu>
   );
 
@@ -147,19 +190,21 @@ function App() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+      <MenuItem onClick={handleProfileMenuOpen1}>
+        <Button size="large" aria-label="show 4 new mails" color="inherit" >
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
-        </IconButton>
+        </Button>
         <p>Messages</p>
+    
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen2}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
+
         >
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
@@ -167,7 +212,7 @@ function App() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={handleProfileMenuOpen3}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -201,21 +246,13 @@ function App() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            CMPUT404Project
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={999} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
@@ -224,17 +261,20 @@ function App() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={999} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+
+
+            
             <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={handleProfileMenuOpen3}
               color="inherit"
             >
               <AccountCircle />
@@ -258,7 +298,7 @@ function App() {
       {renderMenu}
     </Box>
     
-    
+
     <Router>
         <Switch>
           <Route path="/aaa" exact component={Try} />
