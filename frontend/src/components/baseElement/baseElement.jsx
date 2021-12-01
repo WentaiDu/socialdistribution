@@ -19,6 +19,8 @@ import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import PostAction from "../PostAction";
 import axios from "axios";
+import Chip from '@mui/material/Chip';
+import FaceIcon from '@mui/icons-material/Face';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
@@ -62,6 +64,10 @@ export class SingleAuthor extends React.Component {
 
     render(){
       const author = this.props.author;
+      var badge = this.props.badge;
+      if (badge == undefined){
+        badge = "local"
+      }
       try {
       return (
 
@@ -76,7 +82,7 @@ export class SingleAuthor extends React.Component {
            {author.displayName}
            </Typography>
            <Typography variant="body2" color="text.secondary">
-
+           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
            </Typography>
          </CardContent>
 
@@ -116,6 +122,10 @@ export class SinglePost extends React.Component {
   
   }
     render(){
+      var badge = this.props.badge;
+      if (badge == undefined){
+        badge = "local"
+      }
       const post = this.props.post;
 
       return (
@@ -150,6 +160,8 @@ export class SinglePost extends React.Component {
              {this.renderContent()}
             </Typography>
           </CardContent></Stack>
+          <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+
         </CardActionArea>
         <CardActions>
         <PostAction post = {post}/>

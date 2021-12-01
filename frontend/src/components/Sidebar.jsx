@@ -31,6 +31,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 
 const URL = window.location.href;
 
+const token = localStorage.getItem('jwtToken');
+const userID = localStorage.getItem('userID');
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -92,14 +95,14 @@ export default function App() {
 
   const handleProfileMenuOpen1 = (event) => {
     // history.push("/signup");
-    window.location.href="/Author/:author_id/Inbox"
+    window.location.href=`/Author/${userID}/Inbox`
     // setAnchorEl(event.currentTarget);
     
   };
 
   const handleProfileMenuOpen2 = (event) => {
     // history.push("/signup");
-    window.location.href="http://localhost:3000/Author"
+    // window.location.href="http://localhost:3000/Author"
     // setAnchorEl(event.currentTarget);
     
   };

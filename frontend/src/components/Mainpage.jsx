@@ -9,20 +9,21 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import axios from "axios";
-import PrimarySearchAppBar from './Sidebar';
-import { Link } from 'react-router-dom';
-import AddPost from "./Post";
 import { useState } from "react";
 
 import Button from '@mui/material/Button';
 import PostAction from "./PostAction";
 import { SinglePost } from "./baseElement/baseElement";
+import CircularProgress from '@mui/material/CircularProgress';
+import { SingleAuthor } from "./baseElement/baseElement";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const token = localStorage.getItem('jwtToken')
 const userID = localStorage.getItem('userID')
+
 
 class PostList extends React.Component {
   constructor(props){
@@ -98,23 +99,260 @@ class PostList extends React.Component {
     }
 }
 
+class PostList2 extends React.Component {
+    constructor(props){
+      super(props);
+      console.log(props);
+      this.state = {
+        posts: [],
+      }
+    }
+  
 
+    componentDidMount() {
+      axios.get(`https://social-distribution-t10.herokuapp.com/api/authors/?size=99`,
+      {
+        headers: {
+            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+        
+        },
+      })
+        .then(res => {
+          const temp = res.data;
+          console.log(temp);
+          var result = [];
+          for (let item of temp.data){
+            console.log(item)
+            var currentLink = item.url + "/posts/"
+            console.log(currentLink)
+            axios.get(currentLink,
+                {
+                  headers: {
+                      "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+                  
+                  },
+                })
+                  .then(res => {
+                  var value = res.data.data;
+                  console.log(value);
+                  for (let item of value){
+                    result.push(item)
+                  }
+                })
+                .catch( e => {
+                    console.log(e)
+                }).then(() => {
+                  console.log(result);
+                  this.setState({posts:result,})
+                })
+
+          }
+
+  
+      })
+    }
+  
+   
+  
+    renderPosts = () =>{
+     const posts = this.state.posts
+        console.log(this.state);
+        try{
+          return posts.length === 0
+              ? (<ListItem>
+                <ListItemText primary="404 Not Found" secondary="" />
+                </ListItem>)
+              : (posts.map(item => (
+      
+                <ListItem key = {item.post_id}>
+                  <SinglePost userId = {this.props.authorId} post = {item} badge = {"T10"}/>
+                </ListItem> ))
+                )
+      
+          }
+        
+        catch(e){
+            console.log(e)
+            return null;
+        }
+      }
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+  
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+              }}
+            >         
+              {this.renderPosts()}
+            </List>
+          </Grid>
+        )
+      }
+  }
+  
+
+class AuthorList extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        authors: []
+        // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
+      }
+    }
+  
+    componentDidMount() {
+      axios.get(`${base_url}/authors/`,    
+      {
+        headers: {
+          // "X-CSRFToken": this.props.token
+          Authorization:"Token " + this.props.token,
+  
+        },
+      })
+        .then(res => {
+          const authors = res.data;
+          console.log(authors);
+          this.setState( authors );
+      })
+  
+    }
+  
+    renderAuthors(){
+      const {authors} = this.state;
+      return authors.length === 0
+          ? (<CircularProgress />)
+          : (authors.map(item => (
+  
+            <ListItem key = {item.author_id}>
+                  <SingleAuthor author = {item}/>
+            </ListItem>)))
+  
+          };
+  
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+              }}
+            >
+              {this.renderAuthors()}
+            </List>
+          </Grid>
+        )
+      }
+  }
+
+  
+class AuthorList2 extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        authors: [],
+        data:[]
+      }
+    }
+  
+
+    componentDidMount() {
+      axios.get(`https://social-distribution-t10.herokuapp.com/api/authors/?size=99`,
+      {
+        headers: {
+            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+        
+        },
+      })
+        .then(res => {
+          console.log(res);
+  
+          this.setState(res.data);
+          console.log(this.state);
+  
+      })
+    }
+  
+    renderAuthors(){
+        try{
+            const authorList = this.state.data;
+            return authorList.length === 0
+                ? (<CircularProgress />)
+                : (authorList.map(item => (
+        
+                  <ListItem key = {item.author_id}>
+                        <SingleAuthor author = {item} badge = {"T10"}/>
+                  </ListItem>)))
+        
+                }
+        
+        
+        catch(e){
+            return null
+        }
+    }
+
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+              }}
+            >
+              {this.renderAuthors()}
+            </List>
+          </Grid>
+        )
+      }
+  }
 
 export default function MainPage(props) {
+    const [ready, setReady] = useState(false);
+
   const jwtToken = localStorage.getItem('jwtToken');
   const userID = localStorage.getItem('userID');
   console.log(jwtToken)
   console.log(userID)
   
     var authorId = props.match.params.author_id
-    const [addPage, setAddPage] = useState(false);
-
 
     return(
-        <Grid
-    container
-    direction="row"
-    justifyContent="center"
-    alignItems="center"
-  >      <div><PostList token = {token} authorId = {authorId} /></div></Grid> );
+        <Stack direction="row" spacing={2}>
+      <Grid
+  container
+  direction="column"
+  justifyContent="flex-start"
+  alignItems="flex-start"
+> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /></div></Grid> 
+  <Grid
+  container
+  direction="column"
+  justifyContent="flex-start"
+  alignItems="flex-start"
+>    <div><PostList token = {token} authorId = {authorId} /><PostList2  /></div></Grid> 
+  
+  </Stack>);
 }
