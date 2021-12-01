@@ -24,32 +24,32 @@ export default class LikeList extends React.Component {
     console.log(this.props);
   }
 
-  renderComments(){
-    const comments = this.props.comments;
-    console.log(comments);
-    try{
-      return comments.length === 0
-      ? (<CircularProgress />)
-      : (comments.map(item => (
-        <li>@{item.author.displayName}: {item.comments} </li>
-     )))
+  renderLikes(){
+    const likes = this.props.likes;
+    console.log(likes);
+    return likes.length === 0
+        ? null
+        : (likes.map(item => (
 
-      }
-    
-    catch(e){
-      return (<CircularProgress />)
-    }
-  }
+            <Link to= {"/author/"+item.author.author_id +"/"} replace style={{color:'black'}}>
+            <Avatar
+                alt={item.author.profileImage} src={item.author.profileImage}
+                />
+            <ListItemText primary={item.author.displayName}/>
+            </Link>)))
+
+        };
+
     render(){
       return (
         <Grid
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
+          container
+          direction="row"
+          justifyContent="left"
+          alignItems="center"
         >
 
-        {this.renderComments()}
+            {this.renderLikes()}
 
         </Grid>
 

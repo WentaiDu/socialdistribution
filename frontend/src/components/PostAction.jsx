@@ -4,8 +4,14 @@ import Like from "./postActionComponents/Like";
 import Share from "./postActionComponents/Share";
 import Comment from "./postActionComponents/CommentButton";
 import CommentList from "./postActionComponents/Comment";
-
+import LikeList from "./postActionComponents/LikeList";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import ForumIcon from '@mui/icons-material/Forum';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken');
@@ -20,6 +26,8 @@ export default class PostAction extends React.Component{
         this.state = {
             commentClicked: false,
             alreadyLiked: false,
+            likes: [],
+            comments: [],
         }
     }
 
@@ -35,6 +43,13 @@ export default class PostAction extends React.Component{
           .then(res => {
             const temp = res.data;
             console.log(temp);
+
+            this.setState({
+                commentClicked: this.state.commentClicked,
+                alreadyLiked: this.state.alreadyLiked,
+                likes: temp,
+                comments: this.state.comments,
+            })
             for(let item of temp){
 
                 console.log(userID);
@@ -44,10 +59,30 @@ export default class PostAction extends React.Component{
                     this.setState({
                         commentClicked: this.state.commentClicked,
                         alreadyLiked: !this.state.alreadyLiked,
+                        likes: this.state.likes,
+                        comments: this.state.comments,
                     })
                     break;
                 }
             }
+        })
+
+        axios.get(`${base_url}/author/${authorId}/posts/${postId}/comments/`,
+        {
+          headers: {
+            Authorization: "Token " + token,
+          },
+        })
+          .then(res => {
+            const temp2 = res.data;
+            console.log(temp2);
+
+            this.setState({
+                commentClicked: this.state.commentClicked,
+                alreadyLiked: this.state.alreadyLiked,
+                likes: this.state.likes,
+                comments: temp2,
+            })
         })
       }
 
@@ -90,6 +125,8 @@ export default class PostAction extends React.Component{
         this.setState({
             commentClicked: !this.state.commentClicked,
             alreadyLiked: this.state.alreadyLiked,
+            likes: this.state.likes,
+            comments: this.state.comments,
         })
 
     }
@@ -99,28 +136,14 @@ export default class PostAction extends React.Component{
 
     }
 
-    renderCommentList = () =>{
-        console.log("render comment")
-
-        if (this.state.commentClicked){
-            return (
-                <CommentList />
-            )
-        }
-        else{
-            return null;
-        }
-
-    }
-
     render(){
+        console.log(this.state);
         return (
-            <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-            >
+                <Stack
+                direction="column"
+                divider={<Divider orientation="horizontal" flexItem />}
+                spacing={2}
+                >
             <Grid
             container
             direction="row"
@@ -131,8 +154,27 @@ export default class PostAction extends React.Component{
             <Comment onClickComment = {this.onClickComment}/>
             <Share onClickShare = {this.onClickShare}/>
             </Grid>
-            {this.renderCommentList()}
-            </Grid>
+            <Stack
+                direction="row"
+                divider={<Divider orientation="vertical" flexItem />}
+                spacing={2}
+                >
+            
+            <FavoriteIcon size = "large"/>
+            <LikeList likes = {this.state.likes}/>
+
+            </Stack>
+            <Stack
+                direction="row"
+                divider={<Divider orientation="vertical" flexItem />}
+                spacing={2}
+                >
+            
+            <ForumIcon size = "large"/>
+            <CommentList comments = {this.state.comments}/>
+            </Stack>
+
+            </Stack>
 
         )
     }
