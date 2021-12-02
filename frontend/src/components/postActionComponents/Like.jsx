@@ -14,7 +14,7 @@ export default class Like extends React.Component{
     renderIcon(){
         if (this.props.alreadyLiked){
             return(
-                <ThumbUpAltIcon />
+                <Button> <ThumbUpAltIcon /></Button>
             )
         }
         else{

@@ -38,13 +38,13 @@ class PostSerializer(serializers.ModelSerializer):
 
 class LikeSerializer(serializers.ModelSerializer):
     #author = AuthorSerializer(read_only=True)
-    author = AuthorSerializer(required=False)
+    author = AuthorSerializer(read_only=True)
     object = serializers.URLField()
     class Meta:
         model = Like
         fields = ["context","type","summary","author","object"]
 class LikedSerializer(serializers.ModelSerializer):
-    item=LikeSerializer(required=False)
+    item=LikeSerializer(read_only=True)
     object = serializers.URLField()
     class Meta:
         model = Liked

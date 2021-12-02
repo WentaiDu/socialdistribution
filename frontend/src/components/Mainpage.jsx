@@ -200,6 +200,104 @@ class PostList2 extends React.Component {
   }
   
 
+  class PostList3 extends React.Component {
+    constructor(props){
+      super(props);
+      console.log(props);
+      this.state = {
+        posts: [],
+      }
+    }
+  
+
+    componentDidMount() {
+      axios.get('https://social-distance-api.herokuapp.com/authors/',
+      {
+        headers: {
+            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+        
+        },
+      })
+        .then(res => {
+          const temp = res.data;
+          console.log(temp);
+          var result = [];
+          for (let item of temp.items){
+            console.log(item)
+            var currentLink = item.url + "posts/"
+            console.log(currentLink)
+            axios.get(currentLink,
+                {
+                  headers: {
+                      "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+                  
+                  },
+                })
+                  .then(res => {
+                  var value = res.data.items;
+                  console.log(value);
+                  for (let item of value){
+                    result.push(item)
+                  }
+                })
+                .catch( e => {
+                    console.log(e)
+                }).then(() => {
+                  console.log(result);
+                  this.setState({posts:result,})
+                })
+
+          }
+
+  
+      })
+    }
+  
+   
+  
+    renderPosts = () =>{
+     const posts = this.state.posts
+        console.log(this.state);
+        try{
+          return posts.length === 0
+              ? null
+              : (posts.map(item => (
+      
+                <ListItem key = {item.post_id}>
+                  <SinglePost userId = {this.props.authorId} post = {item} badge = {"T1"}/>
+                </ListItem> ))
+                )
+      
+          }
+        
+        catch(e){
+            console.log(e)
+            return null;
+        }
+      }
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+  
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+              }}
+            >         
+              {this.renderPosts()}
+            </List>
+          </Grid>
+        )
+      }
+  }
+
 class AuthorList extends React.Component {
     constructor(props){
       super(props);
@@ -329,6 +427,73 @@ class AuthorList2 extends React.Component {
       }
   }
 
+  class AuthorList3 extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        authors: [],
+        data:[]
+      }
+    }
+  
+
+    componentDidMount() {
+      axios.get('https://social-distance-api.herokuapp.com/authors/',
+      {
+        headers: {
+            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+        
+        },
+      })
+        .then(res => {
+          console.log(res);
+  
+          this.setState(res.data);
+          console.log(this.state);
+  
+      })
+    }
+  
+    renderAuthors(){
+        try{
+            const authorList = this.state.items;
+            return authorList.length === 0
+                ? (<CircularProgress />)
+                : (authorList.map(item => (
+        
+                  <ListItem key = {item.author_id}>
+                        <SingleAuthor author = {item} badge = {"T1"}/>
+                  </ListItem>)))
+        
+                }
+        
+        
+        catch(e){
+            return null
+        }
+    }
+
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                bgcolor: 'background.paper',
+              }}
+            >
+              {this.renderAuthors()}
+            </List>
+          </Grid>
+        )
+      }
+  }
 export default function MainPage(props) {
     const [ready, setReady] = useState(false);
 
@@ -346,13 +511,17 @@ export default function MainPage(props) {
   direction="column"
   justifyContent="flex-start"
   alignItems="flex-start"
-> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /></div></Grid> 
+> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid> 
   <Grid
   container
   direction="column"
   justifyContent="flex-start"
-  alignItems="flex-start"
->    <div><PostList token = {token} authorId = {authorId} /><PostList2  /></div></Grid> 
+  alignItems="flex-start">   
+   <div>
+     <PostList token = {token} authorId = {authorId} />
+   <PostList2  />
+   <PostList3 />
+   </div></Grid> 
   
   </Stack>);
 }
