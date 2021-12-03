@@ -31,4 +31,6 @@ urlpatterns = [
     path('author/',views.SignupAPI.as_view(),name='signup'),
     path('auth/', include('rest_auth.urls')),
     path('authors/', views.AuthorList.as_view()),
+    path('nodes/',views.ServerNodesAPI.as_view(), name = 'server_nodes'),
+    path('delete_nodes/',views.DeleteNodesAPI.as_view(), name ='delete_nodes')
 ]

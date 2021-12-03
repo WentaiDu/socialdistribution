@@ -7,6 +7,7 @@ class AuthorSerializer(serializers.ModelSerializer):
       model = Author
       fields = ['username','password','author_type','author_id','host','displayName','url','github','profileImage']
 
+
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -36,16 +37,27 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['type','title','post_id','source','origin','description','contentType','content'
         ,'author','comments','published','visibility','unlisted']
 
+
+class ServerNodesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServerNodes
+        fields = '__all__'
+
+
 class LikeSerializer(serializers.ModelSerializer):
     #author = AuthorSerializer(read_only=True)
     author = AuthorSerializer(read_only=True)
     object = serializers.URLField()
+
     class Meta:
         model = Like
         fields = ["context","type","summary","author","object"]
+
+
 class LikedSerializer(serializers.ModelSerializer):
     item=LikeSerializer(read_only=True)
     object = serializers.URLField()
+
     class Meta:
         model = Liked
         fields = ["type","item"]

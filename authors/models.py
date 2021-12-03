@@ -24,6 +24,11 @@ class PendingAuthor(models.Model):
     accept = models.CharField(max_length=100, default='pending')
     pending_author = models.JSONField(blank=True,null=True,verbose_name="pending_author")
 
+
+class ServerNodes(models.Model):
+    node = models.CharField(max_length=1000,primary_key=True,verbose_name="server_node")
+
+
 class Post(models.Model):
     class Visibility(models.TextChoices):
         PUBLIC='PUBLIC'
