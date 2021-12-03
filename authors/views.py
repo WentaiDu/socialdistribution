@@ -17,6 +17,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import simplejson as json
 from datetime import datetime
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -76,7 +78,7 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                     author['displayName'] = new_author['displayName']
                     author['password'] = new_author['password']
                     author["author_type"] = 'author'
-                    author['host'] = 'http://' + request.get_host() + '/'
+                    author['host'] = 'https://' + request.get_host() + '/'
                     author['url'] = request.build_absolute_uri()
                     if new_author['profileImage'] != 'null':
                         author['profileImage'] = new_author['profileImage']
@@ -714,3 +716,89 @@ class publicpost(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
+
+
+
+class ServerNodesAPI(generics.ListCreateAPIView):
+    serializer_class = ServerNodesSerializer
+    queryset = ServerNodes.objects.all()
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)
+
+        if user.is_staff:
+            try:
+                url = request.data["node"]
+                url = url.split('/')
+                node = url[0]+'//'+url[2]+'/'
+                ServerNodes.objects.create(node=node)
+                response = {
+                    'details': 'Add server node succeed!'
+                }
+                return Response(response, status.HTTP_200_OK)
+            except:
+                response = {
+                    'details': 'Add server node failed!'
+                }
+                return Response(response, status.HTTP_400_BAD_REQUEST)
+        else:
+            response = {
+                'details': 'Only admin can do operations on server nodes'
+            }
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteNodesAPI(generics.GenericAPIView):
+    serializer_class = ServerNodesSerializer
+
+    @swagger_auto_schema(
+        request_body=ServerNodesSerializer,
+        responses={
+            "201": openapi.Response(
+                description="Create Inbox Post Succeeds",
+                examples={
+                    'application/json': {
+                        "node": 'node'
+                    }
+                }
+            )
+        },
+        tags=['delete_node']
+    )
+    def delete(self, request):
+        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
+        token = auth_header.split(' ')[1]  # get token
+        user = get_object_or_404(Author, auth_token=token)
+
+        if user.is_staff:
+            try:
+                node = request.data["node"]
+                node = ServerNodes.objects.get(node=node)
+                node.delete()
+                response = {
+                    'details': 'Delete server node succeed!'
+                }
+                return Response(response, status.HTTP_200_OK)
+            except:
+                response = {
+                    'details': 'Delete server node failed or node not exist!'
+                }
+                return Response(response, status.HTTP_400_BAD_REQUEST)
+
+        else:
+            response = {
+                'details': 'Only admin can do operations on server nodes'
+            }
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
+
+def check_node(request):
+    node = 'https://' + request.get_host() + '/'
+    node = get_object_or_404(ServerNodes, node=node)
+    if node:
+        return True
+    else:
+        return False
