@@ -41,6 +41,7 @@ class LoginAPI(generics.GenericAPIView):
 
 
 class SignupAPI(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
     serializer_class = PendingAuthorSerializer
 
     def post(self, request, *args, **kwargs):
@@ -61,87 +62,73 @@ class SignupAPI(generics.GenericAPIView):
 class PendingAuthorListAPI(generics.ListCreateAPIView):
     queryset = PendingAuthor.objects.all()
     serializer_class = PendingAuthorSerializer
+    permission_classes = [IsAdminUser,IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
 
-        auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
-        token = auth_header.split(' ')[1] # get token
-        user = get_object_or_404(Author, auth_token = token)
-        if user.is_staff:
-            pending_author = PendingAuthorSerializer(request.data)
-            if pending_author.data['accept'] == 'accept':
-                new_author = json.loads(pending_author.data['pending_author'])
-                pending_author_id = pending_author.data['id']
-                try:
-                    author = {}
-                    author['username'] = new_author['username']
-                    author['displayName'] = new_author['displayName']
-                    author['password'] = new_author['password']
-                    author["author_type"] = 'author'
-                    author['host'] = 'https://' + request.get_host() + '/'
-                    author['url'] = request.build_absolute_uri()
-                    if new_author['profileImage'] != 'null':
-                        author['profileImage'] = new_author['profileImage']
-                    author['github'] = "http://github.com/" + new_author['github']
-                except:
-                    response = {
-                        'detail': 'Bad Input!'
-                    }
-                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
-                author_serializer = AuthorSerializer(data=author)
-                if author_serializer.is_valid():
-                    author_serializer.save()
-                    new_author = Author.objects.get(username=author['username'])
-                    new_author.set_password(author['password'])
-                    new_author.save()
-                    new_author = Author.objects.filter(username=author['username'])
-                    id = author_serializer.data['author_id']
-                    new_author.update(url=author['url'] + id)
-                    new_author = Author.objects.get(username=author['username'])
-                    response = {
-                        'detail': 'User creates succeed!',
-                        'id': new_author.author_id,
-                        'token': Token.objects.get_or_create(user=new_author)[0].key
-                    }
-                    author_request = PendingAuthor.objects.get(id = pending_author_id)
-                    author_request.delete()
-                    return Response(response, status=status.HTTP_201_CREATED)
-
-                else:
-                    print(author_serializer.errors)
-                    response = {
-                        'detail': 'User created failed!'
-                    }
-                    return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-            elif pending_author.data['accept'] == 'reject':
-                id = request.data['id']
-                author = PendingAuthor.objects.get(id=id)
-                author.delete()
-                response ={
-                    'details':'This user has been reject to sign up on our server'
+        pending_author = PendingAuthorSerializer(request.data)
+        if pending_author.data['accept'] == 'accept':
+            new_author = json.loads(pending_author.data['pending_author'])
+            pending_author_id = pending_author.data['id']
+            try:
+                author = {}
+                author['username'] = new_author['username']
+                author['displayName'] = new_author['displayName']
+                author['password'] = new_author['password']
+                author["author_type"] = 'author'
+                author['host'] = 'https://' + request.get_host() + '/'
+                author['url'] = request.build_absolute_uri()
+                if new_author['profileImage'] != 'null':
+                    author['profileImage'] = new_author['profileImage']
+                author['github'] = "http://github.com/" + new_author['github']
+            except:
+                response = {
+                    'detail': 'Bad Input!'
                 }
-                return Response(response, status.HTTP_200_OK)
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            author_serializer = AuthorSerializer(data=author)
+            if author_serializer.is_valid():
+                author_serializer.save()
+                new_author = Author.objects.get(username=author['username'])
+                new_author.set_password(author['password'])
+                new_author.save()
+                new_author = Author.objects.filter(username=author['username'])
+                id = author_serializer.data['author_id']
+                new_author.update(url=author['url'] + id)
+                new_author = Author.objects.get(username=author['username'])
+                response = {
+                    'detail': 'User creates succeed!',
+                    'id': new_author.author_id,
+                    'token': Token.objects.get_or_create(user=new_author)[0].key
+                }
+                author_request = PendingAuthor.objects.get(id = pending_author_id)
+                author_request.delete()
+                return Response(response, status=status.HTTP_201_CREATED)
 
-        else:
-            response = {
-                'details': "Only Admin can accept/reject sign up requests!"
+            else:
+                print(author_serializer.errors)
+                response = {
+                    'detail': 'User created failed!'
+                }
+                return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        elif pending_author.data['accept'] == 'reject':
+            id = request.data['id']
+            author = PendingAuthor.objects.get(id=id)
+            author.delete()
+            response ={
+                'details':'This user has been reject to sign up on our server'
             }
-            return Response(response, status.HTTP_400_BAD_REQUEST)
+            return Response(response, status.HTTP_200_OK)
 
 
 class AuthorList(generics.ListAPIView):
-
     # context_object_name = "context_authors"
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     pagination_class = AuthorPagination
 
     def get(self,request):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION') # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1] # get token
-        # user = get_object_or_404(Author, auth_token = token) # validate if the token is valid
-
         authors = Author.objects.all()
 
         # response = super().list(request,author_id)
@@ -158,7 +145,6 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     
 
 class CommentList(generics.ListCreateAPIView):
-    permission_classes = [permissions.AllowAny]
     queryset = Comment.objects.all()
     lookup_field = 'post_id'
     serializer_class = CommentSerializer
@@ -168,10 +154,6 @@ class CommentList(generics.ListCreateAPIView):
     #     try:
     #         if request.data['type'] ==:
     def get(self,request, post_id,author_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         try:
             post=Post.objects.get(pk=post_id)
@@ -195,9 +177,6 @@ class InboxView(generics.GenericAPIView):
     serializer_class = InboxSerializer
 
     def get(self, request, *args, **kwargs):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         author_id = self.kwargs['author_id']
 
@@ -308,10 +287,6 @@ class InboxView(generics.GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
 
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
@@ -334,10 +309,6 @@ class Likes_list(generics.GenericAPIView):
     """GET a list of likes from other authors on author_id’s post post_id"""
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         post=Post.objects.get(pk=post_id)
         
@@ -414,7 +385,6 @@ class LikedList(generics.GenericAPIView):
 
 class PostList(generics.ListCreateAPIView):
     # permission=[permissions.IsAuthenticatedOrReadOnly]
-    permission_classes = [permissions.AllowAny]
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
@@ -461,10 +431,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
     def get(self,request,author_id,post_id):
 
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
         try:
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
@@ -481,12 +447,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 
     def post(self,request,author_id,post_id):
-        # permission_class=[permissions.IsAuthenticatedOrReadOnly]
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
 
         try:
 
@@ -504,13 +464,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
     def delete(self,request,author_id, post_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
 
         try:
             author = Author.objects.get(pk=author_id)
@@ -523,12 +477,8 @@ class PostDetail(generics.RetrieveUpdateAPIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
-
     def put(self, request,author_id,post_id):
-    # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-    # token = auth_header.split(' ')[1]  # get token
-    # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+
         try:
 
             author = Author.objects.get(pk=author_id)
@@ -567,12 +517,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
 
 
-
-
-
 class FollowerList(generics.ListAPIView):
-
-
 
     # serializer_class = FollowerSerializer
     # context_object_name = "authors"
@@ -580,10 +525,6 @@ class FollowerList(generics.ListAPIView):
     #    return Follower.objects.filter(following_id=self.kwargs['author_id'])
 
     def get(self,request, author_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
 
         followers = Follower.objects.filter(following_id=author_id)
         # response = super().list(request,author_id)
@@ -711,48 +652,36 @@ class FriendRequest(generics.GenericAPIView):
 
 
 class publicpost(generics.ListCreateAPIView):
-    # permission=[permissions.IsAuthenticatedOrReadOnly]
     permission_classes = [permissions.AllowAny]
     queryset = Post.objects.all()
     serializer_class=PostSerializer
 
 
-
-
 class ServerNodesAPI(generics.ListCreateAPIView):
     serializer_class = ServerNodesSerializer
     queryset = ServerNodes.objects.all()
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser,IsAuthenticated]
 
     def post(self, request):
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)
-
-        if user.is_staff:
-            try:
-                url = request.data["node"]
-                url = url.split('/')
-                node = url[0]+'//'+url[2]+'/'
-                ServerNodes.objects.create(node=node)
-                response = {
-                    'details': 'Add server node succeed!'
-                }
-                return Response(response, status.HTTP_200_OK)
-            except:
-                response = {
-                    'details': 'Add server node failed!'
-                }
-                return Response(response, status.HTTP_400_BAD_REQUEST)
-        else:
+        try:
+            url = request.data["node"]
+            url = url.split('/')
+            node = url[0]+'//'+url[2]+'/'
+            ServerNodes.objects.create(node=node)
             response = {
-                'details': 'Only admin can do operations on server nodes'
+                'details': 'Add server node succeed!'
+            }
+            return Response(response, status.HTTP_200_OK)
+        except:
+            response = {
+                'details': 'Add server node failed!'
             }
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteNodesAPI(generics.GenericAPIView):
     serializer_class = ServerNodesSerializer
+    permission_classes = [IsAdminUser, IsAuthenticated]
 
     @swagger_auto_schema(
         request_body=ServerNodesSerializer,
@@ -769,28 +698,19 @@ class DeleteNodesAPI(generics.GenericAPIView):
         tags=['delete_node']
     )
     def delete(self, request):
-        auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        token = auth_header.split(' ')[1]  # get token
-        user = get_object_or_404(Author, auth_token=token)
-
-        if user.is_staff:
-            try:
-                node = request.data["node"]
-                node = ServerNodes.objects.get(node=node)
-                node.delete()
-                response = {
-                    'details': 'Delete server node succeed!'
-                }
-                return Response(response, status.HTTP_200_OK)
-            except:
-                response = {
-                    'details': 'Delete server node failed or node not exist!'
-                }
-                return Response(response, status.HTTP_400_BAD_REQUEST)
-
-        else:
+        try:
+            url = request.data["node"]
+            url = url.split('/')
+            node = url[0] + '//' + url[2] + '/'
+            node = ServerNodes.objects.get(node=node)
+            node.delete()
             response = {
-                'details': 'Only admin can do operations on server nodes'
+                'details': 'Delete server node succeed!'
+            }
+            return Response(response, status.HTTP_200_OK)
+        except:
+            response = {
+                'details': 'Delete server node failed or node not exist!'
             }
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
@@ -802,3 +722,5 @@ def check_node(request):
         return True
     else:
         return False
+
+
