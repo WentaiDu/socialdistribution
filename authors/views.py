@@ -19,12 +19,14 @@ import simplejson as json
 from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
+from urllib.parse import urlparse
 
 
 class LoginAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
     def post(self, request):
+        check_node(request)
         username = request.data["username"]
         password = request.data["password"]
         user = authenticate(username=username, password=password)
@@ -45,6 +47,7 @@ class SignupAPI(generics.GenericAPIView):
     serializer_class = PendingAuthorSerializer
 
     def post(self, request, *args, **kwargs):
+        check_node(request)
         try:
             PendingAuthor.objects.create(accept='pending',pending_author=json.dumps(request.data))
 
@@ -65,7 +68,7 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser,IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-
+        check_node(request)
         pending_author = PendingAuthorSerializer(request.data)
         if pending_author.data['accept'] == 'accept':
             new_author = json.loads(pending_author.data['pending_author'])
@@ -76,11 +79,11 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                 author['displayName'] = new_author['displayName']
                 author['password'] = new_author['password']
                 author["author_type"] = 'author'
-                author['host'] = 'https://' + request.get_host() + '/'
+                author['host'] = request.scheme+'://' + request.get_host() + '/'
                 author['url'] = request.build_absolute_uri()
                 if new_author['profileImage'] != 'null':
                     author['profileImage'] = new_author['profileImage']
-                author['github'] = "http://github.com/" + new_author['github']
+                author['github'] = "https://github.com/" + new_author['github']
             except:
                 response = {
                     'detail': 'Bad Input!'
@@ -123,12 +126,15 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
 
 
 class AuthorList(generics.ListAPIView):
+
     # context_object_name = "context_authors"
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     pagination_class = AuthorPagination
 
     def get(self,request):
+
+        check_node(request)
         authors = Author.objects.all()
 
         # response = super().list(request,author_id)
@@ -154,7 +160,7 @@ class CommentList(generics.ListCreateAPIView):
     #     try:
     #         if request.data['type'] ==:
     def get(self,request, post_id,author_id):
-
+        check_node(request)
         try:
             post=Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
@@ -177,7 +183,7 @@ class InboxView(generics.GenericAPIView):
     serializer_class = InboxSerializer
 
     def get(self, request, *args, **kwargs):
-
+        check_node(request)
         author_id = self.kwargs['author_id']
 
         try:
@@ -224,7 +230,7 @@ class InboxView(generics.GenericAPIView):
         tags=['Inbox']
     )
     def post(self, request, *args, **kwargs):
-
+        check_node(request)
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
@@ -286,7 +292,7 @@ class InboxView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
-
+        check_node(request)
         author_id = self.kwargs['author_id']
         try:
             inbox = Inbox.objects.get(inbox_author_id=author_id)
@@ -332,10 +338,7 @@ class LikesCommentList(generics.GenericAPIView):
     GET a list of likes from other authors on author_id’s post post_id comment comment_id"""
     queryset = Like.objects.all()
     def get(self, request,author_id, post_id, comment_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
 
         comment_idk = Comment.objects.get(pk=comment_id)
         # if comment_id!=post_id:
@@ -365,9 +368,7 @@ class LikedList(generics.GenericAPIView):
     GET list what public things author_id liked
     """
     def get(self, request,author_id):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
 
         author=Author.objects.get(pk=author_id)
         if not author:
@@ -392,10 +393,7 @@ class PostList(generics.ListCreateAPIView):
     #     return self.posts
 
     def get(self,request, author_id):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
 
         try:
             check=Author.objects.get(pk=author_id)
@@ -413,9 +411,7 @@ class PostList(generics.ListCreateAPIView):
 
 
     def post(self,request,author_id):
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
         post_id=uuid.uuid4()
         return PostDetail().put(request,author_id,post_id)
 
@@ -537,11 +533,7 @@ class FollowerDetailView(APIView):
     serializer_class = FollowerSerializer
 
     def get(self, request, *args, **kwargs):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
-
+        check_node(request)
         try:
             #author1 = Author.objects.get(pk=author_id1)
             #author2 = Author.objects.filter(pk=author_id2)
@@ -554,10 +546,7 @@ class FollowerDetailView(APIView):
         return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
 
         try:
             author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
@@ -585,10 +574,7 @@ class FollowerDetailView(APIView):
             return Response(str(e),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
-
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
 
         try:
             follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
@@ -600,6 +586,7 @@ class FollowerDetailView(APIView):
 class FriendRequest(generics.GenericAPIView):
     serializer_class = FriendRequestSerializer
     def put(self, request, author_id1, author_id2):
+        check_node(request)
     # def put(self, request, *args, **kwargs):
         # author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
         # author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
@@ -618,7 +605,7 @@ class FriendRequest(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data)
     def delete(self, request, author_id1, author_id2):
-        
+        check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
@@ -631,10 +618,7 @@ class FriendRequest(generics.GenericAPIView):
         }
         return Response(response, status=status.HTTP_200_OK)
     def get(self, request, author_id1, author_id2):
-        
-        # auth_header = request.META.get('HTTP_AUTHORIZATION')  # get authorized header from HTTP request
-        # token = auth_header.split(' ')[1]  # get token
-        # user = get_object_or_404(Author, auth_token=token)  # validate if the token is valid
+        check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         if not author1:
@@ -663,6 +647,7 @@ class ServerNodesAPI(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser,IsAuthenticated]
 
     def post(self, request):
+        check_node(request)
         try:
             url = request.data["node"]
             url = url.split('/')
@@ -698,6 +683,7 @@ class DeleteNodesAPI(generics.GenericAPIView):
         tags=['delete_node']
     )
     def delete(self, request):
+        check_node(request)
         try:
             url = request.data["node"]
             url = url.split('/')
@@ -716,11 +702,6 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
-    node = 'https://' + request.get_host() + '/'
-    node = get_object_or_404(ServerNodes, node=node)
-    if node:
-        return True
-    else:
-        return False
-
+    node = request.scheme+'://' + request.get_host() + '/'
+    get_object_or_404(ServerNodes, node=node)
 
