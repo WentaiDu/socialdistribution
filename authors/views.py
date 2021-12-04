@@ -675,7 +675,7 @@ class ServerNodesAPI(generics.ListCreateAPIView):
         try:
             url = request.data["node"]
             url = url.split('/')
-            node = url[0]+'//'+url[2]+'/'
+            node = url[2]
             ServerNodes.objects.create(node=node)
             response = {
                 'details': 'Add server node succeed!'
@@ -711,7 +711,7 @@ class DeleteNodesAPI(generics.GenericAPIView):
         try:
             url = request.data["node"]
             url = url.split('/')
-            node = url[0] + '//' + url[2] + '/'
+            node = url[2]
             node = ServerNodes.objects.get(node=node)
             node.delete()
             response = {
@@ -726,8 +726,13 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
-    print(request.META)
-    node = request.scheme+'://' + request.get_host() + '/'
+    meta = request.META
+    print('meta is', meta)
+    url = request.META['HTTP_REFERER']
+    url_li = url.split('/')
+    node = url_li[2]
+    print('url is', url)
+    print('node is', node)
     get_object_or_404(ServerNodes, node=node)
 
 @api_view(['POST'])
