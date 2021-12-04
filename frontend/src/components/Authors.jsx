@@ -1,127 +1,87 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
+
 import Grid from '@mui/material/Grid';
 import axios from "axios";
-import PrimarySearchAppBar from './Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
-import { SingleAuthor } from "./baseElement/baseElement";
-
+import {AuthorList} from "./baseElement/baseElement";
+import useState from "react";
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const token = localStorage.getItem('jwtToken')
 
-//
 
-class AuthorList extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      authors: []
-      // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
-    }
-  }
+// class AuthorList extends React.Component {
+//   constructor(props){
+//     super(props);
+//     this.state = {
+//       authors: []
+//     }
+//   }
 
-  // constructor(async_param){
-  //   if (typeof async_param === 'undefined') {
-  //     throw new Error('Cannot be called directly');
-  //   }
-  //   console.log(async_param.data);
-  //   this.state = {};
-  // }
-    // const showingList = authorList.map((item) => (
-    //   <ListItem key = {item.author_id}>
-    //       <ListItemAvatar>
-    //       <Avatar alt={item.username} src={item.profileImage} />
-    //       </ListItemAvatar>
-    //       <ListItemText primary={item.username} secondary={item.author_id} />
-    //     </ListItem>
-    // ));
+//   componentDidMount() {
 
-    // static async build (){
-    //   let res = await axios.get(`${base_url}/authors/`,);
-    //   // authorList = res.data.authors;
-    //   // this.setState(authorList);
-    //   // console.log(this.state);
-    //   return new AuthorList(res);
-    // }
+//   }
 
-  componentDidMount() {
-    axios.get(`${base_url}/authors/`,    
-    {
-      headers: {
-        // "X-CSRFToken": this.props.token
-        Authorization:"Token " + this.props.token,
+//   renderAuthors(){
+//     const {authors} = this.state;
+//     return authors.length === 0
+//         ? (<CircularProgress />)
+//         : (authors.map(item => (
 
-      },
-    })
-      .then(res => {
-        const authors = res.data;
-        console.log(authors);
-        this.setState( authors );
-    })
+//           <ListItem key = {item.author_id}>
+//                 <SingleAuthor author = {item}/>
+//           </ListItem>)))
 
-  }
+//         };
 
-  renderAuthors(){
-    const {authors} = this.state;
-    return authors.length === 0
-        ? (<CircularProgress />)
-        : (authors.map(item => (
+//     render(){
+//       return (
+//         <Grid
+//           container
+//           direction="column"
+//           justifyContent="center"
+//           alignItems="center"
+//         >
+//           <List
+//             sx={{
+//               width: '100%',
+//               maxWidth: 360,
+//               bgcolor: 'background.paper',
+//             }}
+//           >
+//             {this.renderAuthors()}
+//           </List>
+//         </Grid>
+//       )
+//     }
+// }
 
-          <ListItem key = {item.author_id}>
-                <SingleAuthor author = {item}/>
-          </ListItem>)))
+async function processAuthors(){
+  var authors = [];
+  var res = await axios.get(`${base_url}/authors/`,    
+  {
+    headers: {
+      // "X-CSRFToken": this.props.token
+      Authorization:"Token " + token,
 
-        };
-
-    render(){
-      return (
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <List
-            sx={{
-              width: '100%',
-              maxWidth: 360,
-              bgcolor: 'background.paper',
-            }}
-          >
-            {this.renderAuthors()}
-          </List>
-        </Grid>
-      )
-    }
+    },
+  })
+  .catch(e => {
+    console.log("get all authos error");
+  })
+  authors = res.data.authors
+  console.log(authors)
+  return authors;
 }
 
-export default function Authors() {
-  const token = localStorage.getItem('jwtToken')
-  // var result;
-  // axios.get(`${base_url}/authors/`,).then(
-  //   res => {
-  //     result = res.data.authors;
-  //     console.log(result);
-  //     return(<AuthorList authors = {result}/>);
-  //   }).catch(e => {
-  //     return(<li>404 Not Found</li>);
-  //   });
+export default  function Authors() {
 
-  // async function getAuthors(){
-  //   let res = await axios.get(`${base_url}/authors/`,);
-  //   result = res.data.authors;
-  // }
-  // const getterAuthorList = window.setInterval(getAuthors(),1000);
-  // console.log(result);
 
-  return(<AuthorList token = {token} />);
+  // const [authors, setAuthors] = useState([]);
+  var authors = processAuthors();
+
+
+  return(<AuthorList authors = {authors} />);
+
+
+
 }

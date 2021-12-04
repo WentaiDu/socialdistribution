@@ -10,10 +10,14 @@ import SettingsApplicationsOutlinedIcon from '@mui/icons-material/SettingsApplic
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import InputBase from '@mui/material/InputBase';
+import Button from '@mui/material/Button';
 import { styled, alpha } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import './userInfo.css'
 import React, { useState } from "react";
+
+const userId = localStorage.getItem('userID');
+
 
 function Header () {
     const [index, setIndex] = useState(5)
@@ -77,17 +81,17 @@ function Header () {
             <div>
                 <ul className="center_menu">
                     <li onClick={() => active(1)} className={index === 1 ? 'bottomActive' : ''}>
-                        <Link to="/aaa"><HomeOutlinedIcon fontSize={'large'}></HomeOutlinedIcon></Link>
+                        <Link to="/main"><HomeOutlinedIcon fontSize={'large'}/></Link>
                     </li>
      
                     <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
-                        <LocalFireDepartmentIcon fontSize={'large'}></LocalFireDepartmentIcon>
+                        <LocalFireDepartmentIcon fontSize={'large'} />
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
-                    <Link to="/Author/:author_id/Inbox"><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
+                    <Link to= {"/Author/"+ userId +"/Inbox"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(5)} className={index === 5 ? 'bottomActive' : ''}>
-                    <Link to="/Author"><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
+                    <Link to= {"/Author/"+ userId}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
                     </li>
                 </ul>
             </div>

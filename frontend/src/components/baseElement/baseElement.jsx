@@ -6,10 +6,7 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
-import{ useContext } from 'react';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -21,21 +18,13 @@ import PostAction from "../PostAction";
 import axios from "axios";
 import Chip from '@mui/material/Chip';
 import FaceIcon from '@mui/icons-material/Face';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
 const token = localStorage.getItem('jwtToken')
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
-
-
 
 export class SingleAuthor extends React.Component {
   constructor(props){
@@ -106,7 +95,6 @@ export class SinglePost extends React.Component {
   constructor(props){
     super(props);
     console.log("singlePost")
-    console.log(props);
     this.state = {
     }
   }
@@ -194,4 +182,51 @@ export class FollowerCount extends React.Component {
 
 
 
+}
+
+
+export class AuthorList extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(this.props)
+  }
+
+  renderAuthors(){
+    try{
+      const authors = this.props.authors;
+      return authors.length === 0
+          ? (<CircularProgress />)
+          : (authors?.map(item => (
+  
+            <ListItem key = {item.author_id}>
+              <SingleAuthor author = {item}/>
+            </ListItem>)))
+  
+    }
+    
+    catch (e){
+      console.log("authors typeError")
+    }
+  }
+
+    render(){
+      return (
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <List
+            sx={{
+              width: '100%',
+              maxWidth: 360,
+              bgcolor: 'background.paper',
+            }}
+          >
+            {this.renderAuthors()}
+          </List>
+        </Grid>
+      )
+    }
 }
