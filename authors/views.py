@@ -96,12 +96,14 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                 author_serializer.save()
                 new_author = Author.objects.get(username=author['username'])
                 new_author.set_password(author['password'])
-                id = new_author.author_id
-                print(id)
-                new_author.save()
+                id = new_author.id
                 new_author = Author.objects.filter(username=author['username'])
-                new_author.update(url=author['url'] + id)
+                a = author['host']+'author/'+str(id)
+                new_author.update(author_id=a)
+                new_author.update(url=a)
                 new_author = Author.objects.get(username=author['username'])
+                print(new_author.author_id)
+                print(new_author.id)
                 response = {
                     'detail': 'User creates succeed!',
                     'id': new_author.author_id,
