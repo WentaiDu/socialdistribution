@@ -1,5 +1,7 @@
 from django.db.models.query import QuerySet
 from django.http.response import Http404
+from rest_framework.decorators import api_view
+
 from authors import pagination
 from authors.models import *
 from authors.serializers import *
@@ -156,6 +158,7 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     #pagination_class = CommentPagination
 
+<<<<<<< HEAD
     # def post(self,request):
     #     try:
     #         if request.data['type'] ==:
@@ -176,6 +179,50 @@ class CommentList(generics.ListCreateAPIView):
 
     #     return Response({'comments':serializer.data})
 
+=======
+    def post(self,request,post_id,author_id):
+        try:
+            post = Post.objects.get(pk=post_id)
+            author = Author.objects.get(pk=author_id)
+            comment_id = uuid.uuid4()
+
+            comment = {}
+            comment['contentType'] = request.data['contentType']
+            # comment['comment_author'] = author
+            comment['comment'] = request.data['comment']
+            comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+            # comment['comment_post'] = post
+            serializer = CommentSerializer(data=comment)
+            if serializer.is_valid():
+                comment = Comment.objects.create(**serializer.validated_data,comment_post=post,comment_author=author,comment_id=comment_id)
+                comment.save()
+                return Response({'serializer': serializer.data})
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+    def get(self,request, post_id,author_id):
+        check_node(request)
+        try:
+            post=Post.objects.get(pk=post_id)
+            author = Author.objects.get(pk=author_id)
+            Comments = Comment.objects.filter(comment_post=post)
+        except Exception as e:
+            return Response(e,status=status.HTTP_404_NOT_FOUND)
+
+        # response = super().list(request,author_id)
+        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+        serializer = CommentSerializer(Comments, many=True)
+        return Response({'comments': serializer.data})
+        # if serializer.is_valid():
+        #     return Response({'comments':serializer.data})
+        # else:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+>>>>>>> 29ccce993da6d3293fc625adbdd130a174b9bb02
 
 
 
@@ -666,7 +713,7 @@ class ServerNodesAPI(generics.ListCreateAPIView):
         try:
             url = request.data["node"]
             url = url.split('/')
-            node = url[0]+'//'+url[2]+'/'
+            node = url[2]
             ServerNodes.objects.create(node=node)
             response = {
                 'details': 'Add server node succeed!'
@@ -702,7 +749,7 @@ class DeleteNodesAPI(generics.GenericAPIView):
         try:
             url = request.data["node"]
             url = url.split('/')
-            node = url[0] + '//' + url[2] + '/'
+            node = url[2]
             node = ServerNodes.objects.get(node=node)
             node.delete()
             response = {
@@ -717,7 +764,27 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
+<<<<<<< HEAD
     pass
     # node = request.scheme+'://' + request.get_host() + '/'
     # get_object_or_404(ServerNodes, node=node)
+=======
+    # meta = request.META
+    # print('meta is', meta)
+    # url = request.META['HTTP_REFERER']
+    # url_li = url.split('/')
+    # node = url_li[2]
+    # print('url is', url)
+    # print('node is', node)
+    # get_object_or_404(ServerNodes, node=node)
+    pass
+@api_view(['POST'])
 
+def Share(request, author_id,post_id):
+    try:
+        post=Post.objects.get(pk=post_id)
+        author = Author.objects.get(pk=author_id)
+>>>>>>> 29ccce993da6d3293fc625adbdd130a174b9bb02
+
+    except Exception as e:
+        return Response(str(e), status.HTTP_400_BAD_REQUEST)
