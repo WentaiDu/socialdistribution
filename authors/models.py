@@ -10,8 +10,8 @@ from django.conf import settings
 
 class Author(AbstractUser):
     author_type = models.CharField(max_length=30,default="author", blank=False)
-    id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
-    author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True)
+    author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
+    id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True,verbose_name='url_id',editable=True)
     displayName = models.CharField(max_length=30, default="", blank=False)
     host = models.CharField(max_length=50)
     url = models.CharField(max_length=100000,default='',blank=True,null=True)
