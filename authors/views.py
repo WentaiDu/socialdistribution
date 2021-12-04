@@ -133,7 +133,6 @@ class AuthorList(generics.ListAPIView):
     pagination_class = AuthorPagination
 
     def get(self,request):
-
         check_node(request)
         authors = Author.objects.all()
 
@@ -702,6 +701,7 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
+    print(request.META)
     node = request.scheme+'://' + request.get_host() + '/'
     get_object_or_404(ServerNodes, node=node)
 
