@@ -212,11 +212,13 @@ class InboxView(generics.GenericAPIView):
         author_id = self.kwargs['author_id']
 
         try:
+
             queryset = Inbox.objects.get(inbox_author_id=author_id)
             serializer = InboxSerializer(queryset)
             return Response(serializer.data)
         except:
-            queryset = Inbox.objects.create(inbox_author_id=author_id)
+            author = Author.objects.get(author_id=author_id)
+            queryset = Inbox.objects.create(inbox_author_id=author_id,author=author.id)
             serializer = InboxSerializer(queryset)
             return Response(serializer.data)
 
@@ -273,7 +275,9 @@ class InboxView(generics.GenericAPIView):
             items = []
             items.append(request.data)
             items = json.dumps(items)
-            Inbox.objects.create(inbox_author_id=author_id, items=items)
+            author = Author.objects.get(author_id=author_id)
+            a = Inbox.objects.create(inbox_author_id=author_id,author=author.id, items=items)
+            print(a)
             if request.data['type'] == 'like':
                 author = Author.objects.get(author_id=request.data['author']["author_id"])
                 like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
@@ -311,6 +315,7 @@ class InboxView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_200_OK)
 
         else:
+            print(serializer.errors)
             response = {
                 'detail': 'put post failed'
             }

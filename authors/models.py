@@ -123,6 +123,7 @@ class FriendRequest_M(models.Model):
 class Inbox(models.Model):
     inbox_type = models.CharField(max_length=100, default="inbox", blank=False)
     inbox_author_id = models.CharField(max_length=100, default="", blank=False, primary_key=True)
+    author = models.CharField(max_length=1000,default='',blank=True,null=True)
     items = models.JSONField(blank=True,null=True)
 
 
