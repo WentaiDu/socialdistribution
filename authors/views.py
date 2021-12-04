@@ -703,6 +703,5 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 def check_node(request):
     node = request.scheme+'://' + request.get_host() + '/'
-    print(node)
     get_object_or_404(ServerNodes, node=node)
 
