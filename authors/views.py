@@ -158,28 +158,6 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     #pagination_class = CommentPagination
 
-<<<<<<< HEAD
-    # def post(self,request):
-    #     try:
-    #         if request.data['type'] ==:
-    # def get(self,request, post_id,author_id):
-    #     check_node(request)
-    #     try:
-    #         post=Post.objects.get(pk=post_id)
-    #         author = Author.objects.get(pk=author_id)
-    #         Comments = Comment.objects.filter(comment_post=post)
-    #         print(Comments.comment_author)
-    #     except:
-    #         err_msg='Author does not exist.'
-    #         return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
-
-    #     # response = super().list(request,author_id)
-    #     # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
-    #     serializer = CommentSerializer(Comments, many=True)
-
-    #     return Response({'comments':serializer.data})
-
-=======
     def post(self,request,post_id,author_id):
         try:
             post = Post.objects.get(pk=post_id)
@@ -222,7 +200,6 @@ class CommentList(generics.ListCreateAPIView):
         #     return Response({'comments':serializer.data})
         # else:
         #     return Response(status=status.HTTP_404_NOT_FOUND)
->>>>>>> 29ccce993da6d3293fc625adbdd130a174b9bb02
 
 
 
@@ -764,11 +741,6 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
-<<<<<<< HEAD
-    pass
-    # node = request.scheme+'://' + request.get_host() + '/'
-    # get_object_or_404(ServerNodes, node=node)
-=======
     # meta = request.META
     # print('meta is', meta)
     # url = request.META['HTTP_REFERER']
@@ -784,7 +756,6 @@ def Share(request, author_id,post_id):
     try:
         post=Post.objects.get(pk=post_id)
         author = Author.objects.get(pk=author_id)
->>>>>>> 29ccce993da6d3293fc625adbdd130a174b9bb02
 
     except Exception as e:
         return Response(str(e), status.HTTP_400_BAD_REQUEST)

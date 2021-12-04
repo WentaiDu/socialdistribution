@@ -14,20 +14,27 @@ export default class LikeList extends React.Component {
     console.log(this.props);
   }
 
-  renderComments(){
-    const user = getUserInfo();
-    console.log(user);
-    const comments = this.props.comments.results;
+  renderComments = () =>{
+    try{
+      var temp = getUserInfo(this.props.authorId).catch(err=>{
+        console.log("bugbugbug")
+      });
+      var user = temp.data;
+
+    const name = user.data.displayName;
+    console.log(name);
+    const comments = this.props.comments.comments;
     console.log(comments);
     if (comments === undefined) {
       return null
     } 
     
-    try{
+ 
+      console.log(comments)
       return comments.length === 0
       ? null
-      : (comments.map(item => (
-        <li>{user.displayName}: {item.comment} </li>
+      : (comments?.map(item => (
+        <li>: {item.comment} </li>
      )))
 
       }

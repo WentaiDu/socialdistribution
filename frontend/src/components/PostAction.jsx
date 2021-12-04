@@ -94,7 +94,7 @@ export default class PostAction extends React.Component{
     onClickLike = async () => {
         console.log("like clicked")
         const authorId = this.props.post.author.author_id;
-        var temp = await getUserInfo().catch(err=>{
+        var temp = await getUserInfo(userID).catch(err=>{
           console.log("bugbugbug")
         });
         var user = temp.data;
@@ -162,6 +162,7 @@ export default class PostAction extends React.Component{
     }
 
     onClickClose = () =>{
+
       this.setState({
         commentClicked: !this.state.commentClicked,
         alreadyLiked: this.state.alreadyLiked,
@@ -171,10 +172,13 @@ export default class PostAction extends React.Component{
       })
     }
     renderAddComment = () =>{
+      const postId = this.props.post.post_id;
+      const authorId = this.props.post.author.author_id;
+
       if (this.state.showAddComment){
 
         return (
-        <AddComment onClickClose = {this.onClickClose}/>
+        <AddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId}/>
         )
       }
       return null;

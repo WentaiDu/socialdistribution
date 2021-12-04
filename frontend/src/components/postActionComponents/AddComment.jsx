@@ -9,17 +9,15 @@ import Stack from '@mui/material/Stack';
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const token = localStorage.getItem('jwtToken');
+const userID = localStorage.getItem('userID');
 
 export default class AddComment extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            type:"comment",
-            author:  {},
+            author:  userID,
             comment:"",
             contentType:"text/markdown",
-            published:"2015-03-09T13:07:04+00:00",
-            id: "",
         }
     }
 
@@ -42,7 +40,7 @@ export default class AddComment extends React.Component{
     handlePost = () => {
         console.log(this.state);
         axios
-          .post(`${base_url}/author/${this.props.authorId}/posts`, this.state,    
+          .post(`${base_url}/author/${this.props.authorId}/posts/${this.props.postId}/comments`, this.state,    
           {
             headers: {
               Authorization: "token " + token,
@@ -51,8 +49,10 @@ export default class AddComment extends React.Component{
           .then((res) => {
             console.log(res.data);
           })
-          .catch((res) => {
+          .catch(e => {
+              console.log(e);
           }); 
+          
         this.props.onClickClose();
 
         } 
