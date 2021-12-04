@@ -1,5 +1,7 @@
 from django.db.models.query import QuerySet
 from django.http.response import Http404
+from rest_framework.decorators import api_view
+
 from authors import pagination
 from authors.models import *
 from authors.serializers import *
@@ -133,6 +135,7 @@ class AuthorList(generics.ListAPIView):
     pagination_class = AuthorPagination
 
     def get(self,request):
+
         check_node(request)
         authors = Author.objects.all()
 
@@ -155,9 +158,31 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     #pagination_class = CommentPagination
 
-    # def post(self,request):
-    #     try:
-    #         if request.data['type'] ==:
+    def post(self,request,post_id,author_id):
+        try:
+            post = Post.objects.get(pk=post_id)
+            author = Author.objects.get(pk=author_id)
+            comment_id = uuid.uuid4()
+
+            comment = {}
+            comment['contentType'] = request.data['contentType']
+            comment['comment_author'] = author
+            comment['comment'] = request.data['comment']
+            comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+            comment['comment_post'] = post
+            serializer = CommentSerializer(data=comment)
+            if serializer.is_valid():
+                comment = Comment.objects.create(**serializer.validated_data,comment_id=comment_id)
+                comment.save()
+                return Response({'serializer': serializer.data})
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_404_NOT_FOUND)
+
+
+
+
     def get(self,request, post_id,author_id):
         check_node(request)
         try:
@@ -705,4 +730,11 @@ def check_node(request):
     node = request.scheme+'://' + request.get_host() + '/'
     get_object_or_404(ServerNodes, node=node)
 
-#
+@api_view(['POST'])
+def Share(request, author_id,post_id):
+    try:
+        post=Post.objects.get(pk=post_id)
+        author = Author.objects.get(pk=author_id)
+
+    except Exception as e:
+        return Response(str(e), status.HTTP_400_BAD_REQUEST)
