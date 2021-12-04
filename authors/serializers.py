@@ -5,7 +5,7 @@ from authors.models import *
 class AuthorSerializer(serializers.ModelSerializer):
   class Meta:
       model = Author
-      fields = ['username','password','author_type','author_id','host','displayName','url','github','profileImage']
+      fields = ['username','password','author_type','id','author_id','host','displayName','url','github','profileImage']
 
 
 class LoginSerializer(serializers.ModelSerializer):
