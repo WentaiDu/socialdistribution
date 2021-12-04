@@ -164,12 +164,13 @@ class CommentList(generics.ListCreateAPIView):
             post = Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
             comment_id = uuid.uuid4()
-
+            path = request.build_absolute_uri()
             comment = {}
             comment['contentType'] = request.data['contentType']
             # comment['comment_author'] = author
             comment['comment'] = request.data['comment']
             comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+            comment['id']=path+str(comment_id)
             # comment['comment_post'] = post
             serializer = CommentSerializer(data=comment)
             if serializer.is_valid():
@@ -475,7 +476,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     def post(self,request,author_id,post_id):
 
         try:
-
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
             if author and post:
@@ -524,6 +524,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
+                post['id'] = pid
                 post['content'] = request.data['content']
                 post['comments'] = pid+'/comments'
                 post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')

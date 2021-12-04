@@ -34,7 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
     # commentsSrc = CommentSerializer(many=True)
     class Meta:
         model = Post
-        fields = ['type','title','post_id','source','origin','description','contentType','content'
+        fields = ['type','title','post_id','id','source','origin','description','contentType','content'
         ,'author','comments','published','visibility','unlisted']
 
 

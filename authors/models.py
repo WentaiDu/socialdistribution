@@ -46,18 +46,14 @@ class Post(models.Model):
     # items = models.ForeignKey(Inbox, related_name='items', on_delete=models.CASCADE)
     type = models.CharField(max_length=100,editable=False,default="post", blank=False,verbose_name="type")
     title = models.CharField(max_length=100, default="", blank=False)
-    post_id = models.UUIDField(primary_key = True,auto_created = True,verbose_name="id",default=uuid.uuid4)
+    post_id = models.UUIDField(primary_key = True,auto_created = True,verbose_name="UUid",default=uuid.uuid4)
+    id = models.CharField(max_length=500,default="post", blank=True,verbose_name="URL_id")
     source = models.URLField(default="")
     origin = models.URLField(default="")
     description = models.TextField(default="")
     contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
-    # image_content = models.FileField()
-    # text_content = models.CharField(max_length=500, default='',blank=True, null=True)
     author = models.ForeignKey(Author,related_name='author',on_delete=models.CASCADE,default='')
     content=models.TextField(blank=True)
-    #categories = ArrayField(models.CharField(max_length=200), blank=True)
-    #count = models.IntegerField()
-    #scrcomment
     comments = models.URLField()
     published = models.DateTimeField(auto_now_add=True)#USE_TZ=True in settings.py
     visibility = models.CharField(max_length=20,choices=Visibility.choices , default=Visibility.PUBLIC)
@@ -78,6 +74,8 @@ class Comment(models.Model):
     published = models.DateTimeField(auto_now_add=True)
     comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
     comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc',editable=False)
+    id = models.CharField(max_length=500, default="post", blank=True, verbose_name="URL_id")
+
 
 class Like(models.Model):
     #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)
