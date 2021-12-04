@@ -71,12 +71,12 @@ class Comment(models.Model):
         IMAGE_JPEG = 'image/jpeg;base64'
 
     comment_type = models.CharField(max_length=100, default="comment", editable=False,blank=False,verbose_name="type")
-    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors')
+    comment_author = models.ForeignKey(Author,on_delete=models.CASCADE,default='',related_name='authors',editable=False)
     comment = models.TextField(default="", blank=False)
     contentType = models.CharField(max_length=20, choices=ContentType.choices, default=ContentType.PLAIN)
     published = models.DateTimeField(auto_now_add=True)
     comment_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4, editable = False,verbose_name="id")
-    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc')
+    comment_post = models.ForeignKey(Post,on_delete=models.CASCADE,default='',related_name='commentsSrc',editable=False)
 
 class Like(models.Model):
     #items = models.ForeignKey(LikeInbox, related_name='likes_items', on_delete=models.CASCADE)

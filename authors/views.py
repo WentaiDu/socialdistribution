@@ -166,13 +166,13 @@ class CommentList(generics.ListCreateAPIView):
 
             comment = {}
             comment['contentType'] = request.data['contentType']
-            comment['comment_author'] = author
+            # comment['comment_author'] = author
             comment['comment'] = request.data['comment']
             comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
-            comment['comment_post'] = post
+            # comment['comment_post'] = post
             serializer = CommentSerializer(data=comment)
             if serializer.is_valid():
-                comment = Comment.objects.create(**serializer.validated_data,comment_id=comment_id)
+                comment = Comment.objects.create(**serializer.validated_data,comment_post=post,comment_author=author,comment_id=comment_id)
                 comment.save()
                 return Response({'serializer': serializer.data})
             else:
@@ -189,17 +189,17 @@ class CommentList(generics.ListCreateAPIView):
             post=Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
             Comments = Comment.objects.filter(comment_post=post)
-            print(Comments.comment_author)
-        except:
-            err_msg='Author does not exist.'
-            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(e,status=status.HTTP_404_NOT_FOUND)
 
         # response = super().list(request,author_id)
         # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = CommentSerializer(Comments, many=True)
-
-        return Response({'comments':serializer.data})
-
+        return Response({'comments': serializer.data})
+        # if serializer.is_valid():
+        #     return Response({'comments':serializer.data})
+        # else:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -726,16 +726,17 @@ class DeleteNodesAPI(generics.GenericAPIView):
 
 
 def check_node(request):
-    meta = request.META
-    print('meta is', meta)
-    url = request.META['HTTP_REFERER']
-    url_li = url.split('/')
-    node = url_li[2]
-    print('url is', url)
-    print('node is', node)
-    get_object_or_404(ServerNodes, node=node)
-
+    # meta = request.META
+    # print('meta is', meta)
+    # url = request.META['HTTP_REFERER']
+    # url_li = url.split('/')
+    # node = url_li[2]
+    # print('url is', url)
+    # print('node is', node)
+    # get_object_or_404(ServerNodes, node=node)
+    pass
 @api_view(['POST'])
+
 def Share(request, author_id,post_id):
     try:
         post=Post.objects.get(pk=post_id)
