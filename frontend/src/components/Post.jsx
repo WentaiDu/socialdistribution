@@ -5,25 +5,26 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Card from "@mui/material/Card";
 import axios from "axios";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+
 import Button from '@mui/material/Button';
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormHelperText from '@mui/material/FormHelperText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
+
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 // const base_url = 'http://localhost:8000';
 
 const token = localStorage.getItem('jwtToken');
+const userID = localStorage.getItem('userID');
 
 export default class AddPost extends React.Component{
     constructor(props){
@@ -33,7 +34,7 @@ export default class AddPost extends React.Component{
             title:"",
             source:"auto",
             origin:"auto",
-            id:`${base_url}/author/${this.props.authorId}/posts` ,
+            id:`${base_url}/author/${userID}/posts/` ,
             description:"" ,
             comments:"",
             contentType:"text/markdown",
@@ -41,8 +42,10 @@ export default class AddPost extends React.Component{
             categories:[] ,
             published: false,
             visibility:"PUBLIC",
-            unlisted: false
+            unlisted: false,
+            continuing: true,
         }
+        console.log(this.props)
     }
 
 
@@ -54,8 +57,7 @@ export default class AddPost extends React.Component{
         : target.value;
 
         const name = target.name;
-        console.log(name)
-        console.log(value)
+
         this.setState({
             [name]:value
         })
@@ -63,8 +65,12 @@ export default class AddPost extends React.Component{
 
     handlePost = () => {
         console.log(this.state);
+        this.setState((prevState, props) => {
+            delete prevState.continuing;
+            return prevState;
+        });  
         axios
-          .post(`${base_url}/author/${this.props.authorId}/posts/`, this.state,    
+          .post(`${base_url}/author/${userID}/posts/`, this.state,    
           {
             headers: {
               Authorization: "token " + token,
@@ -73,16 +79,42 @@ export default class AddPost extends React.Component{
           .then((res) => {
             console.log(res.data);
           })
-          .catch((res) => {
+          .catch((e) => {
           }); 
-        this.props.onClick();
+        
+          try{
+            this.props.onClick();
+
+          }
+          catch(e){
+              console.log("not props")
+          }
+          this.cancelPostDialog()
 
         } 
 
+        cancelPostDialog = () =>{
+            this.setState((prevState, props) => {
+                prevState.continuing = false;
+                return prevState;
+            });        
+        }
+
+
+        
     render(){
         const {title,source,origin,description,contentType,content,categories,published,visibility,unlisted } = this.state;
         return(
-            <Box
+
+
+            <Dialog open={this.state.continuing} onClose={this.cancelPostDialog}>
+            <DialogTitle>Make a Post</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To make a post, please enter infomation below
+              </DialogContentText>
+  
+              <Box
             sx={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -176,7 +208,7 @@ export default class AddPost extends React.Component{
                         <FormControlLabel control={<Checkbox />} label="unlisted" name = "unlisted"  checked = {unlisted} onChange={this.handleForm}/>
 
                         </Box>
-                        <Button
+                        {/* <Button
                             type="submit"
                             variant="contained"
                             sx={{
@@ -188,12 +220,21 @@ export default class AddPost extends React.Component{
                             onClick={this.handlePost}
                         >
                             Submit
-                        </Button>
+                        </Button> */}
                     </Stack>    
                     </Grid>
                     </Grid>
                 </Card>
             </Box>
+
+
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.cancelPostDialog}>Cancel</Button>
+              <Button onClick={this.handlePost}>Submit</Button>
+            </DialogActions>
+            </Dialog>
+         
         )
     }
 }

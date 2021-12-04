@@ -15,12 +15,15 @@ import { styled, alpha } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import './userInfo.css'
 import React, { useState } from "react";
+import AddPost from ".././Post";
+
 
 const userId = localStorage.getItem('userID');
 
 
 function Header () {
     const [index, setIndex] = useState(5)
+    const [dia, setDia] = useState(false)
     const row = {
         display: "flex",
         justifyContent: 'space-around',
@@ -68,8 +71,30 @@ function Header () {
     const active = (id) => {
         setIndex(id);
     }
+
+    const addPostDialog = () => {
+        console.log("rendering")
+        setDia(true);
+    }
+
+    const cancelPostDialog = () => {
+        console.log("canceling")
+        setDia(false);
+
+    }
+
+    const renderAddPost = () =>{
+        if (dia){
+            return (<AddPost open = {true} onClickEnd = {cancelPostDialog}/>);
+        }
+    }
+
     return (
+
+
         <div className="userInfo_header" style={row}>
+                            {renderAddPost()}
+
             <div className="weibo">
                 <li className="mui-table-view-cell">
                     <div className="searchBox">
@@ -101,14 +126,13 @@ function Header () {
 
 
                     <li className="mui-table-view-cell">
-                    <Link to="/Post"><EditLocationOutlinedIcon fontSize={'large'}></EditLocationOutlinedIcon></Link>
+                    <Button onClick = {addPostDialog}><EditLocationOutlinedIcon fontSize={'large'} /></Button>
                     </li>
-                    <li className="mui-table-view-cell">
-                    <Link to="/Post"><SettingsApplicationsOutlinedIcon fontSize={'large'}></SettingsApplicationsOutlinedIcon></Link>
-                    </li>
+
                 </ul>
             </div>
         </div>
+
     );
 }
 

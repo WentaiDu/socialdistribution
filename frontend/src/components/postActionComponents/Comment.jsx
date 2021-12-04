@@ -1,21 +1,11 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
+
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
+import { getUserInfo } from ".././baseElement/toolFuntions";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
 //
 
 export default class LikeList extends React.Component {
@@ -25,6 +15,8 @@ export default class LikeList extends React.Component {
   }
 
   renderComments(){
+    const user = getUserInfo();
+    console.log(user);
     const comments = this.props.comments.results;
     console.log(comments);
     if (comments === undefined) {
@@ -35,7 +27,7 @@ export default class LikeList extends React.Component {
       return comments.length === 0
       ? null
       : (comments.map(item => (
-        <li>@Somebody: {item.comment} </li>
+        <li>{user.displayName}: {item.comment} </li>
      )))
 
       }

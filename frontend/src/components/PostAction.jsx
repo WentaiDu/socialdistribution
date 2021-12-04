@@ -20,6 +20,7 @@ const token = localStorage.getItem('jwtToken');
 const URL = window.location.href;
 const userID = localStorage.getItem('userID');
 
+
 export default class PostAction extends React.Component{
     constructor(props){
         super(props);
@@ -115,8 +116,15 @@ export default class PostAction extends React.Component{
           },
         })
           .then(res => {
-            const comment = res.data;
-            console.log(comment);
+            const like = res.data;
+            console.log(like);
+            this.setState({
+              commentClicked: this.state.commentClicked,
+              alreadyLiked: !this.state.alreadyLiked,
+              likes: this.state.likes,
+              comments: this.state.comments,
+              showAddComment: false,
+          })
         })
       
     }

@@ -15,5 +15,6 @@ export function getUserInfo(){
     })
 
     return res
+
   
   }
