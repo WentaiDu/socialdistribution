@@ -44,7 +44,7 @@ class LoginAPI(generics.GenericAPIView):
 
 class SignupAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = PendingAuthorSerializer
+    serializer_class = AuthorSerializer
 
     def post(self, request, *args, **kwargs):
         check_node(request)
@@ -94,9 +94,10 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                 author_serializer.save()
                 new_author = Author.objects.get(username=author['username'])
                 new_author.set_password(author['password'])
+                id = new_author.author_id
+                print(id)
                 new_author.save()
                 new_author = Author.objects.filter(username=author['username'])
-                id = author_serializer.data['author_id']
                 new_author.update(url=author['url'] + id)
                 new_author = Author.objects.get(username=author['username'])
                 response = {
@@ -604,7 +605,7 @@ class FriendRequest(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data)
     def delete(self, request, author_id1, author_id2):
-        check_node(request)
+        # check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
@@ -617,7 +618,7 @@ class FriendRequest(generics.GenericAPIView):
         }
         return Response(response, status=status.HTTP_200_OK)
     def get(self, request, author_id1, author_id2):
-        check_node(request)
+        # check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         if not author1:
@@ -640,73 +641,74 @@ class publicpost(generics.ListCreateAPIView):
     serializer_class=PostSerializer
 
 
-class ServerNodesAPI(generics.ListCreateAPIView):
-    serializer_class = ServerNodesSerializer
-    queryset = ServerNodes.objects.all()
-    permission_classes = [IsAdminUser,IsAuthenticated]
-
-    def post(self, request):
-        check_node(request)
-        try:
-            url = request.data["node"]
-            url = url.split('/')
-            node = url[2]
-            ServerNodes.objects.create(node=node)
-            response = {
-                'details': 'Add server node succeed!'
-            }
-            return Response(response, status.HTTP_200_OK)
-        except:
-            response = {
-                'details': 'Add server node failed!'
-            }
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-
-
-class DeleteNodesAPI(generics.GenericAPIView):
-    serializer_class = ServerNodesSerializer
-    permission_classes = [IsAdminUser, IsAuthenticated]
-
-    @swagger_auto_schema(
-        request_body=ServerNodesSerializer,
-        responses={
-            "201": openapi.Response(
-                description="Create Inbox Post Succeeds",
-                examples={
-                    'application/json': {
-                        "node": 'node'
-                    }
-                }
-            )
-        },
-        tags=['delete_node']
-    )
-    def delete(self, request):
-        check_node(request)
-        try:
-            url = request.data["node"]
-            url = url.split('/')
-            node = url[2]
-            node = ServerNodes.objects.get(node=node)
-            node.delete()
-            response = {
-                'details': 'Delete server node succeed!'
-            }
-            return Response(response, status.HTTP_200_OK)
-        except:
-            response = {
-                'details': 'Delete server node failed or node not exist!'
-            }
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-
-
+# class ServerNodesAPI(generics.ListCreateAPIView):
+#     serializer_class = ServerNodesSerializer
+#     queryset = ServerNodes.objects.all()
+#     permission_classes = [IsAdminUser,IsAuthenticated]
+#
+#     def post(self, request):
+#         check_node(request)
+#         try:
+#             url = request.data["node"]
+#             url = url.split('/')
+#             node = url[2]
+#             ServerNodes.objects.create(node=node)
+#             response = {
+#                 'details': 'Add server node succeed!'
+#             }
+#             return Response(response, status.HTTP_200_OK)
+#         except:
+#             response = {
+#                 'details': 'Add server node failed!'
+#             }
+#             return Response(response, status.HTTP_400_BAD_REQUEST)
+#
+#
+# class DeleteNodesAPI(generics.GenericAPIView):
+#     serializer_class = ServerNodesSerializer
+#     permission_classes = [IsAdminUser, IsAuthenticated]
+#
+#     @swagger_auto_schema(
+#         request_body=ServerNodesSerializer,
+#         responses={
+#             "201": openapi.Response(
+#                 description="Create Inbox Post Succeeds",
+#                 examples={
+#                     'application/json': {
+#                         "node": 'node'
+#                     }
+#                 }
+#             )
+#         },
+#         tags=['delete_node']
+#     )
+#     def delete(self, request):
+#         check_node(request)
+#         try:
+#             url = request.data["node"]
+#             url = url.split('/')
+#             node = url[2]
+#             node = ServerNodes.objects.get(node=node)
+#             node.delete()
+#             response = {
+#                 'details': 'Delete server node succeed!'
+#             }
+#             return Response(response, status.HTTP_200_OK)
+#         except:
+#             response = {
+#                 'details': 'Delete server node failed or node not exist!'
+#             }
+#             return Response(response, status.HTTP_400_BAD_REQUEST)
+#
+#
 def check_node(request):
-    meta = request.META
-    print('meta is', meta)
-    url = request.META['HTTP_REFERER']
-    url_li = url.split('/')
-    node = url_li[2]
-    print('url is', url)
-    print('node is', node)
-    get_object_or_404(ServerNodes, node=node)
+    pass
+    # meta = request.META
+    # print('meta is', meta)
+    # url = request.META['HTTP_REFERER']
+    # url_li = url.split('/')
+    # node = url_li[2]
+    # print('url is', url)
+    # print('node is', node)
+    # get_object_or_404(ServerNodes, node=node)
 
