@@ -20,6 +20,7 @@ import Chip from '@mui/material/Chip';
 import FaceIcon from '@mui/icons-material/Face';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import AddPost from ".././Post";
 
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -32,6 +33,7 @@ export class SingleAuthor extends React.Component {
     console.log("singleAuthor")
     console.log(props);
     this.state = {
+      dia : false,
     }
   }
 
@@ -95,21 +97,47 @@ export class SinglePost extends React.Component {
   constructor(props){
     super(props);
     console.log("singlePost")
-
+    this.state = {
+      dia: false,
+    }
   }
   
   editPost = () => {
-
+    this.addPostDialog()
   }
 
   deletePost = () =>{
     const post = this.props.post;
 
-    axios.delete(`${base_url}/author/${userID}/posts/${post.post_id}`,
-      
-    ) 
+    axios.delete(`${post.id}`,            
+    {
+      headers: {
+        Authorization: "token " + token,
+      }
+    })
+    .then(res => [
+      console.log("delete success")
+    ]) 
+    .catch(e =>{
+      console.log(e)
+    })
 
   }
+
+  addPostDialog = () => {
+    console.log("rendering")
+    this.setState({
+      dia: true,
+    });
+  }
+  
+  cancelPostDialog = () => {
+    console.log("canceling")
+    this.setState({
+      dia: false,
+    });
+  }
+
   renderContent(){
     const post = this.props.post;
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
@@ -140,6 +168,7 @@ export class SinglePost extends React.Component {
     }
     return null
   }
+
     render(){
       var badge = this.props.badge;
       if (badge == undefined){
@@ -154,7 +183,7 @@ export class SinglePost extends React.Component {
           align: "center",
           padding: "10px",
           borderRadius: 7, }}>
-          
+            <AddPost open = {this.state.dia} onClickEnd = {this.cancelPostDialog} post = {this.props.post}/>
         <CardActionArea>
           {/* <CardMedia
             component="img"

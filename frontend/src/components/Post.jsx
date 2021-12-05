@@ -108,9 +108,12 @@ export default class AddPost extends React.Component{
             published: false,
             visibility:"PUBLIC",
             unlisted: false,
-            continuing: true,
         }
         console.log(this.props)
+
+        if (this.props.post !== undefined){
+            this.state = this.props.post;
+        }
     }
 
 
@@ -130,30 +133,52 @@ export default class AddPost extends React.Component{
 
     handlePost = () => {
         console.log(this.state);
-        this.setState((prevState, props) => {
-            delete prevState.continuing;
-            return prevState;
-        });  
-        axios
-          .post(`${base_url}/author/${userID}/posts/`, this.state,    
-          {
-            headers: {
-              Authorization: "token " + token,
-            },
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((e) => {
-          }); 
-        
-          try{
-            this.props.onClick();
 
-          }
-          catch(e){
-              console.log("not props")
-          }
+        if (this.state.post_id !== undefined){
+            axios
+            .post(`${base_url}/author/${userID}/posts/${this.state.post_id}`, this.state,    
+            {
+              headers: {
+                Authorization: "token " + token,
+              },
+            })
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((e) => {
+            }); 
+          
+            try{
+              this.props.onClick();
+  
+            }
+            catch(e){
+                console.log("not props")
+            }
+        }
+        else{
+            axios
+              .post(`${base_url}/author/${userID}/posts/`, this.state,    
+              {
+                headers: {
+                  Authorization: "token " + token,
+                },
+              })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((e) => {
+              }); 
+            
+              try{
+                this.props.onClick();
+    
+              }
+              catch(e){
+                  console.log("not props")
+              }
+        }
+
           this.props.onClickEnd()
 
     } 
