@@ -42,6 +42,8 @@ const Center = (props) => {
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
+
+    
     return (
         <div className="center_slider">
             <Box

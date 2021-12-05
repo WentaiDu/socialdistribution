@@ -114,6 +114,7 @@ export class SinglePost extends React.Component {
       if (badge == undefined){
         badge = "local"
       }
+      console.log(this.props,'his.props')
       const post = this.props.post;
 
       return (
@@ -123,7 +124,7 @@ export class SinglePost extends React.Component {
           align: "center",
           padding: "10px",
           borderRadius: 7, }}>
-          
+          <Link to={{pathname:'/Detail', query:{author_id:this.props.post}}}>
         <CardActionArea>
           {/* <CardMedia
             component="img"
@@ -160,6 +161,7 @@ export class SinglePost extends React.Component {
           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
 
         </CardActionArea>
+        </Link>
         <CardActions>
         <PostAction post = {post}/>
         </CardActions>

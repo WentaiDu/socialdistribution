@@ -1,0 +1,46 @@
+
+.like_content{
+    display: flex;
+    margin-top: 100px;
+    justify-content: space-around;
+}
+.like_content>div{
+    flex: 1;
+}
+.detail_row{
+    display:flex;
+    height: 80px;
+}
+.detail_row>div{
+    margin: 20px;
+}
+.like_conten>div:nth-child(2){
+    flex: 2;
+}
+
+.linke_icon{
+}
+.like{
+    color: #000;
+}
+.like_active{
+    color: #20B2AA;
+}
+/* ```````````````````` */
+.commit_inp{
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.commit_btn{
+    margin:  10px!important;
+}
+
+.like_people{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.like_people>div{
+    margin: 0 10px;
+}

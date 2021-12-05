@@ -12,7 +12,7 @@ import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import { styled, alpha } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './userInfo.css'
 import React, { useState } from "react";
 import AddPost from ".././Post";
@@ -74,8 +74,11 @@ function Header () {
             },
         },
     }));
-
+    const history = useHistory();
     const active = (id) => {
+        if(id === 1){
+            history.push('/Main')
+        }
         setIndex(id);
     }
 
@@ -154,7 +157,7 @@ function Header () {
                     <Link to= {"/Author/"+ userId +"/Inbox"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(5)} className={index === 5 ? 'bottomActive' : ''}>
-                    <Link to= {"/Author/"+ userId}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
+                    <Link to= {"/UserInfo"}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
                     </li>
                 </ul>
             </div>
