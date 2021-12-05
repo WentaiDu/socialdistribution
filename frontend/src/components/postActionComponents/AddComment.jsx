@@ -1,24 +1,23 @@
 import * as React from 'react';
-import { Box, Link, Typography, TextField} from "@material-ui/core";
-import Grid from '@mui/material/Grid';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Card from "@mui/material/Card";
-import axios from "axios";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
+import {TextField} from "@material-ui/core";
 
+import axios from "axios";
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const token = localStorage.getItem('jwtToken');
+const userID = localStorage.getItem('userID');
 
 export default class AddComment extends React.Component{
     constructor(props){
         super(props);
         this.state={
-
+            author:  userID,
+            comment:"",
+            contentType:"text/markdown",
         }
     }
 
@@ -41,7 +40,7 @@ export default class AddComment extends React.Component{
     handlePost = () => {
         console.log(this.state);
         axios
-          .post(`${base_url}/author/${this.props.authorId}/posts`, this.state,    
+          .post(`${base_url}/author/${this.props.authorId}/posts/${this.props.postId}/comments`, this.state,    
           {
             headers: {
               Authorization: "token " + token,
@@ -50,75 +49,48 @@ export default class AddComment extends React.Component{
           .then((res) => {
             console.log(res.data);
           })
-          .catch((res) => {
+          .catch(e => {
+              console.log(e);
           }); 
-        this.props.onClick();
+          
+        this.props.onClickClose();
 
         } 
 
     render(){
-        const {title,source,origin,description,contentType,content,categories,published,visibility,unlisted } = this.state;
+        const {content} = this.state;
         return(
-            <Box
-            sx={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: 750, 
-                m:'auto', 
-                p:{xs:2},
-                flexGrow: 1
-            }}>
-                <Card
-                    sx={{
-                    m:2,
-                    p:{xs:2},
-                    align: "center",
-                    padding: "30px",
-                    borderRadius: 7,
-                    }}>
-        
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            name="title"
-                            label="Title"
-                            fullWidth
-                            variant="standard"
-                            value={title}
-                            onChange={this.handleForm}
-                        />
-                    </Grid>
-        
-                    {/* <Box sx={{ minWidth: 120,}}>
-                            <FormControl fullWidth>
-                                <InputLabel>Visibility</InputLabel>
-                                <Select
-                                name="visibility"
-                                value={visibility}
-                                onChange={this.handleForm}
-                                >
-                                <MenuItem value={"PUBLIC"}>Public</MenuItem>
-                                <MenuItem value={"FRIENDS"}>Friend</MenuItem>
-                                <MenuItem value={"PRIVATE"}>Private</MenuItem>
-                                </Select>
-                            </FormControl>
-                            </Box> */}
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{
-                                width: 100,
-                                m:'auto',
-                                borderRadius: 15,
-                                backgroundColor: "#00428b",
-                            }}
-                            onClick={this.handlePost}
-                        >
-                            Submit
-                        </Button>
-                </Card>
-            </Box>
+            <Stack
+            direction="row"
+            divider={<Divider orientation="vertical"/>}
+            spacing={1}
+            >
+            <TextField
+                required
+                name="content"
+                label="comment"
+                fullWidth
+                variant="standard"
+                value={content}
+                onChange={this.handleForm}
+            />
+
+
+            <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                    width: 100,
+                    m:'auto',
+                    borderRadius: 15,
+                    backgroundColor: "#00428b",
+                }}
+                onClick={this.handlePost}
+            >
+                Submit
+            </Button>
+            </Stack>
         )
     }
 }

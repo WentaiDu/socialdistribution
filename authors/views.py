@@ -164,12 +164,13 @@ class CommentList(generics.ListCreateAPIView):
             post = Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
             comment_id = uuid.uuid4()
-
+            path = request.build_absolute_uri()
             comment = {}
             comment['contentType'] = request.data['contentType']
             # comment['comment_author'] = author
             comment['comment'] = request.data['comment']
             comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+            comment['id']=path+str(comment_id)
             # comment['comment_post'] = post
             serializer = CommentSerializer(data=comment)
             if serializer.is_valid():
@@ -352,7 +353,10 @@ class Likes_list(generics.GenericAPIView):
         elif not post:
             error="Post id not found"
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id
+
+
+        path = request.build_absolute_uri()
+        a = path[:-6]
         likes = Like.objects.filter(object=a)
         #serializer =PostSerializer(post, many=True)
         
@@ -384,7 +388,19 @@ class LikesCommentList(generics.GenericAPIView):
             error="Comment id not found"
             #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
+
+
+        path = request.build_absolute_uri()
+        a = path[:-9]
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        # a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
         likes = Like.objects.filter(object=a)
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
@@ -472,7 +488,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     def post(self,request,author_id,post_id):
 
         try:
-
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
             if author and post:
@@ -521,6 +536,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
+                post['id'] = pid
                 post['content'] = request.data['content']
                 post['comments'] = pid+'/comments'
                 post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')

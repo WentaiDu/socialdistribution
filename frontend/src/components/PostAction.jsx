@@ -5,13 +5,15 @@ import Share from "./postActionComponents/Share";
 import Comment from "./postActionComponents/CommentButton";
 import CommentList from "./postActionComponents/Comment";
 import LikeList from "./postActionComponents/LikeList";
+import AddComment from "./postActionComponents/AddComment";
+
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import ForumIcon from '@mui/icons-material/Forum';
+import { getUserInfo } from "./baseElement/toolFuntions";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken');
@@ -28,6 +30,7 @@ export default class PostAction extends React.Component{
             alreadyLiked: false,
             likes: [],
             comments: [],
+            showAddComment: false,
         }
     }
 
@@ -61,6 +64,7 @@ export default class PostAction extends React.Component{
                         alreadyLiked: !this.state.alreadyLiked,
                         likes: this.state.likes,
                         comments: this.state.comments,
+                        showAddComment: false,
                     })
                     break;
                 }
@@ -74,7 +78,7 @@ export default class PostAction extends React.Component{
           },
         })
           .then(res => {
-            const temp2 = res.data;
+            const temp2 = res.data.comments;
             console.log(temp2);
 
             this.setState({
@@ -86,24 +90,21 @@ export default class PostAction extends React.Component{
         })
       }
 
-    onClickLike = () => {
+    onClickLike = async () => {
         console.log("like clicked")
         const authorId = this.props.post.author.author_id;
+        var temp = await getUserInfo().catch(err=>{
+          console.log("bugbugbug")
+        });
+        var user = temp.data;
+
+        console.log(user);
+        const summaryTxt = user.displayName + " Likes your post";
         const postData = {
             type: "like",
-            summary: "try",
+            summary: summaryTxt,
             context: "http://127.0.0.1:8000/",
-            author:  {
-                "username": "1",
-                "password": "pbkdf2_sha256$216000$f2jl8xXvHJJw$8+ulbnZxvcnE9dIXotuBleZi2Rk4bLeK3VW0xccqofo=",
-                "author_type": "author",
-                "author_id": "cec7aa33-1963-4dad-9ce7-4ca61178bba9",
-                "host": "http://127.0.0.1:8000/",
-                "displayName": "3",
-                "url": "http://127.0.0.1:8000/authors/08923451-b5da-4043-a5f9-12b5289c9a25",
-                "github": "http://github.com/3",
-                "profileImage": "http://127.0.0.1:8000/media/user.jpg"
-            },
+            author: user,
             object: this.props.post.source,
         }
         axios.post(`${base_url}/author/${authorId}/inbox`, postData,
@@ -115,20 +116,43 @@ export default class PostAction extends React.Component{
           },
         })
           .then(res => {
-            const comment = res.data;
-            console.log(comment);
+            const like = res.data;
+            console.log(like);
+            this.setState({
+              commentClicked: this.state.commentClicked,
+              alreadyLiked: !this.state.alreadyLiked,
+              likes: this.state.likes,
+              comments: this.state.comments,
+              showAddComment: false,
+          })
         })
       
     }
 
     onClickComment = () => {
+      
         console.log("comment clicked")
-        this.setState({
+        if (this.state.showAddComment){
+          this.setState({
             commentClicked: !this.state.commentClicked,
             alreadyLiked: this.state.alreadyLiked,
             likes: this.state.likes,
             comments: this.state.comments,
+            showAddComment: false,
+
+        })  
+        }
+        else{
+          this.setState({
+            commentClicked: !this.state.commentClicked,
+            alreadyLiked: this.state.alreadyLiked,
+            likes: this.state.likes,
+            comments: this.state.comments,
+            showAddComment: true,
+
         })
+        }
+
 
     }
 
@@ -137,14 +161,38 @@ export default class PostAction extends React.Component{
 
     }
 
+    onClickClose = () =>{
+
+      this.setState({
+        commentClicked: !this.state.commentClicked,
+        alreadyLiked: this.state.alreadyLiked,
+        likes: this.state.likes,
+        comments: this.state.comments,
+        showAddComment: false,
+      })
+    }
+    renderAddComment = () =>{
+      const postId = this.props.post.post_id;
+      const authorId = this.props.post.author.author_id;
+
+      if (this.state.showAddComment){
+
+        return (
+        <AddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId}/>
+        )
+      }
+      return null;
+
+    }
+
     render(){
         console.log(this.state);
         return (
-                <Stack
-                direction="column"
-                divider={<Divider orientation="horizontal" flexItem />}
-                spacing={2}
-                >
+              <Stack
+              direction="column"
+              divider={<Divider orientation="horizontal"/>}
+              spacing={2}
+              >
             <Grid
             container
             direction="row"
@@ -155,27 +203,34 @@ export default class PostAction extends React.Component{
             <Comment onClickComment = {this.onClickComment}/>
             <Share onClickShare = {this.onClickShare}/>
             </Grid>
+            {this.renderAddComment()}
+
+
             <Stack
                 direction="row"
                 divider={<Divider orientation="vertical" flexItem />}
-                spacing={2}
+                spacing={1}
                 >
             
             <FavoriteIcon size = "large"/>
             <LikeList likes = {this.state.likes}/>
 
             </Stack>
+
+
             <Stack
                 direction="row"
                 divider={<Divider orientation="vertical" flexItem />}
-                spacing={2}
+                spacing={1}
                 >
             
             <ForumIcon size = "large"/>
             <CommentList comments = {this.state.comments}/>
             </Stack>
+                </Stack>
 
-            </Stack>
+
+
 
         )
     }

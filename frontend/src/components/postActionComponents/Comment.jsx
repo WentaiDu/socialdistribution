@@ -1,41 +1,90 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
+
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
+import { getAuthorInfo } from ".././baseElement/toolFuntions";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
 //
 
-export default class LikeList extends React.Component {
+
+class Comment extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(this.props);
+    this.state = {
+      name: "new user"
+    }
+    this.getInfo();
+
+  }
+
+  // componentDidMount() {
+  //   console.log(this.props.item.comment_author)
+  //   var temp = getAuthorInfo(this.props.item.comment_author).catch(err=>{
+  //     console.log("bugbugbug")
+  //   });
+  //   var author = temp.data;
+  //   if (author != undefined){
+  //     this.setState( {
+  //       name: author.displayName
+  //     })
+  //   }
+  //   console.log(author)
+  //   // const name = "author.data.displayName";
+  //   // console.log(name);
+
+  // }
+
+  getInfo = async () => {
+    const authorId = this.props.item.comment_author;
+    var temp = await getAuthorInfo(authorId).catch(err=>{
+      console.log("bugbugbug")
+    });
+    var author = temp.data;
+
+    console.log(author);
+
+    this.setState({
+      name: author.displayName
+    })
+
+  }
+  render(){
+
+    return(
+      <li>@ {this.state.name}: {this.props.item.comment} </li>
+
+    )
+  }
+
+
+
+}
+
+export default class CommentList extends React.Component {
   constructor(props){
     super(props);
     console.log(this.props);
   }
 
-  renderComments(){
-    const comments = this.props.comments.results;
+  renderComments = () =>{
+    try{
+
+    const comments = this.props.comments;
     console.log(comments);
     if (comments === undefined) {
       return null
     } 
     
-    try{
+ 
+      console.log(comments)
       return comments.length === 0
       ? null
-      : (comments.map(item => (
-        <li>@Somebody: {item.comment} </li>
+      : (comments?.map(item => (
+
+        <Comment item = {item} />
      )))
 
       }
