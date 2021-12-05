@@ -5,7 +5,7 @@ from authors.models import *
 class AuthorSerializer(serializers.ModelSerializer):
   class Meta:
       model = Author
-      fields = ['username','password','author_type','author_id','host','displayName','url','github','profileImage']
+      fields = ['username','password','author_type','id','author_id','host','displayName','url','github','profileImage']
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
     # commentsSrc = CommentSerializer(many=True)
     class Meta:
         model = Post
-        fields = ['type','title','post_id','source','origin','description','contentType','content'
+        fields = ['type','title','post_id','id','source','origin','description','contentType','content'
         ,'author','comments','published','visibility','unlisted']
 
 

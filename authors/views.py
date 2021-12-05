@@ -46,7 +46,7 @@ class LoginAPI(generics.GenericAPIView):
 
 class SignupAPI(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = PendingAuthorSerializer
+    serializer_class = AuthorSerializer
 
     def post(self, request, *args, **kwargs):
         check_node(request)
@@ -96,10 +96,11 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                 author_serializer.save()
                 new_author = Author.objects.get(username=author['username'])
                 new_author.set_password(author['password'])
-                new_author.save()
+                id = new_author.author_id
                 new_author = Author.objects.filter(username=author['username'])
-                id = author_serializer.data['author_id']
-                new_author.update(url=author['url'] + id)
+                a = author['host']+'author/'+str(id)
+                new_author.update(id=a)
+                new_author.update(url=a)
                 new_author = Author.objects.get(username=author['username'])
                 response = {
                     'detail': 'User creates succeed!',
@@ -163,12 +164,13 @@ class CommentList(generics.ListCreateAPIView):
             post = Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
             comment_id = uuid.uuid4()
-
+            path = request.build_absolute_uri()
             comment = {}
             comment['contentType'] = request.data['contentType']
             # comment['comment_author'] = author
             comment['comment'] = request.data['comment']
             comment['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
+            comment['id']=path+str(comment_id)
             # comment['comment_post'] = post
             serializer = CommentSerializer(data=comment)
             if serializer.is_valid():
@@ -211,11 +213,13 @@ class InboxView(generics.GenericAPIView):
         author_id = self.kwargs['author_id']
 
         try:
+
             queryset = Inbox.objects.get(inbox_author_id=author_id)
             serializer = InboxSerializer(queryset)
             return Response(serializer.data)
         except:
-            queryset = Inbox.objects.create(inbox_author_id=author_id)
+            author = Author.objects.get(author_id=author_id)
+            queryset = Inbox.objects.create(inbox_author_id=author_id,author=author.id)
             serializer = InboxSerializer(queryset)
             return Response(serializer.data)
 
@@ -272,7 +276,9 @@ class InboxView(generics.GenericAPIView):
             items = []
             items.append(request.data)
             items = json.dumps(items)
-            Inbox.objects.create(inbox_author_id=author_id, items=items)
+            author = Author.objects.get(author_id=author_id)
+            a = Inbox.objects.create(inbox_author_id=author_id,author=author.id, items=items)
+            print(a)
             if request.data['type'] == 'like':
                 author = Author.objects.get(author_id=request.data['author']["author_id"])
                 like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
@@ -310,6 +316,7 @@ class InboxView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_200_OK)
 
         else:
+            print(serializer.errors)
             response = {
                 'detail': 'put post failed'
             }
@@ -484,7 +491,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     def post(self,request,author_id,post_id):
 
         try:
-
             author = Author.objects.get(pk=author_id)
             post = Post.objects.get(pk = post_id)
             if author and post:
@@ -533,6 +539,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
+                post['id'] = pid
                 post['content'] = request.data['content']
                 post['comments'] = pid+'/comments'
                 post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
@@ -644,7 +651,7 @@ class FriendRequest(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data)
     def delete(self, request, author_id1, author_id2):
-        check_node(request)
+        # check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
@@ -657,7 +664,7 @@ class FriendRequest(generics.GenericAPIView):
         }
         return Response(response, status=status.HTTP_200_OK)
     def get(self, request, author_id1, author_id2):
-        check_node(request)
+        # check_node(request)
         author1 = Author.objects.get(id=author_id1)
         author2 = Author.objects.get(id=author_id2)
         if not author1:
@@ -680,66 +687,66 @@ class publicpost(generics.ListCreateAPIView):
     serializer_class=PostSerializer
 
 
-class ServerNodesAPI(generics.ListCreateAPIView):
-    serializer_class = ServerNodesSerializer
-    queryset = ServerNodes.objects.all()
-    permission_classes = [IsAdminUser,IsAuthenticated]
-
-    def post(self, request):
-        check_node(request)
-        try:
-            url = request.data["node"]
-            url = url.split('/')
-            node = url[2]
-            ServerNodes.objects.create(node=node)
-            response = {
-                'details': 'Add server node succeed!'
-            }
-            return Response(response, status.HTTP_200_OK)
-        except:
-            response = {
-                'details': 'Add server node failed!'
-            }
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-
-
-class DeleteNodesAPI(generics.GenericAPIView):
-    serializer_class = ServerNodesSerializer
-    permission_classes = [IsAdminUser, IsAuthenticated]
-
-    @swagger_auto_schema(
-        request_body=ServerNodesSerializer,
-        responses={
-            "201": openapi.Response(
-                description="Create Inbox Post Succeeds",
-                examples={
-                    'application/json': {
-                        "node": 'node'
-                    }
-                }
-            )
-        },
-        tags=['delete_node']
-    )
-    def delete(self, request):
-        check_node(request)
-        try:
-            url = request.data["node"]
-            url = url.split('/')
-            node = url[2]
-            node = ServerNodes.objects.get(node=node)
-            node.delete()
-            response = {
-                'details': 'Delete server node succeed!'
-            }
-            return Response(response, status.HTTP_200_OK)
-        except:
-            response = {
-                'details': 'Delete server node failed or node not exist!'
-            }
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-
-
+# class ServerNodesAPI(generics.ListCreateAPIView):
+#     serializer_class = ServerNodesSerializer
+#     queryset = ServerNodes.objects.all()
+#     permission_classes = [IsAdminUser,IsAuthenticated]
+#
+#     def post(self, request):
+#         check_node(request)
+#         try:
+#             url = request.data["node"]
+#             url = url.split('/')
+#             node = url[2]
+#             ServerNodes.objects.create(node=node)
+#             response = {
+#                 'details': 'Add server node succeed!'
+#             }
+#             return Response(response, status.HTTP_200_OK)
+#         except:
+#             response = {
+#                 'details': 'Add server node failed!'
+#             }
+#             return Response(response, status.HTTP_400_BAD_REQUEST)
+#
+#
+# class DeleteNodesAPI(generics.GenericAPIView):
+#     serializer_class = ServerNodesSerializer
+#     permission_classes = [IsAdminUser, IsAuthenticated]
+#
+#     @swagger_auto_schema(
+#         request_body=ServerNodesSerializer,
+#         responses={
+#             "201": openapi.Response(
+#                 description="Create Inbox Post Succeeds",
+#                 examples={
+#                     'application/json': {
+#                         "node": 'node'
+#                     }
+#                 }
+#             )
+#         },
+#         tags=['delete_node']
+#     )
+#     def delete(self, request):
+#         check_node(request)
+#         try:
+#             url = request.data["node"]
+#             url = url.split('/')
+#             node = url[2]
+#             node = ServerNodes.objects.get(node=node)
+#             node.delete()
+#             response = {
+#                 'details': 'Delete server node succeed!'
+#             }
+#             return Response(response, status.HTTP_200_OK)
+#         except:
+#             response = {
+#                 'details': 'Delete server node failed or node not exist!'
+#             }
+#             return Response(response, status.HTTP_400_BAD_REQUEST)
+#
+#
 def check_node(request):
     # meta = request.META
     # print('meta is', meta)
@@ -756,6 +763,7 @@ def Share(request, author_id,post_id):
     try:
         post=Post.objects.get(pk=post_id)
         author = Author.objects.get(pk=author_id)
+
 
     except Exception as e:
         return Response(str(e), status.HTTP_400_BAD_REQUEST)
