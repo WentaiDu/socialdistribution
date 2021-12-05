@@ -96,6 +96,7 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
                 author_serializer.save()
                 new_author = Author.objects.get(username=author['username'])
                 new_author.set_password(author['password'])
+                new_author.save()
                 id = new_author.author_id
                 new_author = Author.objects.filter(username=author['username'])
                 a = author['host']+'author/'+str(id)
@@ -556,123 +557,254 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
 
 
-class FollowerList(generics.ListAPIView):
-
+class FollowerListAPI(generics.GenericAPIView):
     serializer_class = FollowerSerializer
 
-    def get(self,request, author_id):
-
-        followers = Follower.objects.filter(following_id=author_id)
-        serializer = FollowerSerializer(followers, many=True)
-
-        return Response({'followers':serializer.data})
-
-class FollowerDetailView(APIView):
-    serializer_class = FollowerSerializer
-
-    def get(self, request, *args, **kwargs):
-        check_node(request)
+    def get(self,request,*args, **kwargs):
+        author_id = self.kwargs['author_id']
+        follower = request.data
         try:
-            #author1 = Author.objects.get(pk=author_id1)
-            #author2 = Author.objects.filter(pk=author_id2)
-            follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
-            serializer = FollowerSerializer(follower)
+            queryset = Followers.objects.get(id=author_id)
+            serializer = FollowerSerializer(queryset)
+            return Response(serializer.data, status.HTTP_200_OK)
+        except:
+            query = Followers.objects.create(id=author_id)
+            serializer = FollowerSerializer(queryset)
+            return Response(serializer, status.HTTP_200_OK)
 
-        except Exception as e:
-            err_msg='No following relation'
-            return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.data)
 
-    def put(self, request, *args, **kwargs):
-        check_node(request)
+class FriendRequestAPI(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializers = FriendRequestSerializer
 
+    def get(self,request,*args, **kwargs):
+        author_id = self.kwargs['author_id']
+        foreign_author_id = self.kwargs['foreign_author_id']
         try:
-            author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
-            author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
-            follower = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
-            assert len(follower) == 0, "have relation"
+            friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+            serializer = FriendRequestSerializer(data=friend_request.__dict__)
+            if serializer.is_valid():
+                response = {
+                    'friend_request': serializer,
+                    'is_follower': True,
+                    'details': "This is your follower"
+                }
+                return Response(response, status.HTTP_200_OK)
 
-            author = {}
-            author['author_id'] = author2.author_id
-            author["author_type"] = 'author'
-            author['displayName'] = author2.displayName
-            author['host'] = author2.host
-            author['url'] = author2.url
-            author['github'] = author2.github
-            author['profileImage'] =author2.profileImage
-            author['following'] = author1.author_id
-            serializer = FollowerSerializer(data = author)
-            serializer.is_valid()
-            serializer.save()
+            else:
+                print(serializer.errors)
 
-            return Response(serializer.data)
-        except Exception as e:
-            err_msg='No following relation'
-            
-            return Response(str(e),status=status.HTTP_404_NOT_FOUND)
+        except:
+            friend_request = FriendRequest.objects.create(author_id=author_id, foreign_author_id=foreign_author_id)
+            serializer = FriendRequestSerializer(data=friend_request.__dict__)
+            response = {
+                'friend_request': serializer,
+                'is_follower': False,
+                "details": 'This is not your follower'
+            }
+            return Response(response, status.HTTP_200_OK)
 
-    def delete(self, request, *args, **kwargs):
-        check_node(request)
+    def put(self,request,*args, **kwargs):
+        author_id = self.kwargs['author_id']
+        foreign_author_id = self.kwargs['foreign_author_id']
+        author = request.data['author']
+        foreign_author = request.data['foreign_author']
+        summary = foreign_author['displayName']+ 'wants to follow'+author['displayName']
 
         try:
-            follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
-            follower.delete()
-            return HttpResponseRedirect("/authors/")
-        except Exception as e:
-            return Response("no such following relation",status=status.HTTP_404_NOT_FOUND)
+            follower = Followers.objects.get(id=author_id)
+            items = json.loads(follower.items)
+            items = json.dumps(items.append(foreign_author))
+            follower.items = items
+            follower.save()
+        except:
+            Followers.objects.create(id=author_id)
+        try:
+            try:
+                friend_request = FriendRequest.objects.filter(author_id=author_id,foreign_author_id=foreign_author_id)
+                friend_request.update(actor=json.dumps(foreign_author))
+                friend_request.update(object=json.dumps(author))
+                friend_request.update(summary=summary)
+                friend_request.save()
+                response = {
+                    "details": 'Your follow succeed!'
+                }
+                return Response(response, status.HTTP_200_OK)
 
-class FriendRequest(generics.GenericAPIView):
-    serializer_class = FriendRequestSerializer
-    def put(self, request, author_id1, author_id2):
-        check_node(request)
-    # def put(self, request, *args, **kwargs):
-        # author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
-        # author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
-        # follow_request = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
-        author1 = Author.objects.get(id=author_id1)
-        author2 = Author.objects.get(id=author_id2)
+            except:
+                author = request.data['author']
+                foreign_author = request.data['foreign_author']
+                FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
+                                                              ,summary=summary,actor=json.dumps(foreign_author),
+                                                              object=json.dumps(author))
+                response = {
+                    "details": 'Your follow succeed!'
+                }
+                return Response(response, status.HTTP_200_OK)
+        except:
+            response = {
+                "details": 'Your follow failed!'
+            }
+            return Response(response, status.HTTP_400_BAD_REQUEST)
 
-        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
-        if not follow_request:
-            error="Author not found"
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
-        else:
-            follow_request.friend_state=FriendRequest_M.State.APPROVE
-            serializer = FriendRequestSerializer(follow_request, many=True)
-            serializer.is_valid()
-            serializer.save()
-            return Response(serializer.data)
+    def delete(self,request,*args, **kwargs):
+        author_id = self.kwargs['author_id']
+        foreign_author_id = self.kwargs['foreign_author_id']
+        delete_id = request.data['delete_id']
+
+        try:
+            friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+            friend_request.delete()
+            follower = Followers.objects.get(id=author_id)
+            items = json.loads(follower.items)
+            new_items = []
+            for item in items:
+                if item['id'] == delete_id:
+                    pass
+                else:
+                    new_items.append(item)
+            items = json.dumps(new_items)
+            follower.items = items
+            follower.save()
+            response = {
+                'details': "delete follower succeed!"
+            }
+            return Response(response, status.HTTP_200_OK)
+        except:
+            response = {
+                'details': 'delete follower failed!'
+            }
+            return Response(response, status.HTTP_400_BAD_REQUEST)
 
 
-    def delete(self, request, author_id1, author_id2):
-        # check_node(request)
-        author1 = Author.objects.get(id=author_id1)
-        author2 = Author.objects.get(id=author_id2)
-        follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
-        if not follow_request:
-            error="Author not found OR no FriendRequest"
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
-        follow_request.delete()
-        response = {
-            'response': 'Friend Request delete succeed'
-        }
-        return Response(response, status=status.HTTP_200_OK)
-    def get(self, request, author_id1, author_id2):
-        # check_node(request)
-        author1 = Author.objects.get(id=author_id1)
-        author2 = Author.objects.get(id=author_id2)
-        if not author1:
-            error="Author 1 id not found"
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
-        elif not author2:
-            error="Author 2 id not found"
-            return Response(error, status=status.HTTP_404_NOT_FOUND)
-        follow_request = FriendRequest_M.objects.filter(actor=author1, object =author2,status=FriendRequest_M.State.PENDING)
 
-        #serializer =PostSerializer(post, many=True)
-        
-        serializer = FriendRequestSerializer(follow_request, many=True)
-        return Response(serializer.data)
+
+
+
+
+
+
+    # def get(self, request, *args, **kwargs):
+    #     print('1')
+    #     author_id = self.kwargs['author_id']
+    #     author = Author.objects.get(author_id=author_id)
+    #     print("asdasda",author.follower_authors.__dict__)
+    #     serializer = FollowerSerializer(data = author.follower_authors.__dict__)
+    #     if serializer.is_valid():
+    #         print('2')
+    #
+    #     else:
+    #         print(serializer.errors)
+
+
+
+#
+# class FollowerDetailView(APIView):
+#     serializer_class = FollowerSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         check_node(request)
+#         try:
+#             #author1 = Author.objects.get(pk=author_id1)
+#             #author2 = Author.objects.filter(pk=author_id2)
+#             follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+#             serializer = FollowerSerializer(follower)
+#
+#         except Exception as e:
+#             err_msg='No following relation'
+#             return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
+#         return Response(serializer.data)
+#
+#     def put(self, request, *args, **kwargs):
+#         check_node(request)
+#
+#         try:
+#             author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
+#             author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
+#             follower = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+#             assert len(follower) == 0, "have relation"
+#
+#             author = {}
+#             author['author_id'] = author2.author_id
+#             author["author_type"] = 'author'
+#             author['displayName'] = author2.displayName
+#             author['host'] = author2.host
+#             author['url'] = author2.url
+#             author['github'] = author2.github
+#             author['profileImage'] =author2.profileImage
+#             author['following'] = author1.author_id
+#             serializer = FollowerSerializer(data = author)
+#             serializer.is_valid()
+#             serializer.save()
+#
+#             return Response(serializer.data)
+#         except Exception as e:
+#             err_msg='No following relation'
+#
+#             return Response(str(e),status=status.HTTP_404_NOT_FOUND)
+#
+#     def delete(self, request, *args, **kwargs):
+#         check_node(request)
+#
+#         try:
+#             follower = Follower.objects.get(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+#             follower.delete()
+#             return HttpResponseRedirect("/authors/")
+#         except Exception as e:
+#             return Response("no such following relation",status=status.HTTP_404_NOT_FOUND)
+#
+# class FriendRequest(generics.GenericAPIView):
+#     serializer_class = FriendRequestSerializer
+#     def put(self, request, author_id1, author_id2):
+#         check_node(request)
+#     # def put(self, request, *args, **kwargs):
+#         # author1 = Author.objects.get(author_id=self.kwargs['author_id1'])
+#         # author2 = Author.objects.get(author_id=self.kwargs['author_id2'])
+#         # follow_request = Follower.objects.filter(following=self.kwargs['author_id1'], author_id =self.kwargs['author_id2'])
+#         author1 = Author.objects.get(id=author_id1)
+#         author2 = Author.objects.get(id=author_id2)
+#
+#         follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+#         if not follow_request:
+#             error="Author not found"
+#             return Response(error, status=status.HTTP_404_NOT_FOUND)
+#         else:
+#             follow_request.friend_state=FriendRequest_M.State.APPROVE
+#             serializer = FriendRequestSerializer(follow_request, many=True)
+#             serializer.is_valid()
+#             serializer.save()
+#             return Response(serializer.data)
+#
+#
+#     def delete(self, request, author_id1, author_id2):
+#         # check_node(request)
+#         author1 = Author.objects.get(id=author_id1)
+#         author2 = Author.objects.get(id=author_id2)
+#         follow_request = FriendRequest_M.objects.get(actor=author1,object=author2,  status=FriendRequest_M.State.PENDING)
+#         if not follow_request:
+#             error="Author not found OR no FriendRequest"
+#             return Response(error, status=status.HTTP_404_NOT_FOUND)
+#         follow_request.delete()
+#         response = {
+#             'response': 'Friend Request delete succeed'
+#         }
+#         return Response(response, status=status.HTTP_200_OK)
+#     def get(self, request, author_id1, author_id2):
+#         # check_node(request)
+#         author1 = Author.objects.get(id=author_id1)
+#         author2 = Author.objects.get(id=author_id2)
+#         if not author1:
+#             error="Author 1 id not found"
+#             return Response(error, status=status.HTTP_404_NOT_FOUND)
+#         elif not author2:
+#             error="Author 2 id not found"
+#             return Response(error, status=status.HTTP_404_NOT_FOUND)
+#         follow_request = FriendRequest_M.objects.filter(actor=author1, object =author2,status=FriendRequest_M.State.PENDING)
+#
+#         #serializer =PostSerializer(post, many=True)
+#
+#         serializer = FriendRequestSerializer(follow_request, many=True)
+#         return Response(serializer.data)
 
 
 class publicpost(generics.ListCreateAPIView):

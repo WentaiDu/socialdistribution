@@ -70,10 +70,11 @@ class LikedSerializer(serializers.ModelSerializer):
 class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Followers
-        fields = '__all__'
+        fields = ["id","type","items"]
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = FriendRequest
         fields = '__all__'
