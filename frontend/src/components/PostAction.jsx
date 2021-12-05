@@ -20,7 +20,6 @@ const token = localStorage.getItem('jwtToken');
 const URL = window.location.href;
 const userID = localStorage.getItem('userID');
 
-
 export default class PostAction extends React.Component{
     constructor(props){
         super(props);

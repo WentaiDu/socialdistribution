@@ -137,7 +137,7 @@ export class SinglePost extends React.Component {
           spacing={2}
           >
 
-<Stack
+          <Stack
           direction="column"
           spacing={1}
           >         <Avatar

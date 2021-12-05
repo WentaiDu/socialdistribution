@@ -16,6 +16,8 @@ class Comment extends React.Component {
     this.state = {
       name: "new user"
     }
+    this.getInfo();
+
   }
 
   // componentDidMount() {
@@ -51,7 +53,6 @@ class Comment extends React.Component {
   }
   render(){
 
-    this.getInfo();
     return(
       <li>@ {this.state.name}: {this.props.item.comment} </li>
 
