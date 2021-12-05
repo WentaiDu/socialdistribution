@@ -395,14 +395,7 @@ class LikesCommentList(generics.GenericAPIView):
 
         path = request.build_absolute_uri()
         a = path[:-9]
-        print(a)
-        print(a)
-        print(a)
-        print(a)
-        print(a)
-        print(a)
-        print(a)
-        print(a)
+
         # a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
         likes = Like.objects.filter(object=a)
         serializer = LikeSerializer(likes, many=True)
@@ -689,8 +682,9 @@ class FriendRequest(generics.GenericAPIView):
 
 class publicpost(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(visibility='PUBLIC')
     serializer_class=PostSerializer
+
 
 
 # class ServerNodesAPI(generics.ListCreateAPIView):
