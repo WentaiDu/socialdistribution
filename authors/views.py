@@ -443,7 +443,7 @@ class PostList(generics.ListCreateAPIView):
 
         try:
             check=Author.objects.get(pk=author_id)
-            posts = Post.objects.filter(author_id=author_id)
+            posts = Post.objects.filter(author_id=author_id,)
 
         except:
             err_msg='Author does not exist.'
@@ -466,10 +466,26 @@ class PostList(generics.ListCreateAPIView):
 
 class PostDetail(generics.RetrieveUpdateAPIView):
 
-    permission_classes = [permissions.AllowAny]
-
-
     serializer_class = PostSerializer
+
+
+    @swagger_auto_schema(tags=['post'])
+    def post(self,request,author_id,post_id):
+
+        try:
+            author = Author.objects.get(pk=author_id)
+            post = Post.objects.get(pk = post_id)
+            if author and post:
+                serializer = PostSerializer(post, data=request.data, partial=True, context={'author_id': author_id})
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({'serializer':serializer.data})
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                raise Exception
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def get(self,request,author_id,post_id):
 
@@ -488,22 +504,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-    def post(self,request,author_id,post_id):
-
-        try:
-            author = Author.objects.get(pk=author_id)
-            post = Post.objects.get(pk = post_id)
-            if author and post:
-                serializer = PostSerializer(post, data=request.data, partial=True)
-                if serializer.is_valid():
-                    post=serializer.save()
-                    return Response({'serializer':serializer.data})
-                else:
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                raise Exception
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def delete(self,request,author_id, post_id):
 
@@ -523,9 +523,9 @@ class PostDetail(generics.RetrieveUpdateAPIView):
         try:
 
             author = Author.objects.get(pk=author_id)
-
             try:
                 get_post=Post.objects.get(pk=post_id)
+                print(get_post)
                 err_msg = "Post already exists"
                 return Response(err_msg, status=status.HTTP_409_CONFLICT)
             except:
@@ -539,24 +539,30 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
-                post['id'] = pid
+                # post['id'] = pid
                 post['content'] = request.data['content']
                 post['comments'] = pid+'/comments'
                 post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
                 post['visibility'] = request.data['visibility']
                 post['unlisted'] = request.data['unlisted']
+
                 serializer = PostSerializer(data=post)
                 if serializer.is_valid():
                     post = Post.objects.create(**serializer.validated_data, author=author, post_id=post_id)
                     post.save()
+                    try:
+                        followers = Follower.objects.filter(following_id=author_id)
+
+                    except Exception as e:
+                        print(str(e))
+                        return Response({'serializer': serializer.data})
                     return Response({'serializer': serializer.data})
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
         except Exception as e:
-            err_msg="Author is not found"
-            return Response(err_msg, status=status.HTTP_404_NOT_FOUND)
+            return Response(str(e), status=status.HTTP_404_NOT_FOUND)
 
 
 class FollowerList(generics.ListAPIView):
