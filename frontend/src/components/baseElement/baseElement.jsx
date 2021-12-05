@@ -95,19 +95,50 @@ export class SinglePost extends React.Component {
   constructor(props){
     super(props);
     console.log("singlePost")
-    this.state = {
-    }
+
   }
   
+  editPost = () => {
+
+  }
+
+  deletePost = () =>{
+    const post = this.props.post;
+
+    axios.delete(`${base_url}/author/${userID}/posts/${post.post_id}`,
+      
+    ) 
+
+  }
   renderContent(){
     const post = this.props.post;
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
       console.log("pic!!")
       return(
-        <li>I am daddy!</li>
+        <li>I am daddy!      
+           <img
+        src={`${post.content}`}
+        srcSet={`${post.content}`}
+        alt={post.title}
+        loading="lazy"
+       />
+      </li>
       )
     }
   
+  }
+
+  renderModifyButton(){
+    if(this.props.post.author.author_id == userID){
+      return(
+        <li>        
+        <Button onClick = {this.editPost}>Edit Icon</Button>
+        <Button onClick = {this.deletePost}>Delete Icon</Button>
+        </li>
+
+      )
+    }
+    return null
   }
     render(){
       var badge = this.props.badge;
@@ -161,6 +192,7 @@ export class SinglePost extends React.Component {
 
         </CardActionArea>
         <CardActions>
+          {this.renderModifyButton()}
         <PostAction post = {post}/>
         </CardActions>
       </Card>
