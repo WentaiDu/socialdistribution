@@ -39,6 +39,9 @@ export default class AddComment extends React.Component{
 
     handlePost = () => {
         console.log(this.state);
+        if (this.state.comment === ""){
+            return null;
+        }
         axios
           .post(`${base_url}/author/${this.props.authorId}/posts/${this.props.postId}/comments`, this.state,    
           {
@@ -58,7 +61,7 @@ export default class AddComment extends React.Component{
         } 
 
     render(){
-        const {content} = this.state;
+        const {comment} = this.state;
         return(
 
             <Stack
@@ -68,11 +71,11 @@ export default class AddComment extends React.Component{
             >
             <TextField
                 required
-                name="content"
+                name="comment"
                 label="comment"
                 fullWidth
                 variant="standard"
-                value={content}
+                value={comment}
                 onChange={this.handleForm}
             />
 
