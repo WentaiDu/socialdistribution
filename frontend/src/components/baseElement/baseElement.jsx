@@ -143,13 +143,19 @@ export class SinglePost extends React.Component {
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
       console.log("pic!!")
       return(
-        <li>I am daddy!      
+        <li>
            <img
         src={`${post.content}`}
         srcSet={`${post.content}`}
         alt={post.title}
         loading="lazy"
        />
+      </li>
+      )
+    }
+    else{
+      return(
+        <li>{post.content}
       </li>
       )
     }
@@ -175,6 +181,9 @@ export class SinglePost extends React.Component {
         badge = "local"
       }
       const post = this.props.post;
+      console.log(post);
+      var linkaddr =  "/author/"+ this.props.post.author.author_id +"/posts/"+post.post_id +"/"
+      console.log(linkaddr);
 
       return (
         <Card variant="outlined" sx={{            
@@ -184,7 +193,7 @@ export class SinglePost extends React.Component {
           padding: "10px",
           borderRadius: 7, }}>
             <AddPost open = {this.state.dia} onClickEnd = {this.cancelPostDialog} post = {this.props.post}/>
-        <CardActionArea>
+        <CardActionArea href = {linkaddr}>
           {/* <CardMedia
             component="img"
             height="140"
@@ -211,13 +220,17 @@ export class SinglePost extends React.Component {
 
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {post.description}
+            {post.title}
+
             </Typography>
             <Typography variant="body2" color="text.secondary">
+            {post.description}
+
              {this.renderContent()}
             </Typography>
           </CardContent></Stack>
           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
 
         </CardActionArea>
         <CardActions>
