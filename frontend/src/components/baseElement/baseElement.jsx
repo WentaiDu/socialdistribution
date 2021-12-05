@@ -147,7 +147,12 @@ export class SinglePost extends React.Component {
 
       return(
         <li>
+          
            <img
+          border= {"1px solid #ddd"}
+        border-radius= {"8px"}
+        width={"300px"} 
+        padding= {"5px"}
         src={`${post.content}`}
         srcSet={`${post.content}`}
         alt={post.title}
@@ -238,7 +243,7 @@ export class SinglePost extends React.Component {
             </CardContent>
             <CardContent>
               <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
-                {post.content}
+              {this.renderContent()}
               </div>
             </CardContent>
           </Stack>
