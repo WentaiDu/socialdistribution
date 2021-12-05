@@ -33,14 +33,33 @@ export class SingleAuthor extends React.Component {
     console.log("singleAuthor")
     console.log(props);
     this.state = {
-      dia : false,
+      clickedFollow : false,
     }
+  }
+
+  componentDidMount(){
+    axios.get(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+    {
+      headers: {
+        Authorization: "token " + token,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      this.setState({
+        clickedFollow: false,
+      })
+    })
+    .catch((e) => {
+      console.log(e)
+    });
   }
 
 
   followClicked = () => {
     console.log(this.props);
-    axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+    if (this.state.clickedFollow){
+      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
       {
         headers: {
           Authorization: "token " + token,
@@ -48,9 +67,47 @@ export class SingleAuthor extends React.Component {
       })
       .then((res) => {
         console.log(res.data);
+        this.setState({
+          clickedFollow: false,
+        })
       })
-      .catch((res) => {
+      .catch((e) => {
+        console.log(e)
       });
+    }
+    else{
+      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          clickedFollow: true,
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      });
+    }
+
+  }
+
+  renderFollow = () =>{
+    if (this.state.clickedFollow){
+      return(
+        <Button size="small" onClick={this.followClicked} variant="contained">UnFollow</Button>
+      )
+    }
+    else{
+      return(
+        <Button size="small" onClick={this.followClicked} variant="contained">Follow</Button>
+      )
+    }
+
+
   }
 
   render() {
@@ -78,11 +135,10 @@ export class SingleAuthor extends React.Component {
           </CardContent>
 
           <CardActions>
-            <Button size="small" onClick={this.followClicked}>Follow</Button>
+            {this.renderFollow()}
             <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
           </CardActions>
         </Card>
-
 
       )
     }
@@ -290,30 +346,40 @@ export class FollowerCount extends React.Component {
 
 
 export class AuthorList extends React.Component {
+  // get props and show values not axios
   constructor(props) {
     super(props);
     console.log(this.props)
+    this.state = {
+      authors: [],
+    }
   }
 
   renderAuthors() {
     try {
       const authorsPromise = this.props.authors;
+      var authors;
       authorsPromise.then(res => {
-        const authors = res;
+        authors = res;
         console.log(authors)
+        this.setState({
+          authors: authors,
+        })
 
-        return authors.length === 0
-          ? (<CircularProgress />)
-          : (authors.map(item => (
-
-            <ListItem key={item.author_id}>
-              <SingleAuthor author={item} />
-            </ListItem>)))
       })
+      return authors.length === 0
+      ? (<CircularProgress />)
+      : (authors.map(item => (
+  
+        <ListItem key={item.author_id}>
+          <SingleAuthor author={item} />
+        </ListItem>)))  
     }
     catch (e) {
       console.log(e)
     }
+
+
   }
 
   render() {
@@ -332,6 +398,12 @@ export class AuthorList extends React.Component {
           }}
         >
           {this.renderAuthors()}
+
+          {(this.state.authors.map(item => (
+
+        <ListItem key={item.author_id}>
+          <SingleAuthor author={item} />
+        </ListItem>)))}
         </List>
       </Grid>
     )
