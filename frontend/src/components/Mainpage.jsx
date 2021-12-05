@@ -65,7 +65,7 @@ class PostList extends React.Component {
     
                 <ListItemText primary={item.title} secondary={item.description} />
                 </Link> */}
-                <SinglePost userId = {this.props.authorId} post = {item} />
+                <SinglePost userId = {posts} post = {item} />
               </ListItem> ))
               )
     

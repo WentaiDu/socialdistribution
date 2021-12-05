@@ -4,8 +4,10 @@ import { Box, Link, Typography } from "@material-ui/core";
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import userBg from '../img/userBg.png'
-import Author from '../Author'
-function TabPanel (props) {
+import Posts from "../PostList";
+import Author from '../Author';
+import Inbox from '../Inbox';
+function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
@@ -36,20 +38,22 @@ const Center = (props) => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    function a11yProps (index) {
+    function a11yProps(index) {
         return {
             id: `simple-tab-${index}`,
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
+
+
     return (
         <div className="center_slider">
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    height: "100vh",
+                    alignItems: "start",
+                    justifyContent: 'start',
                     width: '100%'
                 }}
             >
@@ -58,7 +62,7 @@ const Center = (props) => {
                 <div className="userInfo_Center_user">
                     <div>
                         <div className="userInfo_logo">
-                        <img src={props?.value?.profileImage} alt="" />
+                            <img src={props?.value?.profileImage} alt="" />
                         </div>
                     </div>
                     <div>
@@ -88,16 +92,16 @@ const Center = (props) => {
                     <TabPanel value={value} index={0} className="tab_content">
                         {
                             Object.keys(props?.value)?.map(key => (
-                                
-                                    <li>{key}:{props?.value[key]}</li>
+
+                                <li>{key}:{props?.value[key]}</li>
                             ))
                         }
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">
-                    None2
+                        <Posts author_id={props?.value.author_id} />
                     </TabPanel>
                     <TabPanel value={value} index={2} className="tab_content">
-                    None3
+                        <Inbox />
                     </TabPanel>
                 </div>
             </Box>

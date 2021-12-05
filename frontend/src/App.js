@@ -9,26 +9,32 @@ import Posts from "./components/PostList";
 import Followers from "./components/Followers";
 import PostDetail from "./components/PostDetail";
 import MainPage from "./components/Mainpage";
-
+import Detail from './components/postDetail1';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
-
+import { BrowserRouter } from 'react-router-dom';
 import UserInfo from './components/userInfo/UserInfo';
 import './components/userInfo/userInfo.css'
-import Header from "./components/userInfo/header";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
 
+import Header from "./components/userInfo/header";
 
 import CommentList from "./components/postActionComponents/Comment";
 import Sidebar from "./components/Sidebar";
 
-const URL = window.location.href;
+import { createBrowserHistory } from 'history'
+
+// const history = createBrowserHistory()
+
+// history.push('/test')
+
+// const URL = window.location.href;
 
 
 
@@ -52,27 +58,27 @@ function App() {
   //   // history.push("/signup");
   //   window.location.href="/Author/:author_id/Inbox"
   //   // setAnchorEl(event.currentTarget);
-    
+
   // };
 
   // const handleProfileMenuOpen2 = (event) => {
   //   // history.push("/signup");
   //   window.location.href="http://localhost:3000/Author"
   //   // setAnchorEl(event.currentTarget);
-    
+
   // };
 
   // const handleProfileMenuOpen3 = (event) => {
   //   // history.push("/signup");
   //   window.location.href="http://localhost:3000/Author"
   //   // setAnchorEl(event.currentTarget);
-    
+
   // };
 
 
   // const handleMobileMenuClose = () => {
   //   setMobileMoreAnchorEl(null);
-    
+
   // };
 
   // const handleMenuClose = () => {
@@ -118,9 +124,9 @@ function App() {
   //     onClose={handleMenuClose}
   //   >
 
-      
+
   //     <MenuItem>Profile</MenuItem>
-    
+
   //     <MenuItem>Profile</MenuItem>
   //   </Menu>
   // );
@@ -149,7 +155,7 @@ function App() {
   //         </Badge>
   //       </Button>
   //       <p>Messages</p>
-    
+
   //     </MenuItem>
   //     <MenuItem onClick={handleProfileMenuOpen2}>
   //       <IconButton
@@ -179,19 +185,9 @@ function App() {
   //   </Menu>
   // );
   return (
-    <><div className="userInfo">
-    <Box
-       sx={{
-           display: "flex",
-           flexDirection: "column",
-           alignItems: "center",
-           width: '100%'
-       }}
-   ><Router><Header /></Router></Box>
+    <>
 
-
-</div>
-        {/* <Box sx={{ flexGrow: 1 }}>
+      {/* <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -260,13 +256,15 @@ function App() {
       {renderMobileMenu}
       {renderMenu}
     </Box> */}
-    
 
-    <Router>
+      <BrowserRouter forceRefresh={true}>
+      <Header />
         <Switch>
-        <Route path="/Main" exact component={MainPage} />
 
-          <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList}/>
+          
+          <Route path="/Main" exact component={MainPage} />
+
+          <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList} />
           <Route path="/" exact component={Login} />
           <Route path="/Connection" exact component={Connection} />
           <Route path="/Signup" exact component={Signup} />
@@ -279,9 +277,10 @@ function App() {
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
           <Route path="/UserInfo" exact component={UserInfo} />
+          <Route path="/Detail" exact component={Detail} />
 
         </Switch>
-      </Router></>
+      </BrowserRouter></>
   );
 }
 

@@ -12,7 +12,7 @@ import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import { styled, alpha } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './userInfo.css'
 import React, { useState } from "react";
 import AddPost from ".././Post";
@@ -25,7 +25,7 @@ const userId = localStorage.getItem('userID');
 
 
 function Header () {
-    const [index, setIndex] = useState(5)
+    const [index, setIndex] = useState(1)
     const [dia, setDia] = useState(false)
     const [req, setReq] = useState(false)
 
@@ -74,8 +74,11 @@ function Header () {
             },
         },
     }));
-
+    const history = useHistory();
     const active = (id) => {
+        if(id === 1){
+            history.push('/Main')
+        }
         setIndex(id);
     }
 
@@ -138,14 +141,14 @@ function Header () {
                         <Link to="/main"><HomeOutlinedIcon fontSize={'large'}/></Link>
                     </li>
      
-                    <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
+                    <li onClick={() => active(2)} className={index === 2 ? 'bottomActive' : ''}>
                     <Link to= {"/main/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
                     </li>
-                    <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
+                    <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
                     <Link to= {"/Author/"+ userId +"/Inbox"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
-                    <li onClick={() => active(5)} className={index === 5 ? 'bottomActive' : ''}>
-                    <Link to= {"/Author/"+ userId}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
+                    <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
+                    <Link to={{ pathname: '/UserInfo', state: { author_id: {author:{author_id:userId}} } }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
                     </li>
                 </ul>
             </div>
