@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './userInfo.css'
-import { Box, Link, Typography } from "@material-ui/core";
+import { Link, Typography } from "@material-ui/core";
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import userBg from '../img/userBg.png'
+import { Button } from '@mui/material';
 import Posts from "../PostList";
 import Author from '../Author';
 import Inbox from '../Inbox';
+
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import axios from "axios";
+
+
+const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const token = localStorage.getItem('jwtToken')
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -34,6 +43,9 @@ const Center = (props) => {
         userName: 'ali'
     }
     const [value, setValue] = React.useState(0);
+    const [isEdit, setIsEdit] = React.useState(true);
+    const [form, setForm] = React.useState(props?.value);
+    const [file, setFile] = React.useState({});
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -44,8 +56,40 @@ const Center = (props) => {
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
+    useEffect(() => {
+        setForm(props?.value)
+    }, [props?.value])
+    // edit fn
+    const editHandle = () => {
+        setIsEdit(false)
+        console.log(form, 'eee')
+    }
+    const saveHandle = () => {
+        const data = { ...form };
+        data['profileImage'] = file
+        console.log(form, 'eee')
+        console.log(file, 'file')
+        axios.put(`${base_url}/author/${props?.value.author_id}/`, data, {
+            headers: {
+                Authorization: "token " + token,
+            },
+        })
+            .then((res => {
+                console.log(res, 'res')
+            })).catch((err => {
+                console.log(err, 'rerr')
+            }))
 
-
+    }
+    const setObjAttr = (val, key) => {
+        const obj = { ...form };
+        obj[key] = val
+        setForm(obj)
+    }
+    const handleFile = (e) => {
+        let file = e.target.files[0];
+        setFile(file)
+    }
     return (
         <div className="center_slider">
             <Box
@@ -90,12 +134,40 @@ const Center = (props) => {
                 </div>
                 <div className="userInfo_tab_Content">
                     <TabPanel value={value} index={0} className="tab_content">
-                        {
-                            Object.keys(props?.value)?.map(key => (
 
-                                <li>{key}:{props?.value[key]}</li>
-                            ))
-                        }
+                        <Box
+                            component="form"
+                            sx={{
+                                '& .MuiTextField-root': { m: 1, width: '100%' },
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <div>
+
+                                {
+                                    Object.keys(props?.value)?.map(key => (
+                                        key != 'password' && key != 'profileImage' ?
+                                            <TextField
+                                                required
+                                                id={key}
+                                                label={key}
+                                                disabled={key === 'id' || key === 'author_id' ? true : isEdit}
+                                                defaultValue={props?.value[key] || '-'}
+                                                onChange={(e) => setObjAttr(e.target.value, key)}
+                                            />
+                                            :
+                                            null
+                                    ))
+                                }
+                                {
+                                    !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
+                                }
+
+                                <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
+                                <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
+                            </div>
+                        </Box>
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">
                         <Posts author_id={props?.value.author_id} />
