@@ -22,7 +22,7 @@ import './components/userInfo/userInfo.css'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
-
+import SimpleDialog from"./components/Friend";
 import Header from "./components/userInfo/header";
 
 import CommentList from "./components/postActionComponents/Comment";
@@ -260,8 +260,8 @@ function App() {
       <BrowserRouter forceRefresh={true}>
       <Header />
         <Switch>
-
-          
+        
+        <Route path="/Friend" exact component={SimpleDialog} />
           <Route path="/Main" exact component={MainPage} />
 
           <Route path="/Author/:author_id/posts/:post_id/comments" exact component={CommentList} />
