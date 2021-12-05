@@ -27,7 +27,7 @@ const userID = localStorage.getItem('userID')
 const token = localStorage.getItem('jwtToken')
 
 export class SingleAuthor extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log("singleAuthor")
     console.log(props);
@@ -36,9 +36,9 @@ export class SingleAuthor extends React.Component {
   }
 
 
-  followClicked = () =>{
+  followClicked = () => {
     console.log(this.props);
-    axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},    
+    axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
       {
         headers: {
           Authorization: "token " + token,
@@ -48,83 +48,84 @@ export class SingleAuthor extends React.Component {
         console.log(res.data);
       })
       .catch((res) => {
-      }); 
+      });
   }
 
-    render(){
-      const author = this.props.author;
-      var badge = this.props.badge;
-      if (badge == undefined){
-        badge = "local"
-      }
-      try {
+  render() {
+    const author = this.props.author;
+    var badge = this.props.badge;
+    if (badge == undefined) {
+      badge = "local"
+    }
+    try {
       return (
 
-         <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345 }}>
 
-        <Avatar
-        alt={author.profileImage} src={author.profileImage}
-        sx={{ width: 100, height: 100 }}
-         />
-         <CardContent>
-           <Typography gutterBottom variant="h5" component="div">
-           {author.displayName}
-           </Typography>
-           <Typography variant="body2" color="text.secondary">
-           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
-           </Typography>
-         </CardContent>
+          <Avatar
+            alt={author.profileImage} src={author.profileImage}
+            sx={{ width: 100, height: 100 }}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {author.displayName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+            </Typography>
+          </CardContent>
 
-         <CardActions>
-         <Button size="small" onClick = {this.followClicked}>Follow</Button>
-         <Link to={{pathname:'/UserInfo', query:{author_id:this.props.author.author_id}}}><Button size="small">Detail</Button></Link>
-         </CardActions>
-       </Card>
+          <CardActions>
+            <Button size="small" onClick={this.followClicked}>Follow</Button>
+            <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
+          </CardActions>
+        </Card>
 
 
       )
     }
-    catch(e){
+    catch (e) {
       console.log(e);
       return <CircularProgress />;
+    }
   }
-}
 }
 
 export class SinglePost extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log("singlePost")
     this.state = {
     }
   }
-  
-  renderContent(){
+
+  renderContent() {
     const post = this.props.post;
-    if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
+    if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64") {
       console.log("pic!!")
-      return(
+      return (
         <li>I am daddy!</li>
       )
     }
-  
-  }
-    render(){
-      var badge = this.props.badge;
-      if (badge == undefined){
-        badge = "local"
-      }
-      console.log(this.props,'his.props')
-      const post = this.props.post;
 
-      return (
-        <Card variant="outlined" sx={{            
-          minWidth: 800,
-          maxWidth: 1000,
-          align: "center",
-          padding: "10px",
-          borderRadius: 7, }}>
-          <Link to={{pathname:'/Detail', query:{author_id:this.props.post}}}>
+  }
+  render() {
+    var badge = this.props.badge;
+    if (badge == undefined) {
+      badge = "local"
+    }
+    console.log(this.props, 'his.props')
+    const post = this.props.post;
+
+    return (
+      <Card variant="outlined" sx={{
+        minWidth: 800,
+        maxWidth: 1000,
+        align: "center",
+        padding: "10px",
+        borderRadius: 7,
+      }}>
+
         <CardActionArea>
           {/* <CardMedia
             component="img"
@@ -133,48 +134,55 @@ export class SinglePost extends React.Component {
             alt="green iguana"
           /> */}
           <Stack
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
-          spacing={2}
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+            spacing={2}
           >
 
-          <Stack
-          direction="column"
-          spacing={1}
-          >         <Avatar
-          alt={post.author.profileImage} src={post.author.profileImage}
-          sx={{ width: 50, height: 50 }}
-           />
-           <li>
-           {post.author.displayName}
-           </li>
-           </Stack>
+            <Stack
+              direction="column"
+              spacing={1}
+            >         <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post } }}>
+              <Avatar
+              alt={post.author.profileImage} src={post.author.profileImage}
+              sx={{ width: 50, height: 50 }}
+            /></Link>
+              <li>
+                {post.author.displayName}
+              </li>
+            </Stack>
 
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {post.description}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-             {this.renderContent()}
-            </Typography>
-          </CardContent></Stack>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {post.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {post.description}
+              </Typography>
+            </CardContent>
+            <CardContent>
+              <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
+                {post.content}tjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrargtjsetgawrhahrarg
+              </div>
+            </CardContent>
+          </Stack>
           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
 
         </CardActionArea>
-        </Link>
+
         <CardActions>
-        <PostAction post = {post}/>
+          <PostAction post={post} />
         </CardActions>
       </Card>
-      )
-    }
+    )
+  }
 }
 
 
 
 
 export class FollowerCount extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log("FollowerCount")
     console.log(props);
@@ -182,10 +190,10 @@ export class FollowerCount extends React.Component {
     }
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <Link >
-      Follower {this.props.count}
+        Follower {this.props.count}
       </Link>
     )
   }
@@ -197,50 +205,50 @@ export class FollowerCount extends React.Component {
 
 
 export class AuthorList extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     console.log(this.props)
   }
 
-  renderAuthors(){
-    try{
+  renderAuthors() {
+    try {
       const authorsPromise = this.props.authors;
       authorsPromise.then(res => {
         const authors = res;
         console.log(authors)
 
         return authors.length === 0
-        ? (<CircularProgress />)
-        : (authors.map(item => (
+          ? (<CircularProgress />)
+          : (authors.map(item => (
 
-          <ListItem key = {item.author_id}>
-            <SingleAuthor author = {item}/>
-          </ListItem>)))
+            <ListItem key={item.author_id}>
+              <SingleAuthor author={item} />
+            </ListItem>)))
       })
     }
-    catch (e){
+    catch (e) {
       console.log(e)
     }
   }
 
-    render(){
-      return (
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
+  render() {
+    return (
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <List
+          sx={{
+            width: '100%',
+            maxWidth: 360,
+            bgcolor: 'background.paper',
+          }}
         >
-          <List
-            sx={{
-              width: '100%',
-              maxWidth: 360,
-              bgcolor: 'background.paper',
-            }}
-          >
-            {this.renderAuthors()}
-          </List>
-        </Grid>
-      )
-    }
+          {this.renderAuthors()}
+        </List>
+      </Grid>
+    )
+  }
 }

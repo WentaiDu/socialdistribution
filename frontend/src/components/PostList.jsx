@@ -78,7 +78,7 @@ class PostList extends React.Component {
           <List
             sx={{
               width: '100%',
-              maxWidth: 360,
+              // maxWidth: 360,
               bgcolor: 'background.paper',
             }}
           >         
@@ -97,7 +97,7 @@ export default function Posts(props) {
   console.log(jwtToken)
   console.log(userID)
   
-    var authorId = props.match.params.author_id
+    var authorId = props.author_id
     const [addPage, setAddPage] = useState(false);
     const token = localStorage.getItem('jwtToken')
     function RenderAddButton(){

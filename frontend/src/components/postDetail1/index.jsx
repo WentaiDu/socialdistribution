@@ -56,7 +56,7 @@ const PostDetail = (props) => {
             contentType:"text/markdown",
         }
         debugger
-        const postId = 'http://localhost:3000'+props.location.query.author_id.url.split('com/')[1];
+        const postId = 'http://localhost:3000'+props.location.state.author_id.url.split('com/')[1];
         const token = localStorage.getItem('jwtToken')
         axios
         .post(`${postId}comments`, state,    
@@ -81,7 +81,7 @@ const PostDetail = (props) => {
 
     useEffect(() => {
         debugger
-        let str = props.location.query.author_id.url.split('com/')[1]
+        let str = props.location.state.author_id.url.split('com/')[1]
         const postId = 'http://localhost:3000/'+str+'likes/';
         console.log(postId,'postId')
         const token = localStorage.getItem('jwtToken')

@@ -44,7 +44,6 @@ export default function Inbox() {
         {messages.map((message, index) => (
         <Card key = {index}
           sx={{
-            minWidth: "80vw",
             align: "center",
             padding: "50px",
             borderRadius: 7,
