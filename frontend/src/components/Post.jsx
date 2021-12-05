@@ -89,16 +89,10 @@ export default class AddPost extends React.Component{
           catch(e){
               console.log("not props")
           }
-          this.cancelPostDialog()
+          this.props.onClickEnd()
 
         } 
 
-        cancelPostDialog = () =>{
-            this.setState((prevState, props) => {
-                prevState.continuing = false;
-                return prevState;
-            });        
-        }
 
 
         
@@ -107,7 +101,7 @@ export default class AddPost extends React.Component{
         return(
 
 
-            <Dialog open={this.state.continuing} onClose={this.cancelPostDialog}>
+            <Dialog open={this.props.open} onClose={this.props.onClickEnd}>
             <DialogTitle>Make a Post</DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -118,7 +112,7 @@ export default class AddPost extends React.Component{
             sx={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: 750, 
+                width: "auto", 
                 m:'auto', 
                 p:{xs:2},
                 flexGrow: 1
@@ -230,7 +224,7 @@ export default class AddPost extends React.Component{
 
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.cancelPostDialog}>Cancel</Button>
+              <Button onClick={this.props.onClickEnd}>Cancel</Button>
               <Button onClick={this.handlePost}>Submit</Button>
             </DialogActions>
             </Dialog>

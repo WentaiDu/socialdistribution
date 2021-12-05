@@ -3,12 +3,66 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
-import { getUserInfo } from ".././baseElement/toolFuntions";
+import { getAuthorInfo } from ".././baseElement/toolFuntions";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 //
 
-export default class LikeList extends React.Component {
+
+class Comment extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(this.props);
+    this.state = {
+      name: "new user"
+    }
+  }
+
+  // componentDidMount() {
+  //   console.log(this.props.item.comment_author)
+  //   var temp = getAuthorInfo(this.props.item.comment_author).catch(err=>{
+  //     console.log("bugbugbug")
+  //   });
+  //   var author = temp.data;
+  //   if (author != undefined){
+  //     this.setState( {
+  //       name: author.displayName
+  //     })
+  //   }
+  //   console.log(author)
+  //   // const name = "author.data.displayName";
+  //   // console.log(name);
+
+  // }
+
+  getInfo = async () => {
+    const authorId = this.props.item.comment_author;
+    var temp = await getAuthorInfo(authorId).catch(err=>{
+      console.log("bugbugbug")
+    });
+    var author = temp.data;
+
+    console.log(author);
+
+    this.setState({
+      name: author.displayName
+    })
+
+  }
+  render(){
+
+    this.getInfo();
+    return(
+      <li>@ {this.state.name}: {this.props.item.comment} </li>
+
+    )
+  }
+
+
+
+}
+
+export default class CommentList extends React.Component {
   constructor(props){
     super(props);
     console.log(this.props);
@@ -16,14 +70,8 @@ export default class LikeList extends React.Component {
 
   renderComments = () =>{
     try{
-      var temp = getUserInfo(this.props.authorId).catch(err=>{
-        console.log("bugbugbug")
-      });
-      var user = temp.data;
 
-    const name = user.data.displayName;
-    console.log(name);
-    const comments = this.props.comments.comments;
+    const comments = this.props.comments;
     console.log(comments);
     if (comments === undefined) {
       return null
@@ -34,7 +82,8 @@ export default class LikeList extends React.Component {
       return comments.length === 0
       ? null
       : (comments?.map(item => (
-        <li>: {item.comment} </li>
+
+        <Comment item = {item} />
      )))
 
       }

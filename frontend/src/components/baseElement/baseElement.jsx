@@ -118,12 +118,12 @@ export class SinglePost extends React.Component {
 
       return (
         <Card variant="outlined" sx={{            
-          minWidth: 400,
-          maxWidth: 600,
+          minWidth: 800,
+          maxWidth: 1000,
           align: "center",
           padding: "10px",
           borderRadius: 7, }}>
-
+          
         <CardActionArea>
           {/* <CardMedia
             component="img"
@@ -131,15 +131,24 @@ export class SinglePost extends React.Component {
             image="/static/images/cards/contemplative-reptile.jpg"
             alt="green iguana"
           /> */}
-                <Stack
-                direction="row"
-                divider={<Divider orientation="vertical" flexItem />}
-                spacing={2}
-                >
-        <Avatar
-        alt={post.author.profileImage} src={post.author.profileImage}
-        sx={{ width: 50, height: 50 }}
-         />
+          <Stack
+          direction="row"
+          divider={<Divider orientation="vertical" flexItem />}
+          spacing={2}
+          >
+
+<Stack
+          direction="column"
+          spacing={1}
+          >         <Avatar
+          alt={post.author.profileImage} src={post.author.profileImage}
+          sx={{ width: 50, height: 50 }}
+           />
+           <li>
+           {post.author.displayName}
+           </li>
+           </Stack>
+
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {post.description}
@@ -193,19 +202,22 @@ export class AuthorList extends React.Component {
 
   renderAuthors(){
     try{
-      const authors = this.props.authors;
-      return authors.length === 0
-          ? (<CircularProgress />)
-          : (authors?.map(item => (
-  
-            <ListItem key = {item.author_id}>
-              <SingleAuthor author = {item}/>
-            </ListItem>)))
-  
+      const authorsPromise = this.props.authors;
+      authorsPromise.then(res => {
+        const authors = res;
+        console.log(authors)
+
+        return authors.length === 0
+        ? (<CircularProgress />)
+        : (authors.map(item => (
+
+          <ListItem key = {item.author_id}>
+            <SingleAuthor author = {item}/>
+          </ListItem>)))
+      })
     }
-    
     catch (e){
-      console.log("authors typeError")
+      console.log(e)
     }
   }
 

@@ -79,7 +79,7 @@ export default class PostAction extends React.Component{
           },
         })
           .then(res => {
-            const temp2 = res.data;
+            const temp2 = res.data.comments;
             console.log(temp2);
 
             this.setState({
@@ -94,15 +94,16 @@ export default class PostAction extends React.Component{
     onClickLike = async () => {
         console.log("like clicked")
         const authorId = this.props.post.author.author_id;
-        var temp = await getUserInfo(userID).catch(err=>{
+        var temp = await getUserInfo().catch(err=>{
           console.log("bugbugbug")
         });
         var user = temp.data;
 
         console.log(user);
+        const summaryTxt = user.displayName + " Likes your post";
         const postData = {
             type: "like",
-            summary: "try",
+            summary: summaryTxt,
             context: "http://127.0.0.1:8000/",
             author: user,
             object: this.props.post.source,

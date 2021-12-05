@@ -3,29 +3,9 @@ import { useState, useContext, useEffect } from "react";
 import InboxList from "./InboxType/InboxList";
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Link, Typography, TextField} from "@material-ui/core";
-import Grid from '@mui/material/Grid';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Card from "@mui/material/Card";
 import axios from "axios";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormHelperText from '@mui/material/FormHelperText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import {getMockData} from '../mockdata.js';
+
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 export default function Inbox() {
@@ -45,7 +25,10 @@ export default function Inbox() {
               .then(res => {
                 console.log(res.data);
                 if (res.data.items){
-                  setMessages(res.data.items);
+                  let temp = res.data.items;
+                  let data = JSON.parse(temp);
+                  console.log(data)
+                  setMessages(data);
                 }
                 
             })
@@ -53,6 +36,9 @@ export default function Inbox() {
                 console.log(e)
               })
     })
+
+
+
     return (
       <ThemeProvider>
         {messages.map((message, index) => (
@@ -63,14 +49,11 @@ export default function Inbox() {
             padding: "50px",
             borderRadius: 7,
           }}
+        variant="outlined"
         >
           <Box sx={{ width: "100%" }}>
             <InboxList
-              type={message.type}
-              title={message.title}
-              author={message.author.displayName}
-              description={message.description}
-              content={message.content}
+              item = {message}
             />
           </Box>
         </Card>
