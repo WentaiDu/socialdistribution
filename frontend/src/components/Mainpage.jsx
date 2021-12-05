@@ -478,8 +478,6 @@ class AuthorList2 extends React.Component {
           <Grid
             container
             direction="column"
-            justifyContent="center"
-            alignItems="center"
           >
             <List
               sx={{
@@ -505,23 +503,29 @@ export default function MainPage(props) {
     var authorId = props.match.params.author_id
 
     return(
-        <Stack direction="row" spacing={2}>
-      <Grid
+        <Stack 
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+                spacing={2}>
+      {/* <Grid
   container
   direction="column"
   justifyContent="flex-start"
   alignItems="flex-start"
-> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid> 
-  <Grid
+> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid>  */}
+  {/* <Grid
   container
   direction="column"
   justifyContent="flex-start"
-  alignItems="flex-start">   
+  alignItems="flex-start">    */}
    <div>
      <PostList token = {token} authorId = {authorId} />
    <PostList2  />
    <PostList3 />
-   </div></Grid> 
+   </div>
+{/*    
+   </Grid>  */}
   
   </Stack>);
 }

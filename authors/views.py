@@ -356,7 +356,10 @@ class Likes_list(generics.GenericAPIView):
         elif not post:
             error="Post id not found"
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id
+
+
+        path = request.build_absolute_uri()
+        a = path[:-6]
         likes = Like.objects.filter(object=a)
         #serializer =PostSerializer(post, many=True)
         
@@ -388,7 +391,19 @@ class LikesCommentList(generics.GenericAPIView):
             error="Comment id not found"
             #print(error)
             return Response(error, status=status.HTTP_404_NOT_FOUND)
-        a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
+
+
+        path = request.build_absolute_uri()
+        a = path[:-9]
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        print(a)
+        # a="http://127.0.0.1:8000/author/"+author_id+"/posts/"+post_id+"/comments/"+comment_id
         likes = Like.objects.filter(object=a)
         serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
