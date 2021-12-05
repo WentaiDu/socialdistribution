@@ -436,17 +436,15 @@ class PostList(generics.ListCreateAPIView):
 
         try:
             check=Author.objects.get(pk=author_id)
-            posts = Post.objects.filter(author_id=author_id,)
+            posts = Post.objects.filter(author_id=author_id,visibility='PUBLIC', unlisted='False')
 
         except:
             err_msg='Author does not exist.'
             return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
 
-        # response = super().list(request,author_id)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = PostSerializer(posts, many=True)
 
-        return Response({'posts':serializer.data})
+        return Response(serializer.data)
 
 
     def post(self,request,author_id):
@@ -682,8 +680,14 @@ class FriendRequest(generics.GenericAPIView):
 
 class publicpost(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Post.objects.filter(visibility='PUBLIC')
+    queryset = Like.objects.all()
+
+    # queryset = Post.objects.filter(visibility='PUBLIC')
     serializer_class=PostSerializer
+    def get(self, request, *args, **kwargs):
+        posts = Post.objects.filter(visibility='PUBLIC' , unlisted='False')
+        serializer = PostSerializer(posts,many=True)
+        return Response(serializer.data)
 
 
 
