@@ -182,8 +182,6 @@ class CommentList(generics.ListCreateAPIView):
             return Response(str(e), status=status.HTTP_404_NOT_FOUND)
 
 
-
-
     def get(self,request, post_id,author_id):
         check_node(request)
         try:
@@ -201,7 +199,6 @@ class CommentList(generics.ListCreateAPIView):
         #     return Response({'comments':serializer.data})
         # else:
         #     return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 
 class InboxView(generics.GenericAPIView):
@@ -634,6 +631,8 @@ class FriendRequest(generics.GenericAPIView):
             serializer.is_valid()
             serializer.save()
             return Response(serializer.data)
+
+
     def delete(self, request, author_id1, author_id2):
         # check_node(request)
         author1 = Author.objects.get(id=author_id1)
