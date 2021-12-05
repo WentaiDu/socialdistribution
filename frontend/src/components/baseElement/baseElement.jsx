@@ -95,36 +95,63 @@ export class SinglePost extends React.Component {
   constructor(props) {
     super(props);
     console.log("singlePost")
-    this.state = {
-    }
+
   }
 
-  renderContent() {
+  
+  editPost = () => {
+
+  }
+
+  deletePost = () =>{
+    const post = this.props.post;
+
+    axios.delete(`${base_url}/author/${userID}/posts/${post.post_id}`,
+      
+    ) 
+
+  }
+  renderContent(){
+
     const post = this.props.post;
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64") {
       console.log("pic!!")
-      return (
-        <li>I am daddy!</li>
+
+      return(
+        <li>I am daddy!      
+           <img
+        src={`${post.content}`}
+        srcSet={`${post.content}`}
+        alt={post.title}
+        loading="lazy"
+       />
+      </li>
+
       )
     }
 
   }
-  render() {
-    var badge = this.props.badge;
-    if (badge == undefined) {
-      badge = "local"
-    }
-    console.log(this.props, 'his.props')
-    const post = this.props.post;
 
-    return (
-      <Card variant="outlined" sx={{
-        minWidth: 800,
-        maxWidth: 1000,
-        align: "center",
-        padding: "10px",
-        borderRadius: 7,
-      }}>
+
+  renderModifyButton(){
+    if(this.props.post.author.author_id == userID){
+      return(
+        <li>        
+        <Button onClick = {this.editPost}>Edit Icon</Button>
+        <Button onClick = {this.deletePost}>Delete Icon</Button>
+        </li>
+
+      )
+    }
+    return null
+  }
+    render(){
+      var badge = this.props.badge;
+      if (badge == undefined){
+        badge = "local"
+      }
+      const post = this.props.post;
+
 
         <CardActionArea>
           {/* <CardMedia
@@ -171,7 +198,9 @@ export class SinglePost extends React.Component {
         </CardActionArea>
 
         <CardActions>
-          <PostAction post={post} />
+
+          {this.renderModifyButton()}
+        <PostAction post = {post}/>
         </CardActions>
       </Card>
     )

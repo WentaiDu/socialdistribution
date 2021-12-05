@@ -26,6 +26,71 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken');
 const userID = localStorage.getItem('userID');
 
+class UploadImage extends React.Component {
+    state = {
+      file: null,
+      base64URL: ""
+    };
+  
+    getBase64 = file => {
+      return new Promise(resolve => {
+        let fileInfo;
+        let baseURL = "";
+        // Make new FileReader
+        let reader = new FileReader();
+  
+        // Convert the file to base64 text
+        reader.readAsDataURL(file);
+  
+        // on reader load somthing...
+        reader.onload = () => {
+          // Make a fileInfo Object
+          console.log("Called", reader);
+          baseURL = reader.result;
+          console.log(baseURL);
+          resolve(baseURL);
+        };
+        console.log(fileInfo);
+      });
+    };
+  
+    handleFileInputChange = async e => {
+      console.log(e.target.files[0]);
+      let { file } = this.state;
+  
+      file = e.target.files[0];
+  
+      this.getBase64(file)
+        .then(result => {
+          file["base64"] = result;
+          console.log("File Is", file);
+          this.setState({
+            base64URL: result,
+            file
+          });
+          console.log(this.state)
+          this.props.handleUpload(this.state.base64URL);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+  
+      this.setState({
+        file: e.target.files[0]
+      });
+
+    };
+  
+    render() {
+      return (
+        <div>
+          <input type="file" name="file" onChange={this.handleFileInputChange} />
+        </div>
+      );
+    }
+  }
+
+
 export default class AddPost extends React.Component{
     constructor(props){
         super(props);
@@ -91,9 +156,44 @@ export default class AddPost extends React.Component{
           }
           this.props.onClickEnd()
 
-        } 
+    } 
 
 
+    handleUpload = (value) =>{
+        this.setState((prevState, props) => {
+            prevState.content = value;
+            console.log(this.state.content)
+            return prevState;
+        });
+    }
+
+    renderUpload = () => {
+        if (this.state.contentType == "text/markdown" || this.state.contentType =="text/plain"|| this.state.contentType =="application/base64"){
+            return(
+                <Grid item xs={12}>
+                <TextField
+                    name="content"
+                    label="Put in your text"
+                    multiline
+                    fullWidth
+                    rows={4}
+                    value={this.state.content}
+                    onChange={this.handleForm}
+                />
+                </Grid>
+            )
+        }
+        else{
+            return(
+                <Grid item xs={12}>
+
+                <UploadImage handleUpload ={this.handleUpload}/>    
+                </Grid>
+
+            )
+        }
+
+    }
 
         
     render(){
@@ -166,18 +266,8 @@ export default class AddPost extends React.Component{
                             </FormControl>
                             </Box>
                     <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            name="content"
-                            label="Put in your text"
-                            multiline
-                            fullWidth
-                            rows={4}
-                            value={content}
-                            onChange={this.handleForm}
-                        />
-                    </Grid>
-        
+
+                    {this.renderUpload()}
                     <Grid item xs={12} sx={{minWidth: 120}}>
                     <Stack direction="row" spacing={5} sx={{width: 750, m:'auto', p:{xs:2}, }}>
                     <Box sx={{ minWidth: 120,}}>

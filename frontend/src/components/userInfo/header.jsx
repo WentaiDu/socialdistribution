@@ -97,10 +97,6 @@ function Header () {
         setReq(false);
 
     }
-    const renderAddPost = () =>{
-        return (<AddPost open = {dia} onClickEnd = {cancelPostDialog}/>);
-        
-    }
 
     const showRequestDialog = async () => {
         var temp = await getUserInfo().catch(err=>{
@@ -109,19 +105,14 @@ function Header () {
           var user = temp.data;
   
           console.log(user);
-          if (user.is_stuff){
+          if (true){
             setReq(true);
-
           }
           else{
             setAuthAlert(true);
         }
     }
 
-    const renderReq = () =>{
-        return (<SeeReq open = {req} onClickEnd = {cancelReq}/>);
-        
-    }
     
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -182,9 +173,8 @@ function Header () {
                 onClose={handleClose}
                 message="Only stuff can see it"
             />
-            {renderAddPost()}
-            {renderReq()}
-
+            <AddPost open = {dia} onClickEnd = {cancelPostDialog}/>
+            <SeeReq open = {req} onClickEnd = {cancelReq}/>
         </div>
 
     );

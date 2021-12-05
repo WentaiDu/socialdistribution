@@ -22,12 +22,62 @@ const userID = localStorage.getItem('userID');
 class SingleReq extends React.Component{
     constructor(props){
         super(props);
+        console.log(this.props)
+    }
+  
+    onClickAccpet = () => {
+  
+      let postData = this.props.author;
+      postData.accept = "accept";
+
+      axios
+      .post(`${base_url}/pendingsignup/`,
+      postData,
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+      })
+      .catch((e) => {
+      }); 
+    }
+    onClickReject = () => {
+      let postData = this.props.author;
+      postData.accept = "reject";
+
+      axios
+      .post(`${base_url}/pendingsignup/`,
+      postData,
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+      })
+      .catch((e) => {
+      }); 
     }
 
+
     render(){
+      let temp = this.props.author.pending_author
+      let authorInfo = JSON.parse(temp);
+      console.log(authorInfo);
+      let name = authorInfo.displayName;
 
         return (
-            null
+            <li>
+              {name} 
+              <Button onClick = {this.onClickAccpet}>Accept</Button>
+              <Button onClick = {this.onClickReject}>Reject</Button>
+            </li>
         )
     }
 }
@@ -40,69 +90,51 @@ export default class SeeReq extends React.Component{
     }
 
 
-    handleForm = e => {
-        const target = e.target;
+    getInfo = async () =>{
+      let res = await axios
+      .get(`${base_url}/pendingsignup/`,
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      // .then((res) => {
+      //   console.log(res.data);
+      //   var pendingAuthors = res.data.results;
+      //   this.setState(pendingAuthors);
+      // })
+      // .catch((e) => {
+      // }); 
 
-        const value = target.type === "checkbox"
-        ? target.checked
-        : target.value;
-
-        const name = target.name;
-
-        this.setState({
-            [name]:value
-        })
+        console.log(res.data);
+        var pendingAuthors = res.data.results;
+        this.setState(pendingAuthors); 
     }
 
-    handlePost = () => {
-        console.log(this.state);
-        this.setState((prevState, props) => {
-            delete prevState.continuing;
-            return prevState;
-        });  
-        axios
-          .post(`${base_url}/author/${userID}/posts/`, this.state,    
-          {
-            headers: {
-              Authorization: "token " + token,
-            },
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((e) => {
-          }); 
-        
-          try{
-            this.props.onClick();
 
-          }
-          catch(e){
-              console.log("not props")
-          }
-          this.props.onClickEnd()
+    componentDidMount(){
+      
+      this.getInfo()
 
-        } 
+    }
 
-    
+
     renderReqs = () =>{
         try{
-            const authorsPromise = this.props.authors;
-            authorsPromise.then(res => {
-              const authors = res;
-              console.log(authors)
-      
-              return authors.length === 0
+
+              console.log(this.state)
+              let pendingAuthors = Object.values(this.state);
+              return pendingAuthors.length === 0
               ? (<li>No Sign Up request</li>)
 
-              : (authors.map(item => (
+              : (pendingAuthors.map(item => (
       
-                <ListItem key = {item.author_id}>
+                <ListItem key = {item.id}>
                 <SingleReq author = {item}/>
               </ListItem>
               )))
-            })
           }
+        
           catch (e){
             console.log(e)
             return (<li>No Sign Up request</li>)
@@ -126,7 +158,7 @@ export default class SeeReq extends React.Component{
               bgcolor: 'background.paper',
             }}
           >
-            {this.renderReqs}
+            {this.renderReqs()}
             </List>
 
             </DialogContent>
@@ -138,3 +170,4 @@ export default class SeeReq extends React.Component{
         )
     }
 }
+
