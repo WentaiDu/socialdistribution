@@ -20,6 +20,7 @@ import Chip from '@mui/material/Chip';
 import FaceIcon from '@mui/icons-material/Face';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import AddPost from ".././Post";
 
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -32,6 +33,7 @@ export class SingleAuthor extends React.Component {
     console.log("singleAuthor")
     console.log(props);
     this.state = {
+      dia : false,
     }
   }
 
@@ -95,33 +97,65 @@ export class SinglePost extends React.Component {
   constructor(props){
     super(props);
     console.log("singlePost")
-
+    this.state = {
+      dia: false,
+    }
   }
   
   editPost = () => {
-
+    this.addPostDialog()
   }
 
   deletePost = () =>{
     const post = this.props.post;
 
-    axios.delete(`${base_url}/author/${userID}/posts/${post.post_id}`,
-      
-    ) 
+    axios.delete(`${post.id}`,            
+    {
+      headers: {
+        Authorization: "token " + token,
+      }
+    })
+    .then(res => [
+      console.log("delete success")
+    ]) 
+    .catch(e =>{
+      console.log(e)
+    })
 
   }
+
+  addPostDialog = () => {
+    console.log("rendering")
+    this.setState({
+      dia: true,
+    });
+  }
+  
+  cancelPostDialog = () => {
+    console.log("canceling")
+    this.setState({
+      dia: false,
+    });
+  }
+
   renderContent(){
     const post = this.props.post;
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64"){
       console.log("pic!!")
       return(
-        <li>I am daddy!      
+        <li>
            <img
         src={`${post.content}`}
         srcSet={`${post.content}`}
         alt={post.title}
         loading="lazy"
        />
+      </li>
+      )
+    }
+    else{
+      return(
+        <li>{post.content}
       </li>
       )
     }
@@ -140,12 +174,16 @@ export class SinglePost extends React.Component {
     }
     return null
   }
+
     render(){
       var badge = this.props.badge;
       if (badge == undefined){
         badge = "local"
       }
       const post = this.props.post;
+      console.log(post);
+      var linkaddr =  "/author/"+ this.props.post.author.author_id +"/posts/"+post.post_id +"/"
+      console.log(linkaddr);
 
       return (
         <Card variant="outlined" sx={{            
@@ -154,8 +192,8 @@ export class SinglePost extends React.Component {
           align: "center",
           padding: "10px",
           borderRadius: 7, }}>
-          
-        <CardActionArea>
+            <AddPost open = {this.state.dia} onClickEnd = {this.cancelPostDialog} post = {this.props.post}/>
+        <CardActionArea href = {linkaddr}>
           {/* <CardMedia
             component="img"
             height="140"
@@ -182,13 +220,17 @@ export class SinglePost extends React.Component {
 
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {post.description}
+            {post.title}
+
             </Typography>
             <Typography variant="body2" color="text.secondary">
+            {post.description}
+
              {this.renderContent()}
             </Typography>
           </CardContent></Stack>
           <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
 
         </CardActionArea>
         <CardActions>
