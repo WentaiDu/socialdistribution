@@ -1,17 +1,12 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import PostAction from "../PostAction";
@@ -323,6 +318,7 @@ export class SinglePost extends React.Component {
 
 
 export class FollowerCount extends React.Component {
+  // receive follower list info and show
   constructor(props) {
     super(props);
     console.log("FollowerCount")
@@ -333,20 +329,19 @@ export class FollowerCount extends React.Component {
 
   render() {
     return (
-      <Link >
-        Follower {this.props.count}
+      <Link to = {"author/"+this.props.authorId +"/followers"}>
+        Follower {this.props.items.length}
       </Link>
     )
   }
 
-
-
-
 }
 
 
+
+
 export class AuthorList extends React.Component {
-  // get props and show values not axios
+  // receive author list info and show
   constructor(props) {
     super(props);
     console.log(this.props)
@@ -357,16 +352,8 @@ export class AuthorList extends React.Component {
 
   renderAuthors() {
     try {
-      const authorsPromise = this.props.authors;
-      var authors;
-      authorsPromise.then(res => {
-        authors = res;
-        console.log(authors)
-        this.setState({
-          authors: authors,
-        })
-
-      })
+      var authors = this.props.authors
+      console.log(authors)
       return authors.length === 0
       ? (<CircularProgress />)
       : (authors.map(item => (
@@ -398,12 +385,6 @@ export class AuthorList extends React.Component {
           }}
         >
           {this.renderAuthors()}
-
-          {(this.state.authors.map(item => (
-
-        <ListItem key={item.author_id}>
-          <SingleAuthor author={item} />
-        </ListItem>)))}
         </List>
       </Grid>
     )

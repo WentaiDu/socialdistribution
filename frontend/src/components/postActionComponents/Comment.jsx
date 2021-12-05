@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Grid from '@mui/material/Grid';
-import axios from "axios";
 import CircularProgress from '@mui/material/CircularProgress';
 import { getAuthorInfo } from ".././baseElement/toolFuntions";
 

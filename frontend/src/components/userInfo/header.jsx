@@ -1,13 +1,9 @@
 
-import SearchIcon from '@mui/icons-material/Search';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import SettingsApplicationsOutlinedIcon from '@mui/icons-material/SettingsApplicationsOutlined';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
