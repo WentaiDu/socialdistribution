@@ -558,16 +558,11 @@ class PostDetail(generics.RetrieveUpdateAPIView):
 
 class FollowerList(generics.ListAPIView):
 
-    # serializer_class = FollowerSerializer
-    # context_object_name = "authors"
-    # def get_queryset(self, **kwargs):
-    #    return Follower.objects.filter(following_id=self.kwargs['author_id'])
+    serializer_class = FollowerSerializer
 
     def get(self,request, author_id):
 
         followers = Follower.objects.filter(following_id=author_id)
-        # response = super().list(request,author_id)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
         serializer = FollowerSerializer(followers, many=True)
 
         return Response({'followers':serializer.data})
