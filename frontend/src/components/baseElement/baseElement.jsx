@@ -525,57 +525,68 @@ export class SingleActivity extends React.Component {
   }
 
     render(){
+      try{
 
-      const activity = this.props.activity;
-      console.log(activity);
+        const activity = this.props.activity;
+        console.log(activity);
+  
+        return (
+          <Card variant="outlined" sx={{            
+            minWidth: 800,
+            maxWidth: 1000,
+            align: "center",
+            padding: "10px",
+            borderRadius: 7, }}>
+          <CardActionArea href = {activity.repo.url}>
+            <Stack
+              direction="row"
+              divider={<Divider orientation="vertical" flexItem />}
+              spacing={2}
+            >
+            <Stack
+            direction="column"
+            spacing={1}
+            >         
+            <Link to={ activity.actor.url}>
+            <Avatar
+            alt={activity.actor.id.toString()} src={activity.actor.avatar_url}
+            sx={{ width: 50, height: 50 }}
+              /></Link>
+                <li>
+                  {activity.actor.display_login}
+                </li>
+              </Stack>
+  
+               <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                Github Activity {activity.id}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {activity.type}
+                </Typography>
+                
+              </CardContent>
+              <CardContent>
+                <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
+               { activity.payload.commits.map(item => (
 
-      return (
-        <Card variant="outlined" sx={{            
-          minWidth: 800,
-          maxWidth: 1000,
-          align: "center",
-          padding: "10px",
-          borderRadius: 7, }}>
-        <CardActionArea href = {activity.repo.url}>
-          <Stack
-            direction="row"
-            divider={<Divider orientation="vertical" flexItem />}
-            spacing={2}
-          >
-          <Stack
-          direction="column"
-          spacing={1}
-          >         
-          <Link to={{ pathname: activity.actor.url}}>
-          <Avatar
-          alt={activity.actor.id} src={activity.actor.avatar_url}
-          sx={{ width: 50, height: 50 }}
-            /></Link>
-              <li>
-                {activity.actor.display_login}
-              </li>
+                <ListItem key = {item.url}>
+                  <li>commit message: {item.message} url: {item.url} </li>
+                </ListItem> ))
+                }
+
+                </div>
+              </CardContent>
             </Stack>
-
-             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-              Github Activity {activity.id}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {activity.type}
-              </Typography>
-              
-            </CardContent>
-            <CardContent>
-              <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
-              {activity.payload.commits}
-
-              </div>
-            </CardContent>
-          </Stack>
-
-
-        </CardActionArea>
-      </Card>
-    )
+  
+  
+          </CardActionArea>
+        </Card>
+      )
+      }
+      catch(e){
+        console.log(e)
+        return null
+      }
   }
 }

@@ -34,7 +34,10 @@ export default class GithubList extends React.Component {
 
 
     const name = author.github
-    var temp2 = await axios.get(`https://api.github.com/users/${name}/events`)
+    let nameList = name.split("/")
+    let resultURL = nameList.pop();
+    console.log(resultURL)
+    var temp2 = await axios.get(`https://api.github.com/users/${resultURL}/events`)
       
     var activity = temp2.data;
     this.setState(activity);
@@ -53,7 +56,7 @@ export default class GithubList extends React.Component {
  
 
   renderPosts = () =>{
-    const activity = this.state;
+    const activity = Object.values(this.state);
     console.log(activity);
     try{
         return activity.length === 0
@@ -72,6 +75,7 @@ export default class GithubList extends React.Component {
       } 
     
     catch(e){
+        console.log(e)
         return <CircularProgress />
 
     }
