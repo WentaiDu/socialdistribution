@@ -61,9 +61,12 @@ const Center = (props) => {
     }
     useEffect(() => {
         setForm(props?.value)
-        if (userID !== props?.value.author_id) {
-            setIsCurrentUser(false)
+        if (props?.value.author_id) {
+            if (userID !== props?.value?.author_id) {
+                setIsCurrentUser(false)
+            }
         }
+
     }, [props?.value])
     // edit fn
     const editHandle = () => {
@@ -72,9 +75,7 @@ const Center = (props) => {
     }
     const saveHandle = () => {
         const data = { ...form };
-        data['profileImage'] = file
-        console.log(form, 'eee')
-        console.log(file, 'file')
+        data['profileImage'] = file;
         axios.put(`${base_url}/author/${props?.value.author_id}/`, data, {
             headers: {
                 Authorization: "token " + token,
@@ -134,7 +135,12 @@ const Center = (props) => {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" className="tabs">
                         <Tab label="User Information" {...a11yProps(0)} />
                         <Tab label="Posts" {...a11yProps(1)} />
-                        <Tab label="Inbox" {...a11yProps(2)} />
+                        {
+                            isCurrentUser ?
+                                <Tab label="Inbox" {...a11yProps(2)} />
+                                :
+                                null
+                        }
                     </Tabs>
 
                 </div>
@@ -149,42 +155,54 @@ const Center = (props) => {
                             noValidate
                             autoComplete="off"
                         >
-                            {
-                                isCurrentUser ?
-                                    <div>
+                            <div>
 
-                                        {
-                                            Object.keys(props?.value)?.map(key => (
-                                                key != 'password' && key != 'profileImage' ?
-                                                    <TextField
-                                                        required
-                                                        id={key}
-                                                        label={key}
-                                                        disabled={key === 'id' || key === 'author_id' ? true : isEdit}
-                                                        defaultValue={props?.value[key] || '-'}
-                                                        onChange={(e) => setObjAttr(e.target.value, key)}
-                                                    />
-                                                    :
-                                                    null
-                                            ))
-                                        }
-                                        {
-                                            !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
-                                        }
+                                {
+                                    Object.keys(props?.value)?.map(key => (
+                                        key != 'password' && key != 'profileImage' ?
+                                            <TextField
+                                                required
+                                                id={key}
+                                                label={key}
+                                                disabled={key === 'id' || key === 'author_id' ? true : isEdit}
+                                                defaultValue={props?.value[key] || '-'}
+                                                onChange={(e) => setObjAttr(e.target.value, key)}
+                                            />
+                                            :
+                                            null
+                                    ))
+                                }
+                                {
+                                    !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
+                                }
 
-                                        <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
-                                        <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
-                                    </div>
-                                    : null
-                            }
+                                {
+                                    props?.value?.author_id && isCurrentUser ?
+                                        <>
+                                            <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
+                                            <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
+                                        </>
+                                        :
+                                        null
+                                }
+
+                            </div>
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">
                         <Posts author_id={props?.value.author_id} />
                     </TabPanel>
-                    <TabPanel value={value} index={2} className="tab_content">
-                        <Inbox />
-                    </TabPanel>
+                    {
+                        isCurrentUser ?
+                            <TabPanel value={value} index={2} className="tab_content">
+
+                                <Inbox />
+
+
+                            </TabPanel>
+                            :
+                            null
+                    }
                 </div>
             </Box>
         </div>
