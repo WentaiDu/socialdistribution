@@ -135,13 +135,13 @@ const Center = (props) => {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" className="tabs">
                         <Tab label="User Information" {...a11yProps(0)} />
                         <Tab label="Posts" {...a11yProps(1)} />
-                        {
+                        {/* {
                             isCurrentUser ?
                                 <Tab label="Inbox" {...a11yProps(2)} />
                                 :
                                 null
-                        }
-                        <Tab label="Stream" {...a11yProps(3)} />
+                        } */}
+                        <Tab label="Stream" {...a11yProps(2)} />
                     </Tabs>
 
                 </div>
@@ -193,7 +193,7 @@ const Center = (props) => {
                     <TabPanel value={value} index={1} className="tab_content">
                         <Posts author_id={props?.value.author_id} />
                     </TabPanel>
-                    {
+                    {/* {
                         isCurrentUser ?
                             <TabPanel value={value} index={2} className="tab_content">
 
@@ -203,8 +203,8 @@ const Center = (props) => {
                             </TabPanel>
                             :
                             null
-                    }
-                    <TabPanel value={value} index={3} className="tab_content">
+                    } */}
+                    <TabPanel value={value} index={2} className="tab_content">
                     <GithubList authorId = {props?.value.author_id}/>
                     </TabPanel>
                         
