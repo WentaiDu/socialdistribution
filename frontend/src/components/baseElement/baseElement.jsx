@@ -18,6 +18,8 @@ import ListItem from '@mui/material/ListItem';
 import AddPost from ".././Post";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getAuthorInfo } from "./toolFuntions";
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
@@ -30,7 +32,26 @@ export class SingleAuthor extends React.Component {
     console.log(props);
     this.state = {
       clickedFollow : false,
+      authorData : {}
     }
+    this.getInfo();
+  }
+
+  
+  getInfo = async () => {
+    const authorId = this.props.item.comment_author;
+    var temp = await getAuthorInfo(authorId).catch(err=>{
+      console.log("bugbugbug")
+    });
+    var author = temp.data;
+
+    console.log(author);
+
+    this.setState((prevState, props) => {
+      prevState.authorData = author;
+      return prevState;
+   });
+
   }
 
   componentDidMount(){
@@ -42,9 +63,11 @@ export class SingleAuthor extends React.Component {
     })
     .then((res) => {
       console.log(res.data);
-      this.setState({
-        clickedFollow: false,
-      })
+
+      this.setState((prevState, props) => {
+        prevState.clickedFollow = res.data.is_follower;
+        return prevState;
+     });
     })
     .catch((e) => {
       console.log(e)
@@ -63,9 +86,10 @@ export class SingleAuthor extends React.Component {
       })
       .then((res) => {
         console.log(res.data);
-        this.setState({
-          clickedFollow: false,
-        })
+        this.setState((prevState, props) => {
+          prevState.clickedFollow = false;
+          return prevState;
+       });
       })
       .catch((e) => {
         console.log(e)
@@ -80,9 +104,10 @@ export class SingleAuthor extends React.Component {
       })
       .then((res) => {
         console.log(res.data);
-        this.setState({
-          clickedFollow: true,
-        })
+        this.setState((prevState, props) => {
+          prevState.clickedFollow = true;
+          return prevState;
+       });
       })
       .catch((e) => {
         console.log(e)
