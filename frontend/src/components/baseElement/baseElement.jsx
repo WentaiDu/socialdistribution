@@ -65,7 +65,7 @@ export class SingleAuthor extends React.Component {
   followClicked = async () => {
     console.log(this.props);
     if (this.state.clickedFollow){
-      axios.delete(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
+      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
       {
         headers: {
           Authorization: "token " + token,
@@ -114,22 +114,22 @@ export class SingleAuthor extends React.Component {
       }
 
 
-      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, postData,
-      {
-        headers: {
-          Authorization: "token " + token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState((prevState, props) => {
-          prevState.clickedFollow = true;
-          return prevState;
-       });
-      })
-      .catch((e) => {
-        console.log(e)
-      });
+      axios.put(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`, postData,
+        {
+          headers: {
+            Authorization: "token " + token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = true;
+            return prevState;
+          });
+        })
+        .catch((e) => {
+          console.log(e)
+        });
     }
 
   }
