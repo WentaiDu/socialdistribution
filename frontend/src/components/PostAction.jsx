@@ -140,6 +140,7 @@ export default class PostAction extends React.Component{
         else{
           this.setState((prevState, props) => {  
             prevState.showAddComment = true;
+  
             return prevState;
          });  
         }

@@ -42,7 +42,7 @@ export class SingleAuthor extends React.Component {
 
   componentDidMount(){
     console.log(this.props)
-    axios.get(`${this.props.author.id}/followers/${userID}/`,
+    axios.get(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
     {
       headers: {
         Authorization: "token " + token,
@@ -65,7 +65,7 @@ export class SingleAuthor extends React.Component {
   followClicked = async () => {
     console.log(this.props);
     if (this.state.clickedFollow){
-      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
+      axios.delete(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
       {
         headers: {
           Authorization: "token " + token,
@@ -113,7 +113,7 @@ export class SingleAuthor extends React.Component {
       }
 
 
-      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, postData,
+      axios.put(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`, postData,
       {
         headers: {
           Authorization: "token " + token,
@@ -504,6 +504,72 @@ export class AuthorList extends React.Component {
           {this.renderAuthors()}
         </List>
       </Grid>
+    )
+  }
+}
+
+
+
+
+export class SingleActivity extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("SingleActivity")
+
+  }
+
+    render(){
+
+      const activity = this.props.activity;
+      console.log(activity);
+
+      return (
+        <Card variant="outlined" sx={{            
+          minWidth: 800,
+          maxWidth: 1000,
+          align: "center",
+          padding: "10px",
+          borderRadius: 7, }}>
+        <CardActionArea href = {activity.repo.url}>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+            spacing={2}
+          >
+          <Stack
+          direction="column"
+          spacing={1}
+          >         
+          <Link to={{ pathname: activity.actor.url, state: { author_id: this.props.post } }}>
+          <Avatar
+          alt={activity.actor.id} src={activity.actor.avatar_url}
+          sx={{ width: 50, height: 50 }}
+            /></Link>
+              <li>
+                {activity.actor.display_login}
+              </li>
+            </Stack>
+
+             <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+              Github Activity {activity.id}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {activity.type}
+              </Typography>
+              
+            </CardContent>
+            <CardContent>
+              <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
+              {activity.payload.commits}
+
+              </div>
+            </CardContent>
+          </Stack>
+
+
+        </CardActionArea>
+      </Card>
     )
   }
 }
