@@ -11,20 +11,32 @@
     margin-left: 10px!important;
 }
 .userInfo_header{
+    width: 100vw;
     height: 56px;
     background-color: #fff;
+}
+.header_right{
+    /* padding-right: 30px; */
+}
+.header_right ul{
+    display: flex;
+    padding: 0 30px 0 100px;
+    justify-content: space-between;
+}
+.header_right ul li{
+    justify-content: center;
 }
 .userInfo_header>div{
     flex: 1;
 }
 .weibo{
     text-align: right;
+    padding-left: 30px;
 }
 .searchBox{
     display: flex;
     float: right;
     text-align: right;
-    width: 340px;
 }
 .searchBox>div{
     flex: 1;
@@ -42,7 +54,8 @@
 .center_menu{
     display: flex;
     margin-top: 10px;
-    justify-content: space-around;
+    padding: 0;
+    justify-content: space-between;
 }
 .center_menu li{
     flex: 1;
@@ -50,7 +63,7 @@
     text-align: center;
 }
 .center_menu a{
-    color: #000;
+    color: #20B2AA;
 }
 .center_menu li:hover{
     background-color: #efefef;
@@ -62,7 +75,6 @@
 
 .right_menu{
     display: flex;
-    padding: 0 100px;
     margin-top: 10px;
     justify-content: center;
 }
@@ -70,6 +82,9 @@
     width: 40px;
     margin: 0 5px;
     text-align: center;
+}
+.right_menu svg{
+    color: #20B2AA;
 }
 .right_menu li:hover{
     background-color: #efefef;

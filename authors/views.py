@@ -563,8 +563,9 @@ class FollowerListAPI(generics.GenericAPIView):
             return Response(serializer.data, status.HTTP_200_OK)
         except:
             query = Followers.objects.create()
-            query.id = author_id
-            query.save()
+            id = query.id
+            query = Followers.objects.filter(id=id)
+            query.update(id=author_id)
             queryset=Followers.objects.get(id=author_id)
             serializer = FollowerSerializer(queryset)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -637,52 +638,43 @@ class FriendRequestAPI(generics.GenericAPIView):
         author = request.data['actor']
         foreign_author = request.data['object']
         summary = author['displayName']+ ' wants to follow '+foreign_author['displayName']
+        print(author_id)
+        print(foreign_author_id)
         #～～～～这个地方好像是反的
-        if author_id==foreign_author_id or author==foreign_author:
+        if author_id == foreign_author_id or author==foreign_author:
             response = {
                 "details": 'Can not follow yourself'
             }
             return Response(response,status.HTTP_409_CONFLICT)
-        print('author',author,author_id)
-        print('FA',foreign_author,foreign_author_id)
         try:
             follower = Followers.objects.get(id=foreign_author_id)
-            if follower.items == None or follower.items == "[]":
-                print("follower is",follower)
-
+            print(follower.items)
+            if follower.items == None or json.loads(follower.items) =='[]':
                 items = []
-                items = json.dumps(items.append(author))
+                items.append(author)
+                items = json.dumps(items)
                 follower.items = items
                 follower.save()
             else:
-
                 item_list = json.loads(follower.items)
-                if author in item_list:
-                    response = {
-                        "details": 'Your have already follow!'
-                    }
-                    return Response(response)
-                else:
-                    item_list.append(author)
-                    item_list = json.dumps(item_list)
-                    follower.items = item_list
-                    follower.save()
+                item_list.append(author)
+                item_list = json.dumps(item_list)
+                follower.items = item_list
+                follower.save()
         except:
-            print('不存在 ==None这个，get空的话直接报错了！！')
             item_list = []
             item_list.append(author)
             item_list = json.dumps(item_list)
-            follower = Followers.objects.create(items=item_list,id=foreign_author_id)
+
+            Followers.objects.create(items=item_list,id=foreign_author_id)
+
         try:
             try:
                 friend_request = FriendRequest.objects.filter(author_id=author_id,foreign_author_id=foreign_author_id)
                 if not friend_request:
-                    print('alibaba')
                     raise Exception
                 else:
-                    print('走的这里 get到了')
                     friend_request.update(actor=json.dumps(author))
-                    print('到这里了？？？')
                     friend_request.update(object=json.dumps(foreign_author))
                     friend_request.update(summary=summary)
                     friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
@@ -695,7 +687,6 @@ class FriendRequestAPI(generics.GenericAPIView):
                     return Response(response, status.HTTP_200_OK)
 
             except:
-                print('走的这里except')
                 author = request.data['actor']
                 foreign_author = request.data['object']
                 friend_request=FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
