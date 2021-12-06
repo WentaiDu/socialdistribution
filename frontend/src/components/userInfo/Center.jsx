@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
 
-
+const userID = localStorage.getItem('userID')
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken')
 function TabPanel(props) {
@@ -44,6 +44,7 @@ const Center = (props) => {
     }
     const [value, setValue] = React.useState(0);
     const [isEdit, setIsEdit] = React.useState(true);
+    const [isCurrentUser, setIsCurrentUser] = React.useState(true);
     const [form, setForm] = React.useState(props?.value);
     const [file, setFile] = React.useState({});
 
@@ -58,6 +59,9 @@ const Center = (props) => {
     }
     useEffect(() => {
         setForm(props?.value)
+        if (userID !== props?.value.author_id) {
+            setIsCurrentUser(false)
+        }
     }, [props?.value])
     // edit fn
     const editHandle = () => {
@@ -143,30 +147,34 @@ const Center = (props) => {
                             noValidate
                             autoComplete="off"
                         >
-                            <div>
+                            {
+                                isCurrentUser ?
+                                    <div>
 
-                                {
-                                    Object.keys(props?.value)?.map(key => (
-                                        key != 'password' && key != 'profileImage' ?
-                                            <TextField
-                                                required
-                                                id={key}
-                                                label={key}
-                                                disabled={key === 'id' || key === 'author_id' ? true : isEdit}
-                                                defaultValue={props?.value[key] || '-'}
-                                                onChange={(e) => setObjAttr(e.target.value, key)}
-                                            />
-                                            :
-                                            null
-                                    ))
-                                }
-                                {
-                                    !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
-                                }
+                                        {
+                                            Object.keys(props?.value)?.map(key => (
+                                                key != 'password' && key != 'profileImage' ?
+                                                    <TextField
+                                                        required
+                                                        id={key}
+                                                        label={key}
+                                                        disabled={key === 'id' || key === 'author_id' ? true : isEdit}
+                                                        defaultValue={props?.value[key] || '-'}
+                                                        onChange={(e) => setObjAttr(e.target.value, key)}
+                                                    />
+                                                    :
+                                                    null
+                                            ))
+                                        }
+                                        {
+                                            !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
+                                        }
 
-                                <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
-                                <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
-                            </div>
+                                        <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
+                                        <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
+                                    </div>
+                                    : null
+                            }
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">

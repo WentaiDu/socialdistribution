@@ -4,6 +4,12 @@
 .userInfo{
     background-color: #efefef;
 }
+.mui-table-view-cell{
+    display: flex;
+}
+.loginout{
+    margin-left: 10px!important;
+}
 .userInfo_header{
     height: 56px;
     background-color: #fff;
