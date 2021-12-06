@@ -12,6 +12,8 @@ import Inbox from '../Inbox';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
+import { FollowerCount } from ".././baseElement/baseElement";
+
 
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -114,6 +116,7 @@ const Center = (props) => {
                         <div className="fense">
                             <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
                             <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span>
+                            <FollowerCount />
                         </div>
                     </div>
                 </div>
