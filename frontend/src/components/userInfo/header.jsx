@@ -15,7 +15,9 @@ import AddPost from ".././Post";
 import SeeReq from ".././adminReq/signUpReq";
 import { getUserInfo } from "../baseElement/toolFuntions";
 import Snackbar from "@mui/material/Snackbar";
-import Mess from "../Friend/index";
+import DialogFriendlist from "../Friend/index";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import GroupIcon from '@mui/icons-material/Group';
 
 const userId = localStorage.getItem('userID');
 
@@ -24,7 +26,8 @@ function Header () {
     const [index, setIndex] = useState(1)
     const [dia, setDia] = useState(false)
     const [req, setReq] = useState(false)
-
+    const [friendListOpen, setFriendListOpen] = useState(false)
+    
     const [authAlert, setAuthAlert] = useState(false)
 
     const row = {
@@ -109,6 +112,17 @@ function Header () {
         }
     }
 
+
+    const showFriendList = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+          }
+      
+        setFriendListOpen(true);
+          
+
+    }
+    
     
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -116,6 +130,15 @@ function Header () {
         }
     
         setAuthAlert(false);
+      };
+
+
+      const cancelFriendList = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setFriendListOpen(false);
       };
 
     return (
@@ -138,10 +161,10 @@ function Header () {
                     </li>
      
                     <li onClick={() => active(2)} className={index === 2 ? 'bottomActive' : ''}>
-                    <Link to= {"/main/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
+                    <Link to= {"/authors/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
                     </li>
                     <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
-                    <Link to= {"/Mess"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
+                    <Link to= {"/author/"+userId+"/inbox/"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
                     <Link to={{ pathname: '/UserInfo', state: { author_id: {author:{author_id:userId}} } }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
@@ -156,7 +179,12 @@ function Header () {
 
                     <li className="mui-table-view-cell">
 
-                    <Button onClick = {showRequestDialog}><SettingsApplicationsOutlinedIcon fontSize={'large'} /></Button>
+                    <Button onClick = {showRequestDialog}><HowToRegIcon fontSize={'large'} /></Button>
+
+                    </li>
+                    <li className="mui-table-view-cell">
+
+                    <Button onClick = {showFriendList}><GroupIcon fontSize={'large'} /></Button>
 
                     </li>
                 </ul>
@@ -171,6 +199,7 @@ function Header () {
             />
             <AddPost open = {dia} onClickEnd = {cancelPostDialog}/>
             <SeeReq open = {req} onClickEnd = {cancelReq}/>
+            <DialogFriendlist open = {friendListOpen}  onClickEnd = {cancelFriendList}/>
         </div>
 
     );

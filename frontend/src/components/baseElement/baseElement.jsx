@@ -209,7 +209,26 @@ export class SingleAuthor extends React.Component {
       return (
 
         <Card sx={{ maxWidth: 345 }}>
-      <Collapse in={this.state.open}>
+
+          <Avatar
+            alt={author.profileImage} src={author.profileImage}
+            sx={{ width: 100, height: 100 }}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {author.displayName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+            </Typography>
+          </CardContent>
+
+          <CardActions>
+            {this.renderFollow()}         
+            <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
+            <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
+          </CardActions>
+          <Collapse in={this.state.open}>
         <Alert
           action={
             <IconButton
@@ -230,24 +249,6 @@ export class SingleAuthor extends React.Component {
           Successfully send friend request!
         </Alert>
       </Collapse>
-          <Avatar
-            alt={author.profileImage} src={author.profileImage}
-            sx={{ width: 100, height: 100 }}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {author.displayName}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
-            </Typography>
-          </CardContent>
-
-          <CardActions>
-            {this.renderFollow()}         
-            <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
-            <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
-          </CardActions>
         </Card>
 
       )
@@ -421,8 +422,9 @@ export class SinglePost extends React.Component {
 
         <CardActions>
 
-          {this.renderModifyButton()}
         <PostAction post = {post}/>
+        {this.renderModifyButton()}
+
         </CardActions>
       </Card>
     )
