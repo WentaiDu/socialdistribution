@@ -141,6 +141,7 @@ const Center = (props) => {
                                 :
                                 null
                         }
+                        <Tab label="Stream" {...a11yProps(3)} />
                     </Tabs>
 
                 </div>
@@ -203,6 +204,11 @@ const Center = (props) => {
                             :
                             null
                     }
+                    <TabPanel value={value} index={3} className="tab_content">
+                    None3
+                    </TabPanel>
+                        
+      
                 </div>
             </Box>
         </div>
