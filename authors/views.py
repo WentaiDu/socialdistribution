@@ -293,17 +293,9 @@ class InboxView(generics.GenericAPIView):
             author = Author.objects.get(author_id=request.data['author']["author_id"])
             like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
                                        summary=request.data["summary"], object=request.data["object"])
-            serializer = LikeSerializer(data=like.__dict__)
 
-
-        elif request.data['type'] == 'post':
-            serializer = PostSerializer(data=request.data)
-
-        elif request.data['type'] == 'follow':
-            serializer = FollowerSerializer(data=request.data)
-
-        if serializer.is_valid():
-            items.append(serializer.data)
+        try:
+            items.append(request.data)
             items = json.dumps(items)
 
             inbox = Inbox.objects.filter(inbox_author_id=author_id)
@@ -312,13 +304,12 @@ class InboxView(generics.GenericAPIView):
                 'detail': 'put post succeed'
             }
             return Response(response, status=status.HTTP_200_OK)
-
-        else:
-            print(serializer.errors)
+        except:
             response = {
                 'detail': 'put post failed'
             }
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
+
 
     def delete(self, request, *args, **kwargs):
         check_node(request)
