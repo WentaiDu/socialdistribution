@@ -7,6 +7,10 @@ class AuthorSerializer(serializers.ModelSerializer):
       model = Author
       fields = ['username','password','author_type','id','author_id','host','displayName','url','github','profileImage']
 
+class StandardAuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ['type','id','url','host','displayName','github','profileImage']
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
@@ -65,13 +69,14 @@ class LikedSerializer(serializers.ModelSerializer):
 
 class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Follower
-        fields = '__all__'
+        model = Followers
+        fields = ["id","type","items"]
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = FriendRequest_M
+        model = FriendRequest
         fields = '__all__'
 
 

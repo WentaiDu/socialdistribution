@@ -94,28 +94,31 @@ class Liked(models.Model):
     # object = models.URLField()
     type= models.CharField(max_length=100, default="", blank=False)
     items=models.ForeignKey(Like,related_name='liked_detail',on_delete=models.CASCADE,default='')
-class Follower(models.Model):
-    following = models.ForeignKey(Author,to_field = "author_id",on_delete=models.CASCADE,related_name='following')
-    author_type = models.CharField(max_length=30,default="author", blank=False)
-    author_id = models.UUIDField(primary_key = True , auto_created = True , default = uuid.uuid4)
-    displayName = models.CharField(max_length=30, default="", blank=False)
-    host = models.CharField(max_length=50)
-    url = models.CharField(max_length=100000,default='',blank=True,null=True)
-    github = models.CharField(null = True,blank=False, max_length=50)
-    profileImage = models.ImageField(blank = True, null = True,default = 'user.jpg')
 
-class FriendRequest_M(models.Model):
-    class State(models.TextChoices):
-        PENDING = "PENDING"
-        APPROVE = "APPROVE"
-    friend_state = models.CharField(max_length=50, choices=State.choices, default=State.PENDING)
-    type = models.CharField(max_length=100, default="", blank=False)
+
+class FriendRequest(models.Model):
+    author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True,
+                                 verbose_name='author_id',editable=True)
+    foreign_author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True,
+                                 verbose_name='foreign_author_id',editable=True)
+    type = models.CharField(max_length=100, default="Follow", blank=False)
     summary = models.CharField(max_length=50,default="", blank=False)
-    actor = models.ForeignKey(Author, related_name='actor', on_delete=models.CASCADE)
-    object = models.ForeignKey(Author, related_name='object', on_delete=models.CASCADE)
+    actor = models.JSONField(blank=True,null=True)
+    object = models.JSONField(blank=True,null=True)
 
     def __str__(self):
         return self.summary
+
+
+class Followers(models.Model):
+    id = models.CharField(max_length=1000, default=uuid.uuid4, blank=True,
+                          verbose_name='followers_id', editable=True,primary_key=True)
+    type = models.CharField(default='followers',blank=True,null=True, max_length=100)
+    items = models.JSONField(blank=True,null=True,verbose_name="items")
+
+# class FriendList(models.Model):
+#     type = models.CharField()
+
 
 
 class Inbox(models.Model):
