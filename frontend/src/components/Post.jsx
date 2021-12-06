@@ -305,14 +305,10 @@ export default class AddPost extends React.Component{
                                 >
                                 <MenuItem value={"PUBLIC"}>Public</MenuItem>
                                 <MenuItem value={"FRIENDS"}>Friend</MenuItem>
-                                <MenuItem value={"PRIVATE"}>Private</MenuItem>
+                                {/* <MenuItem value={"PRIVATE"}>Private</MenuItem> */}
                                 </Select>
                             </FormControl>
                             </Box>
-                        <Box sx={{ minWidth: 120,}}>
-                        <FormControlLabel control={<Checkbox  />} label="Published" name = "published" checked = {published} onChange={this.handleForm}/>
-
-                        </Box>
                         <Box sx={{ minWidth: 120,}}>
                         <FormControlLabel control={<Checkbox />} label="unlisted" name = "unlisted"  checked = {unlisted} onChange={this.handleForm}/>
 
