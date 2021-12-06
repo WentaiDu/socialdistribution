@@ -9,26 +9,18 @@ import Posts from "./components/PostList";
 import Followers from "./components/Followers";
 import PostDetail from "./components/PostDetail";
 import MainPage from "./components/Mainpage";
-import Detail from './components/postDetail1';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
-import { withRouter } from 'react-router-dom'
-import { Link } from 'react-router-dom';
 import Connection from "./components/connection";
 import { BrowserRouter } from 'react-router-dom';
 import UserInfo from './components/userInfo/UserInfo';
 import './components/userInfo/userInfo.css'
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { useHistory } from "react-router-dom";
 import SimpleDialog from"./components/Friend";
 import Header from "./components/userInfo/header";
 
 import CommentList from "./components/postActionComponents/Comment";
-import Sidebar from "./components/Sidebar";
 import Mess from "./components/Friend/index";
-import { createBrowserHistory } from 'history'
 
 // const history = createBrowserHistory()
 

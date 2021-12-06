@@ -30,71 +30,71 @@ class Comment extends React.Component {
     const url = this.props.item;
 
     console.log(url)
-    axios.get(`${url}/likes/`,
-    {
-      headers: {
-        Authorization: "Token " + token,
-      },
-    })
-      .then(res => {
-        const temp = res.data;
-        console.log(temp);
+    // axios.get(`${url}/likes/`,
+    // {
+    //   headers: {
+    //     Authorization: "Token " + token,
+    //   },
+    // })
+    //   .then(res => {
+    //     const temp = res.data;
+    //     console.log(temp);
 
-        this.setState((prevState, props) => {
-          prevState.likes = temp
-          return prevState;
-       });
-        for(let item of temp){
+    //     this.setState((prevState, props) => {
+    //       prevState.likes = temp
+    //       return prevState;
+    //    });
+    //     for(let item of temp){
 
-            console.log(userID);
-            console.log(item.author.author_id);
+    //         console.log(userID);
+    //         console.log(item.author.author_id);
 
-            if (item.author.author_id === userID){
+    //         if (item.author.author_id === userID){
 
-                this.setState((prevState, props) => {
-                  prevState.alreadyLiked = true;
-                  return prevState;
-               });
-                break;
-            }
-        }
-    })
+    //             this.setState((prevState, props) => {
+    //               prevState.alreadyLiked = true;
+    //               return prevState;
+    //            });
+    //             break;
+    //         }
+    //     }
+    // })
   }
 
   onClickLike = async () => {
-    console.log("like clicked")
-    const authorId = this.props.post.author.author_id;
-    var temp = await getUserInfo().catch(err=>{
-      console.log("bugbugbug")
-    });
-    var user = temp.data;
+    // console.log("like clicked")
+    // const authorId = this.props.post.author.author_id;
+    // var temp = await getUserInfo().catch(err=>{
+    //   console.log("bugbugbug")
+    // });
+    // var user = temp.data;
 
-    console.log(user);
-    const summaryTxt = user.displayName + " Likes your post";
-    const postData = {
-        type: "like",
-        summary: summaryTxt,
-        context: "http://127.0.0.1:8000/",
-        author: user,
-        object: this.props.post.source,
-    }
-    axios.post(`${base_url}/author/${authorId}/inbox`, postData,
-    {
-      headers: {
-        Authorization: "Token " + token,
-        "X-CSRFToken":  token,
+    // console.log(user);
+    // const summaryTxt = user.displayName + " Likes your post";
+    // const postData = {
+    //     type: "like",
+    //     summary: summaryTxt,
+    //     context: "http://127.0.0.1:8000/",
+    //     author: user,
+    //     object: this.props.post.source,
+    // }
+    // axios.post(`${base_url}/author/${authorId}/inbox`, postData,
+    // {
+    //   headers: {
+    //     Authorization: "Token " + token,
+    //     "X-CSRFToken":  token,
 
-      },
-    })
-      .then(res => {
-        const like = res.data;
-        console.log(like);
+    //   },
+    // })
+    //   .then(res => {
+    //     const like = res.data;
+    //     console.log(like);
 
-      this.setState((prevState, props) => {
-        prevState.alreadyLiked = true
-        return prevState;
-     });
-    })
+    //   this.setState((prevState, props) => {
+    //     prevState.alreadyLiked = true
+    //     return prevState;
+    //  });
+    // })
   
   }
 

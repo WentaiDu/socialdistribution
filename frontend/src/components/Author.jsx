@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { SingleAuthor } from "./baseElement/baseElement";
 
+const token = localStorage.getItem('jwtToken')
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -16,7 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
   }));
 
-class MainPage extends React.Component {
+export class OneAuthorPage extends React.Component {
   constructor(props){
     super(props);
     console.log(props);
@@ -30,7 +31,7 @@ class MainPage extends React.Component {
     {
       headers: {
         // "X-CSRFToken":  this.props.token,
-        Authorization:"Token " + this.props.token,
+        Authorization:"Token " + token,
 
       },
     })
@@ -48,17 +49,19 @@ class MainPage extends React.Component {
     render(){
       console.log(this.state)
       return (
-        <Stack spacing={1}>
-          <SingleAuthor author = {this.state}/>
+        <Stack   direction="column"
+        justifyContent="center"
+        alignItems="center"   
+        spacing={2}>
+        <SingleAuthor author = {this.state}/>
         </Stack>
       )
     }
 }
 
 export default function Author(props) {
-    const token = localStorage.getItem('jwtToken')
     // console.log(imb)
     console.log(props);
     var authorId = props.match.params.author_id
-    return(<MainPage token = {token} authorId = {authorId}/>);
+    return(<OneAuthorPage authorId = {authorId}/>);
 }
