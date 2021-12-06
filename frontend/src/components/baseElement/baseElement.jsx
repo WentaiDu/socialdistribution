@@ -18,7 +18,7 @@ import ListItem from '@mui/material/ListItem';
 import AddPost from ".././Post";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getAuthorInfo } from "./toolFuntions";
+import { getAuthorInfo, getUserInfo } from "./toolFuntions";
 
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -32,30 +32,13 @@ export class SingleAuthor extends React.Component {
     console.log(props);
     this.state = {
       clickedFollow : false,
-      authorData : {}
     }
-    this.getInfo();
   }
 
-  
-  getInfo = async () => {
-    const authorId = this.props.item.comment_author;
-    var temp = await getAuthorInfo(authorId).catch(err=>{
-      console.log("bugbugbug")
-    });
-    var author = temp.data;
-
-    console.log(author);
-
-    this.setState((prevState, props) => {
-      prevState.authorData = author;
-      return prevState;
-   });
-
-  }
 
   componentDidMount(){
-    axios.get(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+    console.log(this.props)
+    axios.get(`${this.props.author.id}/followers/${userID}/`,
     {
       headers: {
         Authorization: "token " + token,
@@ -75,10 +58,10 @@ export class SingleAuthor extends React.Component {
   }
 
 
-  followClicked = () => {
+  followClicked = async () => {
     console.log(this.props);
     if (this.state.clickedFollow){
-      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
       {
         headers: {
           Authorization: "token " + token,
@@ -96,7 +79,37 @@ export class SingleAuthor extends React.Component {
       });
     }
     else{
-      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, {},
+      try{
+        var postData = {};
+        console.log("like clicked")
+        var temp = await getUserInfo().catch(err=>{
+          console.log("bugbugbug")
+        });
+        var user = temp.data;
+  
+        console.log(user);
+        console.log(this.props);
+  
+        const authorId = this.props.author.author_id;
+        var temp = await getAuthorInfo(authorId).catch(err=>{
+          console.log("bugbugbug")
+        });
+        var author = temp.data;
+    
+        console.log(author);
+  
+  
+        postData = {
+          "actor": user,
+          "object": author
+        };
+      }
+      catch(e){
+        console.log(e);
+      }
+
+
+      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, postData,
       {
         headers: {
           Authorization: "token " + token,

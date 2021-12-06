@@ -639,8 +639,8 @@ class FriendRequestAPI(generics.GenericAPIView):
     def put(self,request,*args, **kwargs):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        author = request.data['author']
-        foreign_author = request.data['foreign_author']
+        author = request.data['actor']
+        foreign_author = request.data['object']
         summary = foreign_author['displayName']+ ' wants to follow '+author['displayName']
 
         try:
@@ -680,8 +680,8 @@ class FriendRequestAPI(generics.GenericAPIView):
                 return Response(response, status.HTTP_200_OK)
 
             except:
-                author = request.data['author']
-                foreign_author = request.data['foreign_author']
+                author = request.data['actor']
+                foreign_author = request.data['object']
                 FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
                                                               ,summary=summary,actor=json.dumps(author),
                                                               object=json.dumps(foreign_author))

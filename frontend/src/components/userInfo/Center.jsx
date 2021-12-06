@@ -116,7 +116,6 @@ const Center = (props) => {
                         <div className="fense">
                             <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
                             <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span>
-                            <FollowerCount />
                         </div>
                     </div>
                 </div>

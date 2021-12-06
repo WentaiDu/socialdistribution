@@ -500,7 +500,7 @@ export default function MainPage(props) {
   console.log(jwtToken)
   console.log(userID)
   
-    var authorId = props.match.params.author_id
+    // var authorId = props.match.params.author_id
 
     return(
         <Stack 
@@ -520,7 +520,7 @@ export default function MainPage(props) {
   justifyContent="flex-start"
   alignItems="flex-start">    */}
    <div>
-     <PostList token = {token} authorId = {authorId} />
+     <PostList token = {token} />
    <PostList2  />
    <PostList3 />
    </div>
