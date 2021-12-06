@@ -29,9 +29,12 @@ export default function Inbox() {
                   let data = JSON.parse(temp);
                   console.log(data)
                   for (let oneData of data){
-                    if (oneData.id == "post"){
+                    if (oneData.type == "post"){
                       oneData.author =  JSON.parse(oneData.author);
                     }
+                    // if (oneData.id == "post"){
+                    //   oneData.author =  JSON.parse(oneData.author);
+                    // }
                     if (oneData.type == "follow"){
                       oneData.actor =  JSON.parse(oneData.actor);
                       oneData.object =  JSON.parse(oneData.object);

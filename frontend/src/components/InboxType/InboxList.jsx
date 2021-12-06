@@ -11,26 +11,28 @@ import { SinglePost } from "../baseElement/baseElement";
 import { Link } from 'react-router-dom';
 
 
-// class FriendRequestComp extends React.Component{
-//   constructor(props){
-//     super(props);
-//     console.log(props);
-//   }
+class FriendRequestComp extends React.Component{
+  constructor(props){
+    super(props);
+    console.log(props);
+  }
 
-//   render(){
-//     return(
+  render(){
+    return( 
+      null)
+      
+    //   <Card variant="outlined">
+    //   <Stack direction="row" spacing={2}>
+    //   <li>{this.props.item.summary}</li> 
+    //     <Button onClick={this.accpet}><EditIcon /></Button>
+    //    </Stack>
+    //    <OneAuthorPage authorId = {this.props.item}/>
+    //    </Card>
+    // )
+  }
 
-//       <Card variant="outlined">
-//       <Stack direction="row" spacing={2}>
-//         <Button onClick={this.accpet}><EditIcon /></Button>
-//         <Button onClick={this.decline}><DeleteIcon /> </Button>
-//        </Stack>
-//        </Card>
-//     )
-//   }
 
-
-// }
+}
 
 
 
@@ -52,10 +54,12 @@ export default class Converter extends React.Component{
         )
     }
     if (this.props.item.type == "follow"){
-      return(
-        <Link>
-        <li>{this.props.item.summary}</li> 
 
+      console.log(this.props.item.actor.id)
+      return(
+        <Link to = {this.props.item.actor.id} >
+
+         <li>{this.props.item.summary}</li> 
         </Link>
 
         )
@@ -65,7 +69,7 @@ export default class Converter extends React.Component{
     else{
     return(
           <span>
-            <Link to = {this.props.item.author.id} replace> <li>{this.props.item.author.displayName} share you a post! </li></Link>
+             <li>{this.props.item.author.displayName} share you a post! </li>
             <SinglePost post = {this.props.item}/>
             </span>
         )
