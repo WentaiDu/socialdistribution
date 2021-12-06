@@ -176,7 +176,7 @@ function Header() {
             <div className="weibo">
                 <li className="mui-table-view-cell">
                     <div className="searchBox">
-                        <div style={{ paddingTop: '6px' }}>Cmput404 Project</div>
+                        <div style={{ color: '#20B2AA' }}>Cmput404 Project</div>
 
                     </div>
                 </li>
@@ -184,7 +184,7 @@ function Header() {
             <div>
                 <ul className="center_menu">
                     <li onClick={() => active(1)} className={index === 1 ? 'bottomActive' : ''}>
-                        <Link to="/main"><HomeOutlinedIcon fontSize={'large'} /></Link>
+                        <Link to="/main"><HomeOutlinedIcon  fontSize={'large'} /></Link>
                     </li>
 
                     <li onClick={() => active(2)} className={index === 2 ? 'bottomActive' : ''}>
@@ -199,10 +199,8 @@ function Header() {
                     </li>
                 </ul>
             </div>
-            <div>
+            <div className='header_right'>
                 <ul className="right_menu">
-                    
-
                     <li className="mui-table-view-cell">
                         <Button onClick={addPostDialog}><EditLocationOutlinedIcon fontSize={'large'} /></Button>
                     </li>

@@ -98,7 +98,7 @@ function Login() {
           alignItems: "center",
           height: "100vh",
           justifyContent: "center",
-          backgroundColor: "#000000"
+          backgroundColor: "#20B2AA"
         }}
       >
         <Card
@@ -180,7 +180,7 @@ function Login() {
                 variant="contained"
                 style={{
                   borderRadius: 15,
-                  backgroundColor: "#000000",
+                  backgroundColor: "#20B2AA",
                 }}
                 disabled={!username || !password}
                 onClick={handleLogin}
