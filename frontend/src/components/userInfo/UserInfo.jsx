@@ -1,4 +1,5 @@
-
+//Some code comes fromhttps://mui.com/zh/getting-started/usage/
+//The layout is inspired by https://weibo.com/
 import { Box } from "@material-ui/core";
 import Header from "./header";
 import Left from './Left';
