@@ -116,9 +116,6 @@ class Followers(models.Model):
     type = models.CharField(default='followers',blank=True,null=True, max_length=100)
     items = models.JSONField(blank=True,null=True,verbose_name="items")
 
-# class FriendList(models.Model):
-#     type = models.CharField()
-
 
 
 class Inbox(models.Model):
