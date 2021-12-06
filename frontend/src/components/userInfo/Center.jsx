@@ -119,15 +119,15 @@ const Center = (props) => {
                     <div>
                         <div className="userName">{props?.value?.username}</div>
                         <div className="fense">
-                            <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
-                            <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span>
+                            {/* <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
+                            <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span> */}
                         </div>
                     </div>
                 </div>
                 <div className="userDesc">
                     <p>
                         {
-                            info.userDesc ? info.userDesc : 'Description'
+                            // info.userDesc ? info.userDesc : 'Description'
                         }
                     </p>
                 </div>
