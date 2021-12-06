@@ -114,6 +114,7 @@ export default function Posts(props) {
           direction="column"
           justifyContent="center"
           alignItems="center"
+          
         > <Button onClick = {addOnClick}> Add Post</Button><RenderAddButton/></Grid> 
         );
       }
@@ -134,7 +135,9 @@ export default function Posts(props) {
     container
     direction="row"
     justifyContent="center"
-    alignItems="center">
+    alignItems="center"
+    >
+   
             {/* <RenderAddAddButton/>   */}
    <div><PostList token = {token} authorId = {authorId} /></div></Grid> 
    );

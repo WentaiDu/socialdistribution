@@ -40,6 +40,7 @@ console.log(userID)
       direction="column"
       justifyContent="center"
       alignItems="center"
+      backgroundColor= '#20B2AA'
               spacing={2}>
 
         <div>
@@ -88,7 +89,7 @@ class PostList extends React.Component {
             ? (null)
             : (posts.map(item => (
     
-              <ListItem key = {item.post_id}>
+              <ListItem key = {item.post_id} >
                 {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
     
                 <ListItemText primary={item.title} secondary={item.description} />
@@ -111,6 +112,7 @@ class PostList extends React.Component {
           direction="column"
           justifyContent="center"
           alignItems="center"
+          
         >
 
           <List
@@ -118,7 +120,7 @@ class PostList extends React.Component {
               width: '100%',
               maxWidth: 1000,
               minWidth: 1000,
-              bgcolor: 'background.paper',
+              bgcolor: '#F5F5F5',
             }}
           >         
             {this.renderPosts()}
