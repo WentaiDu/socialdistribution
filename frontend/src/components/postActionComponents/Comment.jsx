@@ -53,7 +53,7 @@ class Comment extends React.Component {
   render(){
 
     return(
-      <li>@ {this.state.name}: {this.props.item.comment} </li>
+      <li style={{color:'#20B2AA'}}>@ {this.state.name}: {this.props.item.comment} </li>
 
     )
   }

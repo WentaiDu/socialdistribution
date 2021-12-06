@@ -43,29 +43,6 @@ export class SingleAuthor extends React.Component {
   componentDidMount() {
     console.log(this.props)
     axios.get(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
-    {
-      headers: {
-        Authorization: "token " + token,
-      },
-    })
-    .then((res) => {
-      console.log(res.data);
-
-      this.setState((prevState, props) => {
-        prevState.clickedFollow = res.data.is_follower;
-        return prevState;
-     });
-    })
-    .catch((e) => {
-      console.log(e)
-    });
-  }
-
-
-  followClicked = async () => {
-    console.log(this.props);
-    if (this.state.clickedFollow){
-      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
       {
         headers: {
           Authorization: "token " + token,
@@ -83,6 +60,29 @@ export class SingleAuthor extends React.Component {
         console.log(e)
       });
   }
+
+
+  followClicked = async () => {
+    console.log(this.props);
+    if (this.state.clickedFollow) {
+      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
+        {
+          headers: {
+            Authorization: "token " + token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = res.data.is_follower;
+            return prevState;
+          });
+        })
+        .catch((e) => {
+          console.log(e)
+        });
+    }
     else {
       try {
         var postData = {};
@@ -187,12 +187,12 @@ export class SingleAuthor extends React.Component {
 
   renderFollow = () => {
 
-    if (userID == this.props.author.author_id){
+    if (userID == this.props.author.author_id) {
       return (
         <li>
 
-        <Button size="small" variant="contained" disabled>Yourself</Button>
-        <Button size="small" onClick={this.friendRequestClicked} variant="contained" disabled>FriendRequest</Button>
+          <Button size="small" variant="contained" disabled>Yourself</Button>
+          <Button size="small" onClick={this.friendRequestClicked} variant="contained" disabled>FriendRequest</Button>
         </li>
 
       )
@@ -200,8 +200,8 @@ export class SingleAuthor extends React.Component {
     if (this.state.clickedFollow) {
       return (
         <li>
-        <Button size="small" onClick={this.followClicked} variant="contained">UnFollow</Button>
-        <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
+          <Button size="small" onClick={this.followClicked} variant="contained">UnFollow</Button>
+          <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
         </li>
 
 
@@ -211,14 +211,14 @@ export class SingleAuthor extends React.Component {
       return (
         <li>
 
-        <Button size="small" onClick={this.followClicked} variant="contained">Follow</Button>
-        <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
+          <Button size="small" onClick={this.followClicked} variant="contained">Follow</Button>
+          <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
         </li>
 
       )
     }
 
-    
+
 
 
   }
@@ -357,7 +357,7 @@ export class SinglePost extends React.Component {
 
     else {
       return (
-        <li style={{width: '100%'}}>{post.content}1
+        <li style={{ width: '100%' ,color:'#20B2AA'}}>{post.content}1
         </li>
       )
     }
@@ -391,7 +391,6 @@ export class SinglePost extends React.Component {
 
     return (
       <Card variant="outlined" sx={{
-        minWidth: 800,
         maxWidth: 1000,
         align: "center",
         padding: "10px",
@@ -416,34 +415,36 @@ export class SinglePost extends React.Component {
             <Stack
               direction="column"
               spacing={1}
-            >         
-            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }}>
+              justifyContent="center"
+              paddingLeft='30px'
+            >
+              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }} style={{ color: '#20B2AA' }}>
                 <Avatar
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
                 /></Link>
-              <li>
+              <li style={{ color: '#20B2AA' }}>
                 {post.author.displayName}
-              </li>
+              </li> <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
+          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
             </Stack>
 
-            <CardContent style={{flex:1}}>
-              <Typography gutterBottom variant="h5" component="div">
+            <CardContent style={{ flex: 1 }}>
+              <Typography gutterBottom variant="h5" component="div" style={{ color: '#20B2AA' }}>
                 {post.title}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" style={{ color: '#20B2AA' }}>
                 {post.description}
               </Typography>
             </CardContent>
-            <CardContent style={{width:'60%',overflowX:'auto'}}>
+            <CardContent style={{ width: '60%', overflowX: 'auto' }}>
               <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
                 {this.renderContent()}
               </div>
             </CardContent>
           </Stack>
 
-          <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
-          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
+         
 
         </CardActionArea>
 
@@ -546,69 +547,70 @@ export class SingleActivity extends React.Component {
 
   }
 
-    render(){
-      try{
+  render() {
+    try {
 
-        const activity = this.props.activity;
-        console.log(activity);
-  
-        return (
-          <Card variant="outlined" sx={{            
-            minWidth: 800,
-            maxWidth: 1000,
-            align: "center",
-            padding: "10px",
-            borderRadius: 7, }}>
-          <CardActionArea href = {activity.repo.url}>
+      const activity = this.props.activity;
+      console.log(activity);
+
+      return (
+        <Card variant="outlined" sx={{
+          minWidth: 800,
+          maxWidth: 1000,
+          align: "center",
+          padding: "10px",
+          borderRadius: 7,
+        }}>
+          <CardActionArea href={activity.repo.url}>
             <Stack
               direction="row"
               divider={<Divider orientation="vertical" flexItem />}
               spacing={2}
             >
-            <Stack
-            direction="column"
-            spacing={1}
-            >         
-            <Link to={ activity.actor.url}>
-            <Avatar
-            alt={activity.actor.id.toString()} src={activity.actor.avatar_url}
-            sx={{ width: 50, height: 50 }}
-              /></Link>
+              <Stack
+                direction="column"
+                spacing={1}
+              >
+                <Link to={activity.actor.url}>
+                  <Avatar
+                    alt={activity.actor.id.toString()} src={activity.actor.avatar_url}
+                    sx={{ width: 50, height: 50 }}
+                  /></Link>
                 <li>
                   {activity.actor.display_login}
                 </li>
               </Stack>
-  
-               <CardContent>
+
+              <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                Github Activity {activity.id}
+                  Github Activity {activity.id}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {activity.type}
                 </Typography>
-                
+
               </CardContent>
               <CardContent>
                 <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
-               { activity.payload.commits.map(item => (
+                  {activity.payload.commits.map(item => (
 
-                <ListItem key = {item.url}>
-                  <li>commit message: {item.message} url: {item.url} </li>
-                </ListItem> ))
-                }
+                    <ListItem key={item.url}>
+                      <li>commit message: {item.message} url: {item.url} </li>
+                    </ListItem>))
+                  }
 
                 </div>
               </CardContent>
             </Stack>
-  
-  
+
+
           </CardActionArea>
         </Card>
       )
-      }
-      catch(e){
-        console.log(e)
-        return null
-      }
+    }
+    catch (e) {
+      console.log(e)
+      return null
+    }
   }
 }
