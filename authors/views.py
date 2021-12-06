@@ -429,13 +429,17 @@ class PostList(generics.ListCreateAPIView):
     # def get_queryset(self):
     #     return self.posts
 
-    def get(self,request, author_id):
+    def get(self,request,author_id):
         check_node(request)
 
         try:
-            check=Author.objects.get(pk=author_id)
-            posts = Post.objects.filter(author_id=author_id,visibility='PUBLIC', unlisted='False')
-
+            author=Author.objects.get(pk=author_id)
+            if str(request.user) == str(author.username):
+                posts = Post.objects.filter(author_id=author_id)
+            elif check_friend(author_id,str(request.user))==True:
+                posts = Post.objects.filter(author_id=author_id,visibility="FRIENDS",unlisted=False)
+            else:
+                posts = Post.objects.filter(author_id=author_id,visibility="PUBLIC",unlisted=False)
         except:
             err_msg='Author does not exist.'
             return Response(err_msg,status=status.HTTP_404_NOT_FOUND)
@@ -529,9 +533,9 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                 post['description'] = request.data['description']
                 post['contentType'] = request.data['contentType']
                 post['author'] = author
-                # post['id'] = pid
+                post['id'] = pid
                 post['content'] = request.data['content']
-                post['comments'] = pid+'/comments'
+                post['comments'] = pid+'comments'
                 post['published'] = datetime.today().strftime('%Y-%m-%d %H:%M')
                 post['visibility'] = request.data['visibility']
                 post['unlisted'] = request.data['unlisted']
@@ -1007,18 +1011,21 @@ class Myfriend(generics.ListCreateAPIView):
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
 
-def get_friends(author_id):
+def check_friend(author_id,username):
     try:
         followers = FriendRequest.objects.filter(foreign_author_id=author_id)
         Friendlist = []
         for i in followers:
             if FriendRequest.objects.filter(foreign_author_id=i.author_id, author_id=author_id):
                 Friendlist.append(i.author_id)
-        author_list = []
+        username_list = []
         for id in Friendlist:
             author = Author.objects.get(author_id=id)
-            author_list.append(author)
-        return author_list
+            username_list.append(str(author.username))
+        if username in username_list:
+            return True
+        else:
+            return False
     except:
         response = {
             'details': 'Author or followers not exist!'

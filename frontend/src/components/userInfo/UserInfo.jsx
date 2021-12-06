@@ -14,7 +14,7 @@ const token = localStorage.getItem('jwtToken')
 function UserInfo (props) {
     const [ value, setValue] = useState({});
     console.log(props,"00000")
-    const  author_id = props?.location?.state?.author_id?.author?.author_id
+    const  author_id = props?.location?.state?.author_id
     useEffect(()=>{
         axios.get(`${base_url}/author/${author_id}/`,
         {

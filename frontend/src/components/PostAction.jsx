@@ -119,7 +119,7 @@ export default class PostAction extends React.Component{
             console.log(like);
 
           this.setState((prevState, props) => {
-            prevState.alreadyLiked = !prevState.alreadyLiked
+            prevState.alreadyLiked = true
             return prevState;
          });
         })
@@ -140,6 +140,7 @@ export default class PostAction extends React.Component{
         else{
           this.setState((prevState, props) => {  
             prevState.showAddComment = true;
+  
             return prevState;
          });  
         }
@@ -149,8 +150,11 @@ export default class PostAction extends React.Component{
 
     handleShare = (friend) =>{
       let postData =this.props.post
+      postData.author = JSON.stringify(postData.author);
+      
 
-      axios.post(`${base_url}/author/${friend.author_id}/inbox`, postData,
+      console.log(friend);
+      axios.post(`${base_url}/author/${friend.author.author_id}/inbox`, postData,
       {
         headers: {
           Authorization: "Token " + token,

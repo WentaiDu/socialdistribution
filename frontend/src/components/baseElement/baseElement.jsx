@@ -42,7 +42,30 @@ export class SingleAuthor extends React.Component {
 
   componentDidMount() {
     console.log(this.props)
-    axios.get(`${this.props.author.id}/followers/${userID}/`,
+    axios.get(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
+    {
+      headers: {
+        Authorization: "token " + token,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+
+      this.setState((prevState, props) => {
+        prevState.clickedFollow = res.data.is_follower;
+        return prevState;
+     });
+    })
+    .catch((e) => {
+      console.log(e)
+    });
+  }
+
+
+  followClicked = async () => {
+    console.log(this.props);
+    if (this.state.clickedFollow){
+      axios.delete(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
       {
         headers: {
           Authorization: "token " + token,
@@ -60,28 +83,6 @@ export class SingleAuthor extends React.Component {
         console.log(e)
       });
   }
-
-
-  followClicked = async () => {
-    console.log(this.props);
-    if (this.state.clickedFollow) {
-      axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
-        {
-          headers: {
-            Authorization: "token " + token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          this.setState((prevState, props) => {
-            prevState.clickedFollow = false;
-            return prevState;
-          });
-        })
-        .catch((e) => {
-          console.log(e)
-        });
-    }
     else {
       try {
         var postData = {};
@@ -114,6 +115,7 @@ export class SingleAuthor extends React.Component {
 
 
       axios.put(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`, postData,
+<<<<<<< HEAD
         {
           headers: {
             Authorization: "token " + token,
@@ -129,6 +131,23 @@ export class SingleAuthor extends React.Component {
         .catch((e) => {
           console.log(e)
         });
+=======
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.setState((prevState, props) => {
+          prevState.clickedFollow = true;
+          return prevState;
+       });
+      })
+      .catch((e) => {
+        console.log(e)
+      });
+>>>>>>> 79ed6621ed237a2b1c54cd865552b3a0402f9f9a
     }
 
   }
@@ -226,7 +245,8 @@ export class SingleAuthor extends React.Component {
           <CardActions>
             {this.renderFollow()}
             <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
-            <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
+            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.author_id } }}>
+              <Button size="small">Detail</Button></Link>
           </CardActions>
           <Collapse in={this.state.open}>
             <Alert
@@ -392,7 +412,8 @@ export class SinglePost extends React.Component {
             <Stack
               direction="column"
               spacing={1}
-            >         <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post } }}>
+            >         
+            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }}>
                 <Avatar
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
@@ -506,6 +527,72 @@ export class AuthorList extends React.Component {
           {this.renderAuthors()}
         </List>
       </Grid>
+    )
+  }
+}
+
+
+
+
+export class SingleActivity extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("SingleActivity")
+
+  }
+
+    render(){
+
+      const activity = this.props.activity;
+      console.log(activity);
+
+      return (
+        <Card variant="outlined" sx={{            
+          minWidth: 800,
+          maxWidth: 1000,
+          align: "center",
+          padding: "10px",
+          borderRadius: 7, }}>
+        <CardActionArea href = {activity.repo.url}>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+            spacing={2}
+          >
+          <Stack
+          direction="column"
+          spacing={1}
+          >         
+          <Link to={{ pathname: activity.actor.url}}>
+          <Avatar
+          alt={activity.actor.id} src={activity.actor.avatar_url}
+          sx={{ width: 50, height: 50 }}
+            /></Link>
+              <li>
+                {activity.actor.display_login}
+              </li>
+            </Stack>
+
+             <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+              Github Activity {activity.id}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {activity.type}
+              </Typography>
+              
+            </CardContent>
+            <CardContent>
+              <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
+              {activity.payload.commits}
+
+              </div>
+            </CardContent>
+          </Stack>
+
+
+        </CardActionArea>
+      </Card>
     )
   }
 }
