@@ -193,7 +193,7 @@ function Header() {
                     <Link to= {"/author/"+userId+"/inbox/"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
-                        <Link to={{ pathname: '/UserInfo', state: { author_id: { author: { author_id: userId } } } }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
+                        <Link to={{ pathname: '/UserInfo', state: {  author_id: userId }  }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
                     </li>
                 </ul>
             </div>
