@@ -35,7 +35,7 @@ export default class LikeList extends React.Component {
             <Avatar
                 alt={item.author.profileImage} src={item.author.profileImage}
                 />
-            <ListItemText primary={item.author.displayName} style={{color:'#20B2AA'}}/>
+            <ListItemText primary={item.author.displayName} />
             </Link>)))
 
         };

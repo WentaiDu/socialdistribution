@@ -64,10 +64,7 @@ export default class GithubList extends React.Component {
         : (activity.map(item => (
 
           <ListItem key = {item.id}>
-            {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
 
-            <ListItemText primary={item.title} secondary={item.description} />
-            </Link> */}
             <SingleActivity userId = {this.props.authorId} activity = {item} />
           </ListItem> ))
           )

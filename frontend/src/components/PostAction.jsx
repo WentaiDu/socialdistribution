@@ -233,9 +233,9 @@ export default class PostAction extends React.Component{
             justifyContent="start"
             alignItems="start"
             >
-            <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked} style={{color:'#20B2AA'}}/>
-            <Comment onClickComment = {this.onClickComment} style={{color:'#20B2AA'}}/>
-            <Share onClickShare = {this.onClickShare} style={{color:'#20B2AA'}}/>
+            <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked} />
+            <Comment onClickComment = {this.onClickComment} />
+            <Share onClickShare = {this.onClickShare} />
             </Grid>
             {this.renderAddComment()}
 
@@ -246,7 +246,7 @@ export default class PostAction extends React.Component{
                 spacing={1}
                 >
             
-            <FavoriteIcon size = "large" style={{color:'#20B2AA'}}/>
+            <FavoriteIcon size = "large" />
             <LikeList likes = {this.state.likes}/>
 
             </Stack>
@@ -258,7 +258,7 @@ export default class PostAction extends React.Component{
                 spacing={1}
                 >
             
-            <ForumIcon size = "large" style={{color:'#20B2AA'}}/>
+            <ForumIcon size = "large" />
             <CommentList comments = {this.state.comments}/>
             </Stack>
                 </Stack>

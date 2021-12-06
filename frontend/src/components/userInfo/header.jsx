@@ -2,17 +2,6 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import SettingsApplicationsOutlinedIcon from '@mui/icons-material/SettingsApplicationsOutlined';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import AlertDialog from './logout'
 import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import InputBase from '@mui/material/InputBase';
@@ -29,6 +18,8 @@ import Avatar from '@mui/material/Avatar';
 import DialogFriendlist from "../Friend/index";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import GroupIcon from '@mui/icons-material/Group';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 const userId = localStorage.getItem('userID');
 
 
@@ -176,7 +167,7 @@ function Header() {
             <div className="weibo">
                 <li className="mui-table-view-cell">
                     <div className="searchBox">
-                        <div style={{ color: '#20B2AA' }}>Cmput404 Project</div>
+                        <div  style={{ color: '#20B2AA' }}>Cmput404 Project</div>
 
                     </div>
                 </li>
@@ -217,7 +208,10 @@ function Header() {
 
                     </li>
                     <li className="mui-table-view-cell" style={{marginLeft:'20px'}}>
-                        <Avatar alt="loginoput" onClick={logoutHandle}/><AlertDialog open={logoutOpen} handleAgree={handleAgree} handleClose={LogoutClose}/>
+
+                    <Button onClick = {logoutHandle}><LogoutIcon fontSize={'large'}  /></Button>
+
+                        <AlertDialog open={logoutOpen} handleAgree={handleAgree} handleClose={LogoutClose}/>
                     </li>
                 </ul>
             </div>
