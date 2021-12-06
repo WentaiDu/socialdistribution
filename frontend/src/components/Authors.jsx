@@ -23,25 +23,6 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken')
 
 export default function Authors() {
-  // const [authors, setAuthors] = useState([]);
-
-  // axios.get(`${base_url}/authors/`,    
-  // {
-  //   headers: {
-  //     // "X-CSRFToken": this.props.token
-  //     Authorization:"Token " + token,
-
-  //   },
-  // })
-  // .then(res =>{
-  //   setAuthors( res.data.authors)
-  // }
-
-  // )
-
-  // console.log(authors)
-
-  // var authorId = props.match.params.author_id
 
   return(<div>
   <AuthorList  />

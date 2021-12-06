@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 export default class Converter extends React.Component{
   constructor(props){
     super(props);
+    console.log(props);
   }
   
   

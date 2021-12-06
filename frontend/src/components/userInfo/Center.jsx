@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
 import { FollowerCount } from ".././baseElement/baseElement";
-
+import GithubList from "./githubConnection";
 
 const userID = localStorage.getItem('userID')
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -117,7 +117,7 @@ const Center = (props) => {
                         </div>
                     </div>
                     <div>
-                        <div className="userName">{props?.value?.username}</div>
+                        <div className="userName">{props?.value?.displayName}</div>
                         <div className="fense">
                             {/* <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
                             <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span> */}
@@ -205,7 +205,7 @@ const Center = (props) => {
                             null
                     }
                     <TabPanel value={value} index={3} className="tab_content">
-                    None3
+                    <GithubList authorId = {props?.value.author_id}/>
                     </TabPanel>
                         
       

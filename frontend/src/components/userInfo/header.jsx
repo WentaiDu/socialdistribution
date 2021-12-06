@@ -155,6 +155,8 @@ function Header() {
     }
     const handleAgree = ()=>{
         setLogoutOpen(false);
+        localStorage.setItem("jwtToken", "null");
+        localStorage.setItem("userID", "null");
         history.push('/')
     }
 
