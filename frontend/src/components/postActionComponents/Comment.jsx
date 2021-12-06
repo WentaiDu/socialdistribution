@@ -2,10 +2,15 @@ import * as React from 'react';
 
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getAuthorInfo } from ".././baseElement/toolFuntions";
+import { getAuthorInfo,getUserInfo } from ".././baseElement/toolFuntions";
+import Like from ".././postActionComponents/Like";
+import axios from "axios";
+import Card from "@mui/material/Card";
+import Stack from "@mui/material/Stack";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-//
+const token = localStorage.getItem('jwtToken')
+const userID = localStorage.getItem('userID');
 
 
 class Comment extends React.Component {
@@ -13,28 +18,85 @@ class Comment extends React.Component {
     super(props);
     console.log(this.props);
     this.state = {
-      name: "new user"
+      name: "new user",
+      alreadyLiked:false,
     }
     this.getInfo();
 
   }
 
-  // componentDidMount() {
-  //   console.log(this.props.item.comment_author)
-  //   var temp = getAuthorInfo(this.props.item.comment_author).catch(err=>{
-  //     console.log("bugbugbug")
-  //   });
-  //   var author = temp.data;
-  //   if (author != undefined){
-  //     this.setState( {
-  //       name: author.displayName
-  //     })
-  //   }
-  //   console.log(author)
-  //   // const name = "author.data.displayName";
-  //   // console.log(name);
+  
+  componentDidMount() {
+    const url = this.props.item;
 
-  // }
+    console.log(url)
+    axios.get(`${url}/likes/`,
+    {
+      headers: {
+        Authorization: "Token " + token,
+      },
+    })
+      .then(res => {
+        const temp = res.data;
+        console.log(temp);
+
+        this.setState((prevState, props) => {
+          prevState.likes = temp
+          return prevState;
+       });
+        for(let item of temp){
+
+            console.log(userID);
+            console.log(item.author.author_id);
+
+            if (item.author.author_id === userID){
+
+                this.setState((prevState, props) => {
+                  prevState.alreadyLiked = true;
+                  return prevState;
+               });
+                break;
+            }
+        }
+    })
+  }
+
+  onClickLike = async () => {
+    console.log("like clicked")
+    const authorId = this.props.post.author.author_id;
+    var temp = await getUserInfo().catch(err=>{
+      console.log("bugbugbug")
+    });
+    var user = temp.data;
+
+    console.log(user);
+    const summaryTxt = user.displayName + " Likes your post";
+    const postData = {
+        type: "like",
+        summary: summaryTxt,
+        context: "http://127.0.0.1:8000/",
+        author: user,
+        object: this.props.post.source,
+    }
+    axios.post(`${base_url}/author/${authorId}/inbox`, postData,
+    {
+      headers: {
+        Authorization: "Token " + token,
+        "X-CSRFToken":  token,
+
+      },
+    })
+      .then(res => {
+        const like = res.data;
+        console.log(like);
+
+      this.setState((prevState, props) => {
+        prevState.alreadyLiked = true
+        return prevState;
+     });
+    })
+  
+  }
 
   getInfo = async () => {
     const authorId = this.props.item.comment_author;
@@ -53,7 +115,11 @@ class Comment extends React.Component {
   render(){
 
     return(
-      <li style={{color:'#20B2AA'}}>@ {this.state.name}: {this.props.item.comment} </li>
+
+      <Card variant="outlined">
+      <Stack direction="row" spacing={2}>
+      <li>style={{color:'#20B2AA'}}@ {this.state.name}: {this.props.item.comment}</li> <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked}/>
+       </Stack></Card>
 
     )
   }

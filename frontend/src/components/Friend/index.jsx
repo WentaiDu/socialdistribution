@@ -69,18 +69,7 @@ export class FriendsList extends React.Component{
         super(props);
         console.log(this.props)
         this.state = {
-            friends : [    {
-                "username": "Rain",
-                "password": "pbkdf2_sha256$216000$04PubgSl7Odo$JFFpaXNtFZZ536SKe1OGXX4VEcwPNbrsGbSa2fEVSIQ=",
-                "author_type": "author",
-                "id": "http://localhost:8000/author/4bc3f489-11e0-4113-85e7-57ce483649d2",
-                "author_id": "4bc3f489-11e0-4113-85e7-57ce483649d2",
-                "host": "http://localhost:8000/",
-                "displayName": "Rain",
-                "url": "http://localhost:8000/author/4bc3f489-11e0-4113-85e7-57ce483649d2",
-                "github": "https://github.com/Rain",
-                "profileImage": "/media/user.jpg"
-              }],
+            friends : [ ],
         }
     }
 
@@ -94,7 +83,7 @@ export class FriendsList extends React.Component{
           },
         })
         .then( res => {
-            console.log(res.data);
+            console.log(res);
             var friends = res.data;
             this.setState(friends); 
         })
@@ -116,8 +105,9 @@ export class FriendsList extends React.Component{
     renderFriends = () =>{
         try{
 
-              console.log(this.state)
               let friends = this.state.friends;
+              console.log(friends)
+
             //   let friends = Object.values(this.state);
               return friends.length === 0
               ? (<Grid
