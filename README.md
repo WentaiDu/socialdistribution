@@ -42,6 +42,31 @@ Frontend: https://socialdistribution-t02.herokuapp.com
 Backend:https://ourbackend.herokuapp.com
 
 
+# Instructions for use:  
+we provide a superuser  
+Account number: 1  
+Password: 1  
+First, we need to enter  
+https://socialdistribution-t02.herokuapp.com  
+Then we can log in directly with the superuser, or choose to register a new user.  
+If we choose to register a user, after filling in the corresponding information, we return to the login interface.  
+At this time we log in to the superuser.  
+After logging in, we can click the third button in the upper right corner to complete the registration of new users by using super permissions.  
+Click the first button in the upper right corner to log out.  
+At this time, our newly registered users can already use it.  
+After successfully logging in, we came to the home page.  
+All public posts are displayed on the homepage.  
+Clicking on the avatar will bring us to the author's personal information interface  
+Clicking on the content of the post will take us to the specific information interface of the post  
+At the same time, we can also like, comment, and share these posts  
+Of course, we can also like the comments  
+Click the second button in the upper right corner to view the list of friends  
+Click the fourth button in the upper right corner to add a new post  
+Click the four buttons directly above to jump to the homepage, user list, sharing list, and personal homepage respectively  
+In the user list, we can choose to follow or send a friend request  
+In the sharing list, we can view the posts shared with ourselves  
+In the personal homepage, we can modify our own information, and we can also view our own posts, inbox, and stream  
+
 # API
 
 Docs:https://ourbackend.herokuapp.com/docs/
