@@ -155,10 +155,11 @@ export class SingleAuthor extends React.Component {
 
 
     postData = {
-      "actor": user,
-      "object": author,
+      "actor": JSON.stringify(user),
+      "object": JSON.stringify(author),
       "type": "follow",
-      "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName + "(" + author.author_id + ")"
+      "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName + "(" + author.author_id + ")",
+      "condition": true
     };
 
 

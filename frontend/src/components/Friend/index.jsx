@@ -76,7 +76,7 @@ export class FriendsList extends React.Component{
     componentDidMount(){
       
         axios
-        .get(`${base_url}/author/${userID}/friends`,
+        .get(`${base_url}/author/${userID}/friends/`,
         {
           headers: {
             Authorization: "token " + token,
@@ -84,7 +84,7 @@ export class FriendsList extends React.Component{
         })
         .then( res => {
             console.log(res);
-            var friends = res.data;
+            var friends ={friends:res.data} ;
             this.setState(friends); 
         })
   
@@ -103,10 +103,12 @@ export class FriendsList extends React.Component{
     }
 
     renderFriends = () =>{
+        var friends = this.state.friends;
+
         try{
 
-              let friends = this.state.friends;
               console.log(friends)
+
 
             //   let friends = Object.values(this.state);
               return friends.length === 0
@@ -125,7 +127,7 @@ export class FriendsList extends React.Component{
         
           catch (e){
             console.log(e)
-            return (<li>No Sign Up request</li>)
+            return (                <SingleFriend author = {friends} handleListItemClick = {this.handleListItemClick}/>)
           }
     }
 
