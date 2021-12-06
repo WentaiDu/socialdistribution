@@ -692,9 +692,11 @@ class FriendRequestAPI(generics.GenericAPIView):
                     "details": 'Your follow succeed!'
                 }
                 return Response(response, status.HTTP_200_OK)
-        except:
+        except Exception as e:
             response = {
-                "details": 'Your follow failed!'
+                "details": 'Your follow failed!',
+                "shit" : str(e)
+
             }
             return Response(response, status.HTTP_400_BAD_REQUEST)
 

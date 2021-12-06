@@ -19,7 +19,10 @@ import AddPost from ".././Post";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAuthorInfo, getUserInfo } from "./toolFuntions";
-
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
@@ -32,6 +35,7 @@ export class SingleAuthor extends React.Component {
     console.log(props);
     this.state = {
       clickedFollow : false,
+      open: false,
     }
   }
 
@@ -129,6 +133,57 @@ export class SingleAuthor extends React.Component {
 
   }
 
+  friendRequestClicked = async () =>{
+
+    var postData = {};
+    var temp = await getUserInfo().catch(err=>{
+      console.log("bugbugbug")
+    });
+    var user = temp.data;
+
+    console.log(user);
+    console.log(this.props);
+
+    const authorId = this.props.author.author_id;
+    var temp = await getAuthorInfo(authorId).catch(err=>{
+      console.log("bugbugbug")
+    });
+    var author = temp.data;
+
+    console.log(author);
+
+
+    postData = {
+      "actor": user,
+      "object": author,
+      "type": "follow",
+      "summary": user.displayName+ "(" + user.author_id + ")"+ " want to make friend with " + author.displayName+ "(" + author.author_id + ")"
+    };
+
+
+    console.log(postData);
+    axios.post(`${base_url}/author/${this.props.author.author_id}/inbox`, postData,
+    {
+      headers: {
+        Authorization: "Token " + token,
+        "X-CSRFToken":  token,
+
+      },
+    })
+      .then(res => {
+        console.log(res.data);
+        this.setState((prevState, props) => {
+          prevState.open = true;
+          return prevState;
+       });
+
+    })
+    .catch(e =>{
+      console.log(e)
+    })
+  }
+
+
   renderFollow = () =>{
     if (this.state.clickedFollow){
       return(
@@ -154,7 +209,27 @@ export class SingleAuthor extends React.Component {
       return (
 
         <Card sx={{ maxWidth: 345 }}>
-
+      <Collapse in={this.state.open}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                this.setState((prevState, props) => {
+                  prevState.open = false;
+                  return prevState;
+               });              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          Successfully send friend request!
+        </Alert>
+      </Collapse>
           <Avatar
             alt={author.profileImage} src={author.profileImage}
             sx={{ width: 100, height: 100 }}
@@ -169,7 +244,8 @@ export class SingleAuthor extends React.Component {
           </CardContent>
 
           <CardActions>
-            {this.renderFollow()}
+            {this.renderFollow()}         
+            <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
             <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
           </CardActions>
         </Card>
