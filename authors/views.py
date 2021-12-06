@@ -554,6 +554,8 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             return Response(str(e), status=status.HTTP_404_NOT_FOUND)
 
 
+
+
 class FollowerListAPI(generics.GenericAPIView):
     serializer_class = FollowerSerializer
 
@@ -565,9 +567,12 @@ class FollowerListAPI(generics.GenericAPIView):
             serializer = FollowerSerializer(queryset)
             return Response(serializer.data, status.HTTP_200_OK)
         except:
-            query = Followers.objects.create(id=author_id)
+            query = Followers.objects.create()
+            query.id = author_id
+            query.save()
+            queryset=Followers.objects.get(id=author_id)
             serializer = FollowerSerializer(queryset)
-            return Response(serializer, status.HTTP_200_OK)
+            return Response(serializer.data, status.HTTP_200_OK)
 
 
 class FriendRequestAPI(generics.GenericAPIView):
@@ -601,29 +606,81 @@ class FriendRequestAPI(generics.GenericAPIView):
             }
             return Response(response, status.HTTP_200_OK)
 
+
+    @swagger_auto_schema(
+    request_body= FriendRequestSerializer,
+       responses = {
+            "201" : openapi.Response(
+                description = "Create Inbox Post Succeeds",
+                examples={
+                    'application/json': {
+                                  "author": {
+                                  "username": "string",
+                                  "password": "string",
+                                  "author_type": "string",
+                                  "id": "string",
+                                  "author_id": "7aefa778-0f17-4f3e-91b1-e2d0b91ac099",
+                                  "host": "string",
+                                  "displayName": "string",
+                                  "url": "string",
+                                  "github": "string"
+                                },
+                                  "foreign_author": {
+                                  "username": "string",
+                                  "password": "string",
+                                  "author_type": "string",
+                                  "id": "string",
+                                  "author_id": "6eb47372-35cd-40a1-b4d5-96b56b901d59",
+                                  "host": "string",
+                                  "displayName": "string",
+                                  "url": "string",
+                                  "github": "string"
+                                }
+                            }
+                }
+            )
+       },
+        tags=['FriendRequest']
+    )
     def put(self,request,*args, **kwargs):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
         author = request.data['author']
         foreign_author = request.data['foreign_author']
-        summary = foreign_author['displayName']+ 'wants to follow'+author['displayName']
+        summary = foreign_author['displayName']+ ' wants to follow '+author['displayName']
 
         try:
-            follower = Followers.objects.get(id=author_id)
-            items = json.loads(follower.items)
-            items = json.dumps(items.append(foreign_author))
-            follower.items = items
-            follower.save()
+            follower = Followers.objects.get(id=foreign_author_id)
+            if follower.items == None:
+                print("follower is",follower)
+                items = []
+                items = json.dumps(items.append(author))
+                follower.items = items
+                follower.save()
+            else:
+                item_list = json.loads(follower.items)
+                item_list.append(author)
+                item_list = json.dumps(item_list)
+                follower.items = item_list
+                follower.save()
         except:
-            Followers.objects.create(id=author_id)
+            item_list = []
+            item_list.append(author)
+            item_list = json.dumps(item_list)
+            follower = Followers.objects.create(items=item_list)
+            new_id = follower.id
+            follower = Followers.objects.filter(id=new_id)
+            follower.update(id=foreign_author_id)
         try:
             try:
                 friend_request = FriendRequest.objects.filter(author_id=author_id,foreign_author_id=foreign_author_id)
-                friend_request.update(actor=json.dumps(foreign_author))
-                friend_request.update(object=json.dumps(author))
+                friend_request.update(actor=json.dumps(author))
+                friend_request.update(object=json.dumps(foreign_author))
                 friend_request.update(summary=summary)
-                friend_request.save()
+                friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+                serializer = FriendRequestSerializer(friend_request.__dict__)
                 response = {
+                    'data': serializer.data,
                     "details": 'Your follow succeed!'
                 }
                 return Response(response, status.HTTP_200_OK)
@@ -632,9 +689,12 @@ class FriendRequestAPI(generics.GenericAPIView):
                 author = request.data['author']
                 foreign_author = request.data['foreign_author']
                 FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
-                                                              ,summary=summary,actor=json.dumps(foreign_author),
-                                                              object=json.dumps(author))
+                                                              ,summary=summary,actor=json.dumps(author),
+                                                              object=json.dumps(foreign_author))
+                friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+                serializer = FriendRequestSerializer(friend_request.__dict__)
                 response = {
+                    'data':serializer.data,
                     "details": 'Your follow succeed!'
                 }
                 return Response(response, status.HTTP_200_OK)
@@ -647,16 +707,15 @@ class FriendRequestAPI(generics.GenericAPIView):
     def delete(self,request,*args, **kwargs):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        delete_id = request.data['delete_id']
 
         try:
             friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
             friend_request.delete()
-            follower = Followers.objects.get(id=author_id)
+            follower = Followers.objects.get(id=foreign_author_id)
             items = json.loads(follower.items)
             new_items = []
             for item in items:
-                if item['id'] == delete_id:
+                if item['author_id'] == author_id:
                     pass
                 else:
                     new_items.append(item)

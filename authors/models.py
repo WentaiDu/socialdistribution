@@ -111,6 +111,8 @@ class FriendRequest(models.Model):
 
 
 class Followers(models.Model):
+    id = models.CharField(max_length=1000, default=uuid.uuid4, blank=True,
+                          verbose_name='followers_id', editable=True,primary_key=True)
     type = models.CharField(default='followers',blank=True,null=True, max_length=100)
     items = models.JSONField(blank=True,null=True,verbose_name="items")
 
