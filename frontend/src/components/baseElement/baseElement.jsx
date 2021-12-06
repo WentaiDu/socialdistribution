@@ -34,109 +34,109 @@ export class SingleAuthor extends React.Component {
     console.log("singleAuthor")
     console.log(props);
     this.state = {
-      clickedFollow : false,
+      clickedFollow: false,
       open: false,
     }
   }
 
 
-  componentDidMount(){
+  componentDidMount() {
     console.log(this.props)
     axios.get(`${this.props.author.id}/followers/${userID}/`,
-    {
-      headers: {
-        Authorization: "token " + token,
-      },
-    })
-    .then((res) => {
-      console.log(res.data);
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
 
-      this.setState((prevState, props) => {
-        prevState.clickedFollow = res.data.is_follower;
-        return prevState;
-     });
-    })
-    .catch((e) => {
-      console.log(e)
-    });
+        this.setState((prevState, props) => {
+          prevState.clickedFollow = res.data.is_follower;
+          return prevState;
+        });
+      })
+      .catch((e) => {
+        console.log(e)
+      });
   }
 
 
   followClicked = async () => {
     console.log(this.props);
-    if (this.state.clickedFollow){
+    if (this.state.clickedFollow) {
       axios.delete(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`,
-      {
-        headers: {
-          Authorization: "token " + token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState((prevState, props) => {
-          prevState.clickedFollow = false;
-          return prevState;
-       });
-      })
-      .catch((e) => {
-        console.log(e)
-      });
+        {
+          headers: {
+            Authorization: "token " + token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = false;
+            return prevState;
+          });
+        })
+        .catch((e) => {
+          console.log(e)
+        });
     }
-    else{
-      try{
+    else {
+      try {
         var postData = {};
         console.log("like clicked")
-        var temp = await getUserInfo().catch(err=>{
+        var temp = await getUserInfo().catch(err => {
           console.log("bugbugbug")
         });
         var user = temp.data;
-  
+
         console.log(user);
         console.log(this.props);
-  
+
         const authorId = this.props.author.author_id;
-        var temp = await getAuthorInfo(authorId).catch(err=>{
+        var temp = await getAuthorInfo(authorId).catch(err => {
           console.log("bugbugbug")
         });
         var author = temp.data;
-    
+
         console.log(author);
-  
-  
+
+
         postData = {
           "actor": user,
           "object": author
         };
       }
-      catch(e){
+      catch (e) {
         console.log(e);
       }
 
 
       axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, postData,
-      {
-        headers: {
-          Authorization: "token " + token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState((prevState, props) => {
-          prevState.clickedFollow = true;
-          return prevState;
-       });
-      })
-      .catch((e) => {
-        console.log(e)
-      });
+        {
+          headers: {
+            Authorization: "token " + token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = true;
+            return prevState;
+          });
+        })
+        .catch((e) => {
+          console.log(e)
+        });
     }
 
   }
 
-  friendRequestClicked = async () =>{
+  friendRequestClicked = async () => {
 
     var postData = {};
-    var temp = await getUserInfo().catch(err=>{
+    var temp = await getUserInfo().catch(err => {
       console.log("bugbugbug")
     });
     var user = temp.data;
@@ -145,7 +145,7 @@ export class SingleAuthor extends React.Component {
     console.log(this.props);
 
     const authorId = this.props.author.author_id;
-    var temp = await getAuthorInfo(authorId).catch(err=>{
+    var temp = await getAuthorInfo(authorId).catch(err => {
       console.log("bugbugbug")
     });
     var author = temp.data;
@@ -157,41 +157,41 @@ export class SingleAuthor extends React.Component {
       "actor": user,
       "object": author,
       "type": "follow",
-      "summary": user.displayName+ "(" + user.author_id + ")"+ " want to make friend with " + author.displayName+ "(" + author.author_id + ")"
+      "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName + "(" + author.author_id + ")"
     };
 
 
     console.log(postData);
     axios.post(`${base_url}/author/${this.props.author.author_id}/inbox`, postData,
-    {
-      headers: {
-        Authorization: "Token " + token,
-        "X-CSRFToken":  token,
+      {
+        headers: {
+          Authorization: "Token " + token,
+          "X-CSRFToken": token,
 
-      },
-    })
+        },
+      })
       .then(res => {
         console.log(res.data);
         this.setState((prevState, props) => {
           prevState.open = true;
           return prevState;
-       });
+        });
 
-    })
-    .catch(e =>{
-      console.log(e)
-    })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 
 
-  renderFollow = () =>{
-    if (this.state.clickedFollow){
-      return(
+  renderFollow = () => {
+    if (this.state.clickedFollow) {
+      return (
         <Button size="small" onClick={this.followClicked} variant="contained">UnFollow</Button>
       )
     }
-    else{
-      return(
+    else {
+      return (
         <Button size="small" onClick={this.followClicked} variant="contained">Follow</Button>
       )
     }
@@ -224,31 +224,32 @@ export class SingleAuthor extends React.Component {
           </CardContent>
 
           <CardActions>
-            {this.renderFollow()}         
+            {this.renderFollow()}
             <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
             <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
           </CardActions>
           <Collapse in={this.state.open}>
-        <Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                this.setState((prevState, props) => {
-                  prevState.open = false;
-                  return prevState;
-               });              }}
+            <Alert
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    this.setState((prevState, props) => {
+                      prevState.open = false;
+                      return prevState;
+                    });
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
             >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2 }}
-        >
-          Successfully send friend request!
-        </Alert>
-      </Collapse>
+              Successfully send friend request!
+            </Alert>
+          </Collapse>
         </Card>
 
       )
@@ -269,26 +270,26 @@ export class SinglePost extends React.Component {
     }
   }
 
-  
+
   editPost = () => {
     this.addPostDialog()
   }
 
-  deletePost = () =>{
+  deletePost = () => {
     const post = this.props.post;
 
-    axios.delete(`${post.id}`,            
-    {
-      headers: {
-        Authorization: "token " + token,
-      }
-    })
-    .then(res => [
-      console.log("delete success")
-    ]) 
-    .catch(e =>{
-      console.log(e)
-    })
+    axios.delete(`${post.id}`,
+      {
+        headers: {
+          Authorization: "token " + token,
+        }
+      })
+      .then(res => [
+        console.log("delete success")
+      ])
+      .catch(e => {
+        console.log(e)
+      })
 
   }
 
@@ -298,7 +299,7 @@ export class SinglePost extends React.Component {
       dia: true,
     });
   }
-  
+
   cancelPostDialog = () => {
     console.log("canceling")
     this.setState({
@@ -306,46 +307,46 @@ export class SinglePost extends React.Component {
     });
   }
 
-  renderContent(){
+  renderContent() {
 
     const post = this.props.post;
     if (post.contentType == "image/png;base64" || post.contentType == "image/jpeg;base64") {
       console.log("pic!!")
 
-      return(
+      return (
         <li>
-          
-           <img
-          border= {"1px solid #ddd"}
-        border-radius= {"8px"}
-        width={"300px"} 
-        padding= {"5px"}
-        src={`${post.content}`}
-        srcSet={`${post.content}`}
-        alt={post.title}
-        loading="lazy"
-       />
-      </li>
+
+          <img
+            border={"1px solid #ddd"}
+            border-radius={"8px"}
+            width={"300px"}
+            padding={"5px"}
+            src={`${post.content}`}
+            srcSet={`${post.content}`}
+            alt={post.title}
+            loading="lazy"
+          />
+        </li>
 
       )
     }
 
-    else{
-      return(
-        <li>{post.content}
-      </li>
+    else {
+      return (
+        <li style={{width: '100%'}}>{post.content}1
+        </li>
       )
     }
 
   }
 
 
-  renderModifyButton(){
-    if(this.props.post.author.author_id == userID){
-      return(
+  renderModifyButton() {
+    if (this.props.post.author.author_id == userID) {
+      return (
         <Stack spacing={2}>
-        <Button onClick = {this.editPost}><EditIcon/></Button>
-        <Button onClick = {this.deletePost}><DeleteIcon/> </Button>
+          <Button onClick={this.editPost}><EditIcon /></Button>
+          <Button onClick={this.deletePost}><DeleteIcon /> </Button>
         </Stack>
 
       )
@@ -353,26 +354,27 @@ export class SinglePost extends React.Component {
     return null
   }
 
-    render(){
-      var badge = this.props.badge;
-      if (badge == undefined){
-        badge = "local"
-      }
-      const post = this.props.post;
-      console.log(post);
-      var linkaddr =  "/author/"+ this.props.post.author.author_id +"/posts/"+post.post_id +"/"
-      console.log(linkaddr);
+  render() {
+    var badge = this.props.badge;
+    if (badge == undefined) {
+      badge = "local"
+    }
+    const post = this.props.post;
+    console.log(post);
+    var linkaddr = "/author/" + this.props.post.author.author_id + "/posts/" + post.post_id + "/"
+    console.log(linkaddr);
 
 
-      return (
-        <Card variant="outlined" sx={{            
-          minWidth: 800,
-          maxWidth: 1000,
-          align: "center",
-          padding: "10px",
-          borderRadius: 7, }}>
-            <AddPost open = {this.state.dia} onClickEnd = {this.cancelPostDialog} post = {this.props.post}/>
-        <CardActionArea href = {linkaddr}>
+    return (
+      <Card variant="outlined" sx={{
+        minWidth: 800,
+        maxWidth: 1000,
+        align: "center",
+        padding: "10px",
+        borderRadius: 7,
+      }}>
+        <AddPost open={this.state.dia} onClickEnd={this.cancelPostDialog} post={this.props.post} />
+        <CardActionArea href={linkaddr}>
 
           {/* <CardMedia
             component="img"
@@ -387,20 +389,20 @@ export class SinglePost extends React.Component {
           >
 
 
-          <Stack
-          direction="column"
-          spacing={1}
-          >         <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post } }}>
-          <Avatar
-          alt={post.author.profileImage} src={post.author.profileImage}
-          sx={{ width: 50, height: 50 }}
-            /></Link>
+            <Stack
+              direction="column"
+              spacing={1}
+            >         <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post } }}>
+                <Avatar
+                  alt={post.author.profileImage} src={post.author.profileImage}
+                  sx={{ width: 50, height: 50 }}
+                /></Link>
               <li>
                 {post.author.displayName}
               </li>
             </Stack>
 
-             <CardContent>
+            <CardContent style={{flex:1}}>
               <Typography gutterBottom variant="h5" component="div">
                 {post.title}
               </Typography>
@@ -408,9 +410,9 @@ export class SinglePost extends React.Component {
                 {post.description}
               </Typography>
             </CardContent>
-            <CardContent>
+            <CardContent style={{width:'60%',overflowX:'auto'}}>
               <div style={{ width: '100%', wordBreak: 'break-all', overflowY: 'scroll' }}>
-              {this.renderContent()}
+                {this.renderContent()}
               </div>
             </CardContent>
           </Stack>
@@ -422,8 +424,8 @@ export class SinglePost extends React.Component {
 
         <CardActions>
 
-        <PostAction post = {post}/>
-        {this.renderModifyButton()}
+          <PostAction post={post} />
+          {this.renderModifyButton()}
 
         </CardActions>
       </Card>
@@ -446,7 +448,7 @@ export class FollowerCount extends React.Component {
 
   render() {
     return (
-      <Link to = {"author/"+this.props.authorId +"/followers"}>
+      <Link to={"author/" + this.props.authorId + "/followers"}>
         Follower {this.props.items.length}
       </Link>
     )
@@ -472,12 +474,12 @@ export class AuthorList extends React.Component {
       var authors = this.props.authors
       console.log(authors)
       return authors.length === 0
-      ? (<CircularProgress />)
-      : (authors.map(item => (
-  
-        <ListItem key={item.author_id}>
-          <SingleAuthor author={item} />
-        </ListItem>)))  
+        ? (<CircularProgress />)
+        : (authors.map(item => (
+
+          <ListItem key={item.author_id}>
+            <SingleAuthor author={item} />
+          </ListItem>)))
     }
     catch (e) {
       console.log(e)
