@@ -44,7 +44,7 @@ function Login() {
         // const imb = localStorage.getItem('jwtToken')
         // console.log(imb)
         handleClick(true);
-        history.push("/author/"+res.data.id);
+        history.push("/main/");
       })
       .catch((e) => {
         handleClick(false);

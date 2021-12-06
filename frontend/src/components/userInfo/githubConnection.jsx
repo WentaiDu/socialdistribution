@@ -5,61 +5,77 @@ import ListItemText from '@mui/material/ListItemText';
 
 import Grid from '@mui/material/Grid';
 import axios from "axios";
-import PrimarySearchAppBar from './Sidebar';
-import { Link } from 'react-router-dom';
-import AddPost from "./Post";
-import { useState } from "react";
 
-import Button from '@mui/material/Button';
-import PostAction from "./PostAction";
-import { SingleActivity } from "./baseElement/baseElement";
+import { SingleActivity } from ".././baseElement/baseElement";
+import { getAuthorInfo } from ".././baseElement/toolFuntions";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 
 
-class GithubList extends React.Component {
+export default class GithubList extends React.Component {
   constructor(props){
     super(props);
     console.log(props);
     this.state = {
-      activity: []
     }
   }
 
-  componentDidMount() {
-      const name = this.props.author.github
-    axios.get(`  https://api.github.com/users/${dragon11150221}/events`)
-      .then(res => {
-        console.log(res);
-        const activity = res.data;
-        console.log(activity);
 
-        this.setState(activity);
 
-    })
+    async componentDidMount() {
+
+    const authorId = this.props.authorId;
+    var temp = await getAuthorInfo(authorId).catch(err => {
+      console.log("bugbugbug")
+    });
+    var author = temp.data;
+
+
+    const name = author.github
+    var temp2 = await axios.get(`https://api.github.com/users/${name}/events`)
+      
+    var activity = temp2.data;
+    this.setState(activity);
+    console.log(author);
+
+    console.log(this.state);
+
+    // temp2.then(res => {
+    //     console.log(res);
+    //     const activity = res.data;
+
+
+    // })
   }
 
  
 
   renderPosts = () =>{
-    const {activity} = this.state;
-    return activity.length === 0
-        ? (<ListItem>
-          <ListItemText primary="404 Not Found" secondary="" />
-          </ListItem>)
+    const activity = this.state;
+    console.log(activity);
+    try{
+        return activity.length === 0
+        ? null
         : (activity.map(item => (
 
-          <ListItem key = {item.post_id}>
+          <ListItem key = {item.id}>
             {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
 
             <ListItemText primary={item.title} secondary={item.description} />
             </Link> */}
-            <SingleActivity userId = {this.props.authorId} post = {item} />
+            <SingleActivity userId = {this.props.authorId} activity = {item} />
           </ListItem> ))
           )
 
-        };
+      } 
+    
+    catch(e){
+        return <CircularProgress />
+
+    }
+}
 
     render(){
       return (

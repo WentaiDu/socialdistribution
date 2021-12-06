@@ -50,9 +50,7 @@ class PostList extends React.Component {
   renderPosts = () =>{
     const {posts} = this.state;
     return posts.length === 0
-        ? (<ListItem>
-          <ListItemText primary="404 Not Found" secondary="" />
-          </ListItem>)
+        ? <li>You don't have post</li>
         : (posts.map(item => (
 
           <ListItem key = {item.post_id}>

@@ -694,11 +694,11 @@ class FriendRequestAPI(generics.GenericAPIView):
                     friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
                     serializer = FriendRequestSerializer(friend_request.__dict__)
 
-                response = {
-                    'data': serializer.data,
-                    "details": 'Your follow succeed!'
-                }
-                return Response(response, status.HTTP_200_OK)
+                    response = {
+                        'data': serializer.data,
+                        "details": 'Your follow succeed!'
+                    }
+                    return Response(response, status.HTTP_200_OK)
 
             except:
                 print('走的这里except')
