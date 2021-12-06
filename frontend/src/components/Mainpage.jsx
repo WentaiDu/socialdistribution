@@ -90,10 +90,7 @@ class PostList extends React.Component {
             : (posts.map(item => (
     
               <ListItem key = {item.post_id} >
-                {/* <Link to={"/author/"+this.props.authorId+"/posts/"+item.post_id} replace style={{color:'black'}}>
-    
-                <ListItemText primary={item.title} secondary={item.description} />
-                </Link> */}
+
                 <SinglePost post = {item} />
               </ListItem> ))
               )

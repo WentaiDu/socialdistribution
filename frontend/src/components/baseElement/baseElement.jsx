@@ -424,7 +424,7 @@ export class SinglePost extends React.Component {
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
                 /></Link>
-              <li style={{ color: '#20B2AA' }}>
+              <li >
                 {post.author.displayName}
               </li> <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
           <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
