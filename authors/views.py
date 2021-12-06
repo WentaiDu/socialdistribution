@@ -656,7 +656,7 @@ class FriendRequestAPI(generics.GenericAPIView):
         print('FA',foreign_author,foreign_author_id)
         try:
             follower = Followers.objects.get(id=foreign_author_id)
-            if follower.items == None:
+            if follower.items == None or follower.items == "[]":
                 print("follower is",follower)
 
                 items = []
