@@ -416,7 +416,7 @@ export class SinglePost extends React.Component {
               direction="column"
               spacing={1}
               justifyContent="center"
-              paddingLeft='30px'
+              paddingLeft='10px'
             >
               <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }} style={{ color: '#20B2AA' }}>
                 <Avatar
