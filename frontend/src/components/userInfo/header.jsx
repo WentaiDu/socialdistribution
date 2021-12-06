@@ -167,7 +167,7 @@ function Header() {
             <div className="weibo">
                 <li className="mui-table-view-cell">
                     <div className="searchBox">
-                        <div >Cmput404 Project</div>
+                        <div  style={{ color: '#20B2AA' }}>Cmput404 Project</div>
 
                     </div>
                 </li>

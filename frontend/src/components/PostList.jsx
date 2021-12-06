@@ -54,11 +54,6 @@ class PostList extends React.Component {
         : (posts.map(item => (
 
           <ListItem key = {item.post_id}>
-<<<<<<< HEAD
-
-=======
- 
->>>>>>> main
             <SinglePost userId = {this.props.authorId} post = {item} />
           </ListItem> ))
           )
