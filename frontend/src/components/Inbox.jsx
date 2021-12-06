@@ -27,6 +27,12 @@ export default function Inbox() {
                 if (res.data.items){
                   let temp = res.data.items;
                   let data = JSON.parse(temp);
+
+                  for (let oneData of data){
+                    if (oneData.id = "post"){
+                      oneData.author =  JSON.parse(oneData.author);
+                    }
+                  }
                   console.log(data)
                   setMessages(data);
                 }

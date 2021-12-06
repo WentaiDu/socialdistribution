@@ -41,26 +41,15 @@ console.log(userID)
       justifyContent="center"
       alignItems="center"
               spacing={2}>
-    {/* <Grid
-container
-direction="column"
-justifyContent="flex-start"
-alignItems="flex-start"
-> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid>  */}
-{/* <Grid
-container
-direction="column"
-justifyContent="flex-start"
-alignItems="flex-start">    */}
- <div>
-   <PostList/>
- <PostList2  />
- <PostList3 />
- </div>
-{/*    
- </Grid>  */}
 
-</Stack>);
+        <div>
+          <PostList/>
+        <PostList2  />
+        <PostList3 />
+        </div>
+
+
+        </Stack>);
 }
 
 
