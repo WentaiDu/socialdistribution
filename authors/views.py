@@ -184,23 +184,22 @@ class CommentList(generics.ListCreateAPIView):
             return Response(str(e), status=status.HTTP_404_NOT_FOUND)
 
 
-    def get(self,request, post_id,author_id):
+        def get(self,request, post_id,author_id):
         check_node(request)
         try:
             post=Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
-            Comments = Comment.objects.filter(comment_post=post)
+            if str(request.user)==str(post.author.username):
+                Comments = Comment.objects.filter(comment_post=post)
+            else:
+
+                Comments = Comment.objects.filter(comment_post=post,comment_author=author)
         except Exception as e:
             return Response(e,status=status.HTTP_404_NOT_FOUND)
 
-        # response = super().list(request,author_id)
-        # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(response.data))
+
         serializer = CommentSerializer(Comments, many=True)
         return Response({'comments': serializer.data})
-        # if serializer.is_valid():
-        #     return Response({'comments':serializer.data})
-        # else:
-        #     return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class InboxView(generics.GenericAPIView):
