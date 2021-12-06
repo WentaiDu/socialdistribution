@@ -25,3 +25,11 @@ Backend:https://ourbackend.herokuapp.com
 # API
 
 Docs:https://ourbackend.herokuapp.com/docs/
+
+# REFERENCE
+https://mui.com/zh/getting-started/usage/
+//The layout is inspired by https://weibo.com/
+https://www.sioe.cn/yingyong/yanse-rgb-16/
+https://stackoverflow.com/questions/60969224/how-to-override-muipaper-root-style-in-material-table
+https://www.w3.org/Style/Examples/007/color-bullets.zh_CN.html
+https://www.tutorialguruji.com/javascript/materialui-how-to-overwrite-styles-of-nested-mui-component/
