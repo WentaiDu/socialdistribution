@@ -16,7 +16,8 @@ import FaceIcon from '@mui/icons-material/Face';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import AddPost from ".././Post";
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
@@ -227,10 +228,10 @@ export class SinglePost extends React.Component {
   renderModifyButton(){
     if(this.props.post.author.author_id == userID){
       return(
-        <li>        
-        <Button onClick = {this.editPost}>Edit Icon</Button>
-        <Button onClick = {this.deletePost}>Delete Icon</Button>
-        </li>
+        <Stack spacing={2}>
+        <Button onClick = {this.editPost}><EditIcon/></Button>
+        <Button onClick = {this.deletePost}><DeleteIcon/> </Button>
+        </Stack>
 
       )
     }
