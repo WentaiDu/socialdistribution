@@ -150,8 +150,8 @@ export default class PostAction extends React.Component{
 
     handleShare = (friend) =>{
       let postData =this.props.post
-
-      axios.post(`${base_url}/author/${friend.author_id}/inbox`, postData,
+      console.log(friend);
+      axios.post(`${base_url}/author/${friend.author.author_id}/inbox`, postData,
       {
         headers: {
           Authorization: "Token " + token,

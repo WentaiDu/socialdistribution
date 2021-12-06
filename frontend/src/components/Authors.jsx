@@ -79,11 +79,12 @@ class AuthorList extends React.Component {
 
   renderAuthors(){
     const {authors} = this.state;
+    console.log(authors)
     return authors.length === 0
         ? (<CircularProgress />)
         : (authors.map(item => (
 
-          <ListItem key = {item.author_id}>
+          <ListItem key = {item.id}>
                 <SingleAuthor author = {item}/>
           </ListItem>)))
 

@@ -227,7 +227,8 @@ export class SingleAuthor extends React.Component {
           <CardActions>
             {this.renderFollow()}
             <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
-            <Link to={{ pathname: '/UserInfo', query: { author_id: this.props.author.author_id } }}><Button size="small">Detail</Button></Link>
+            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.author_id } }}>
+              <Button size="small">Detail</Button></Link>
           </CardActions>
           <Collapse in={this.state.open}>
             <Alert
@@ -393,7 +394,8 @@ export class SinglePost extends React.Component {
             <Stack
               direction="column"
               spacing={1}
-            >         <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post } }}>
+            >         
+            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }}>
                 <Avatar
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
@@ -543,7 +545,7 @@ export class SingleActivity extends React.Component {
           direction="column"
           spacing={1}
           >         
-          <Link to={{ pathname: activity.actor.url, state: { author_id: this.props.post } }}>
+          <Link to={{ pathname: activity.actor.url}}>
           <Avatar
           alt={activity.actor.id} src={activity.actor.avatar_url}
           sx={{ width: 50, height: 50 }}
