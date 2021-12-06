@@ -859,7 +859,7 @@ class FriendRequestAPI(generics.GenericAPIView):
 
 class publicpost(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Like.objects.all()
+    queryset = Post.objects.all()
 
     # queryset = Post.objects.filter(visibility='PUBLIC')
     serializer_class=PostSerializer
