@@ -979,19 +979,43 @@ class Myfriend(generics.ListCreateAPIView):
 
     # queryset = Post.objects.filter(visibility='PUBLIC')
     serializer_class=FriendRequestSerializer
-    def getfriend(request,author_id):
+
+    def get(self, request, *args, **kwargs):
         try:
-            author = Author.objects.get(author_id=author_id)
-            followers = FriendRequest.objects.filter(object = author)
-            print(followers)
-
-
+            author_id = self.kwargs['author_id']
+            print(author_id)
+            followers = FriendRequest.objects.filter(foreign_author_id = author_id)
+            Friendlist=[]
+            for i in followers:
+                if FriendRequest.objects.filter(foreign_author_id=i.author_id, author_id =author_id ):
+                    Friendlist.append(i.author_id)
+            author_list =[]
+            for id in Friendlist:
+                author = Author.objects.get(author_id=id)
+                author_list.append(author)
+            serializer = AuthorSerializer(author_list,many=True)
+            return Response(serializer.data)
         except:
             response = {
-                            'details': 'Author not exist!'
+                            'details': 'Author or followers not exist!'
                         }
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
 
-
-
+def get_friends(author_id):
+    try:
+        followers = FriendRequest.objects.filter(foreign_author_id=author_id)
+        Friendlist = []
+        for i in followers:
+            if FriendRequest.objects.filter(foreign_author_id=i.author_id, author_id=author_id):
+                Friendlist.append(i.author_id)
+        author_list = []
+        for id in Friendlist:
+            author = Author.objects.get(author_id=id)
+            author_list.append(author)
+        return author_list
+    except:
+        response = {
+            'details': 'Author or followers not exist!'
+        }
+        return Response(response)

@@ -119,15 +119,15 @@ const Center = (props) => {
                     <div>
                         <div className="userName">{props?.value?.username}</div>
                         <div className="fense">
-                            <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
-                            <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span>
+                            {/* <span className="infoKey">Fans</span><span className="infoVal">{info.fence}</span>
+                            <span className="infoKey">Follow</span><span className="infoVal">{info.focus}</span> */}
                         </div>
                     </div>
                 </div>
                 <div className="userDesc">
                     <p>
                         {
-                            info.userDesc ? info.userDesc : 'Description'
+                            // info.userDesc ? info.userDesc : 'Description'
                         }
                     </p>
                 </div>
@@ -141,6 +141,7 @@ const Center = (props) => {
                                 :
                                 null
                         }
+                        <Tab label="Stream" {...a11yProps(3)} />
                     </Tabs>
 
                 </div>
@@ -203,6 +204,11 @@ const Center = (props) => {
                             :
                             null
                     }
+                    <TabPanel value={value} index={3} className="tab_content">
+                    None3
+                    </TabPanel>
+                        
+      
                 </div>
             </Box>
         </div>
