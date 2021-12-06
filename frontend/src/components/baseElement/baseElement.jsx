@@ -186,16 +186,39 @@ export class SingleAuthor extends React.Component {
 
 
   renderFollow = () => {
+
+    if (userID == this.props.author.author_id){
+      return (
+        <li>
+
+        <Button size="small" variant="contained" disabled>Yourself</Button>
+        <Button size="small" onClick={this.friendRequestClicked} variant="contained" disabled>FriendRequest</Button>
+        </li>
+
+      )
+    }
     if (this.state.clickedFollow) {
       return (
+        <li>
         <Button size="small" onClick={this.followClicked} variant="contained">UnFollow</Button>
+        <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
+        </li>
+
+
       )
     }
     else {
       return (
+        <li>
+
         <Button size="small" onClick={this.followClicked} variant="contained">Follow</Button>
+        <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
+        </li>
+
       )
     }
+
+    
 
 
   }
@@ -226,7 +249,6 @@ export class SingleAuthor extends React.Component {
 
           <CardActions>
             {this.renderFollow()}
-            <Button size="small" onClick={this.friendRequestClicked} variant="contained">FriendRequest</Button>
             <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.author_id } }}>
               <Button size="small">Detail</Button></Link>
           </CardActions>
