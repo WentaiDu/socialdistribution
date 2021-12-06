@@ -11,6 +11,29 @@ import { SinglePost } from "../baseElement/baseElement";
 import { Link } from 'react-router-dom';
 
 
+// class FriendRequestComp extends React.Component{
+//   constructor(props){
+//     super(props);
+//     console.log(props);
+//   }
+
+//   render(){
+//     return(
+
+//       <Card variant="outlined">
+//       <Stack direction="row" spacing={2}>
+//         <Button onClick={this.accpet}><EditIcon /></Button>
+//         <Button onClick={this.decline}><DeleteIcon /> </Button>
+//        </Stack>
+//        </Card>
+//     )
+//   }
+
+
+// }
+
+
+
 export default class Converter extends React.Component{
   constructor(props){
     super(props);
@@ -30,8 +53,10 @@ export default class Converter extends React.Component{
     }
     if (this.props.item.type == "follow"){
       return(
+        <Link>
+        <li>{this.props.item.summary}</li> 
 
-             <li>{this.props.item.summary}</li>
+        </Link>
 
         )
     }
@@ -40,7 +65,7 @@ export default class Converter extends React.Component{
     else{
     return(
           <span>
-            <Link> <li>{this.props.item.author.displayName} share you a post! </li></Link>
+            <Link to = {this.props.item.author.id} replace> <li>{this.props.item.author.displayName} share you a post! </li></Link>
             <SinglePost post = {this.props.item}/>
             </span>
         )
