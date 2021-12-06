@@ -17,12 +17,12 @@ export default function AlertDialog(props) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {"are you logout?"}
+                are you sure you want to exit?
             </DialogTitle>
             <DialogActions>
-                <Button onClick={handleClose}>Disagree</Button>
+                <Button onClick={handleClose}>Cancel</Button>
                 <Button onClick={handleAgree} autoFocus>
-                    Agree
+                    Confrim
                 </Button>
             </DialogActions>
         </Dialog>
