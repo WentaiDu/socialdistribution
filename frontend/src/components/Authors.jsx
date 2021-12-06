@@ -77,7 +77,7 @@ class AuthorList extends React.Component {
           container
           direction="column"
           justifyContent="center"
-          alignItems="center"style={{backgroundColor:'#20B2AA'}}
+          alignItems="center"
           color
         >
           <List

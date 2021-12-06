@@ -358,7 +358,7 @@ export class SinglePost extends React.Component {
 
     else {
       return (
-        <li style={{ width: '100%' ,color:'#20B2AA'}}>{post.content}1
+        <li style={{ width: '100%'}}>{post.content}1
         </li>
       )
     }
@@ -419,22 +419,22 @@ export class SinglePost extends React.Component {
               justifyContent="center"
               paddingLeft='10px'
             >
-              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }} style={{ color: '#20B2AA' }}>
+              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }} >
                 <Avatar
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
                 /></Link>
-              <li style={{ color: '#20B2AA' }}>
+              <li >
                 {post.author.displayName}
               </li> <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
           <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
             </Stack>
 
             <CardContent style={{ flex: 1 }}>
-              <Typography gutterBottom variant="h5" component="div" style={{ color: '#20B2AA' }}>
+              <Typography gutterBottom variant="h5" component="div" >
                 {post.title}
               </Typography>
-              <Typography variant="body2" color="text.secondary" style={{ color: '#20B2AA' }}>
+              <Typography variant="body2" color="text.secondary" >
                 {post.description}
               </Typography>
             </CardContent>

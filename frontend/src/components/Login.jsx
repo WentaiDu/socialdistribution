@@ -180,7 +180,6 @@ function Login() {
                 variant="contained"
                 style={{
                   borderRadius: 15,
-                  backgroundColor: "#20B2AA",
                 }}
                 disabled={!username || !password}
                 onClick={handleLogin}
