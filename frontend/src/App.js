@@ -27,7 +27,7 @@ import Header from "./components/userInfo/header";
 
 import CommentList from "./components/postActionComponents/Comment";
 import Sidebar from "./components/Sidebar";
-
+import Mess from "./components/Friend/index";
 import { createBrowserHistory } from 'history'
 
 // const history = createBrowserHistory()
@@ -277,7 +277,7 @@ function App() {
           <Route path="/Author/:author_id" exact component={Author} />
           <Route path="/Authors" exact component={Authors} />
           <Route path="/UserInfo" exact component={UserInfo} />
-          <Route path="/Detail" exact component={Detail} />
+          <Route path="/Mess" exact component={Mess} />
 
         </Switch>
       </BrowserRouter></>
