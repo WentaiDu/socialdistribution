@@ -32,7 +32,7 @@ frontend:
 cd frontend  
 npm install  
 npm start  
-# Supper user  
+# Super user  
 python manage.py createsuperuser  
 
 # Deployed Server
