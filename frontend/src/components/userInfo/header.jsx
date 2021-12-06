@@ -155,7 +155,7 @@ function Header() {
     }
     const handleAgree = ()=>{
         setLogoutOpen(false);
-        history.push('/Signup')
+        history.push('/')
     }
 
       const cancelFriendList = (event, reason) => {
