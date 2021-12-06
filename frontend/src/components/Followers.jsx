@@ -10,7 +10,7 @@ const token = localStorage.getItem('jwtToken')
 export default function Followers(props) {
   const [authors, setAuthors] = useState([]);
 
-  axios.get(`${base_url}/authors/${props.match.params.author_id}/followers`,    
+  axios.get(`${base_url}/authors/${props.match.params.author_id}/followers`,
   {
     headers: {
       // "X-CSRFToken": this.props.token
