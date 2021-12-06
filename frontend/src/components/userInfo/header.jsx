@@ -15,7 +15,7 @@ import AddPost from ".././Post";
 import SeeReq from ".././adminReq/signUpReq";
 import { getUserInfo } from "../baseElement/toolFuntions";
 import Snackbar from "@mui/material/Snackbar";
-
+import Mess from "../Friend/index";
 
 const userId = localStorage.getItem('userID');
 
@@ -141,7 +141,7 @@ function Header () {
                     <Link to= {"/main/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
                     </li>
                     <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
-                    <Link to= {"/Author/"+ userId +"/Inbox"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
+                    <Link to= {"/Mess"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
                     <Link to={{ pathname: '/UserInfo', state: { author_id: {author:{author_id:userId}} } }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
