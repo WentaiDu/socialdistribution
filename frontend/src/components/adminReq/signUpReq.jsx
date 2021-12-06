@@ -7,7 +7,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
-import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
@@ -98,13 +97,6 @@ export default class SeeReq extends React.Component{
           Authorization: "token " + token,
         },
       })
-      // .then((res) => {
-      //   console.log(res.data);
-      //   var pendingAuthors = res.data.results;
-      //   this.setState(pendingAuthors);
-      // })
-      // .catch((e) => {
-      // }); 
 
         console.log(res.data);
         var pendingAuthors = res.data.results;
@@ -145,10 +137,10 @@ export default class SeeReq extends React.Component{
     render(){
         return(
             <Dialog open={this.props.open} onClose={this.props.onClickEnd}>
-            <DialogTitle>Make a Post</DialogTitle>
+            <DialogTitle>Sign up requests</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Sign up requests
+                Accpect or Reject registerations below
               </DialogContentText>
               <List
             sx={{

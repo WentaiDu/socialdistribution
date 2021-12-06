@@ -1,14 +1,10 @@
 
-import SearchIcon from '@mui/icons-material/Search';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import SettingsApplicationsOutlinedIcon from '@mui/icons-material/SettingsApplicationsOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -30,9 +26,10 @@ import AddPost from ".././Post";
 import SeeReq from ".././adminReq/signUpReq";
 import { getUserInfo } from "../baseElement/toolFuntions";
 import Snackbar from "@mui/material/Snackbar";
-
 import Avatar from '@mui/material/Avatar';
-
+import DialogFriendlist from "../Friend/index";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import GroupIcon from '@mui/icons-material/Group';
 const userId = localStorage.getItem('userID');
 
 
@@ -41,6 +38,8 @@ function Header() {
     const [dia, setDia] = useState(false)
     const [req, setReq] = useState(false)
     const [logoutOpen, setLogoutOpen] = useState(false)
+
+    const [friendListOpen, setFriendListOpen] = useState(false)
 
     const [authAlert, setAuthAlert] = useState(false)
 
@@ -127,13 +126,28 @@ function Header() {
     }
 
 
-    const handleClose = (event, reason) => {
+
+
+    const showFriendList = (event, reason) => {
         if (reason === 'clickaway') {
             return;
-        }
+          }
+      
+        setFriendListOpen(true);
+          
 
+    }
+    
+    
+      const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
         setAuthAlert(false);
-    };
+      };
+  
+  
     const LogoutClose = (event, reason) => {
         setLogoutOpen(false);
     };
@@ -144,6 +158,15 @@ function Header() {
         setLogoutOpen(false);
         history.push('/Signup')
     }
+
+      const cancelFriendList = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setFriendListOpen(false);
+      };
+
     return (
 
 
@@ -164,10 +187,11 @@ function Header() {
                     </li>
 
                     <li onClick={() => active(2)} className={index === 2 ? 'bottomActive' : ''}>
-                        <Link to={"/main/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
+
+                    <Link to= {"/authors/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
                     </li>
                     <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
-                        <Link to={"/Author/" + userId + "/Inbox"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
+                    <Link to= {"/author/"+userId+"/inbox/"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
                         <Link to={{ pathname: '/UserInfo', state: { author_id: { author: { author_id: userId } } } }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
@@ -184,7 +208,13 @@ function Header() {
 
                     <li className="mui-table-view-cell">
 
-                        <Button onClick={showRequestDialog}><SettingsApplicationsOutlinedIcon fontSize={'large'} /></Button>
+
+                    <Button onClick = {showRequestDialog}><HowToRegIcon fontSize={'large'} /></Button>
+
+                    </li>
+                    <li className="mui-table-view-cell">
+
+                    <Button onClick = {showFriendList}><GroupIcon fontSize={'large'} /></Button>
 
                     </li>
                     <li className="mui-table-view-cell" style={{marginLeft:'20px'}}>
@@ -200,8 +230,11 @@ function Header() {
                 onClose={handleClose}
                 message="Only stuff can see it"
             />
-            <AddPost open={dia} onClickEnd={cancelPostDialog} />
-            <SeeReq open={req} onClickEnd={cancelReq} />
+
+            <AddPost open = {dia} onClickEnd = {cancelPostDialog}/>
+            <SeeReq open = {req} onClickEnd = {cancelReq}/>
+            <DialogFriendlist open = {friendListOpen}  onClickEnd = {cancelFriendList}/>
+
         </div>
 
     );
