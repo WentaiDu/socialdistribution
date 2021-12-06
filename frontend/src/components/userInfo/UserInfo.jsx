@@ -44,9 +44,9 @@ function UserInfo (props) {
             >
                 {/* <Header /> */}
                 <div className="userInfo_content">
-                    {/* <div>
+                    <div>
                         <Left />
-                    </div> */}
+                    </div>
                     <div>
                         <Center value={value}/>
                     </div>
