@@ -12,6 +12,8 @@ import Inbox from '../Inbox';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
+import { FollowerCount } from ".././baseElement/baseElement";
+
 
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
