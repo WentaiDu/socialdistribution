@@ -184,7 +184,7 @@ class CommentList(generics.ListCreateAPIView):
             return Response(str(e), status=status.HTTP_404_NOT_FOUND)
 
 
-        def get(self,request, post_id,author_id):
+    def get(self,request, post_id,author_id):
         check_node(request)
         try:
             post=Post.objects.get(pk=post_id)
