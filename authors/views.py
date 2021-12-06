@@ -584,24 +584,17 @@ class FriendRequestAPI(generics.GenericAPIView):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
         try:
+            print('1')
             friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
-            serializer = FriendRequestSerializer(data=friend_request.__dict__)
-            if serializer.is_valid():
-                response = {
-                    'friend_request': serializer,
-                    'is_follower': True,
-                    'details': "This is your follower"
-                }
-                return Response(response, status.HTTP_200_OK)
-
-            else:
-                print(serializer.errors)
+            response = {
+                'is_follower': True,
+                'details': "This is your follower"
+            }
+            return Response(response, status.HTTP_200_OK)
 
         except:
             friend_request = FriendRequest.objects.create(author_id=author_id, foreign_author_id=foreign_author_id)
-            serializer = FriendRequestSerializer(data=friend_request.__dict__)
             response = {
-                'friend_request': serializer,
                 'is_follower': False,
                 "details": 'This is not your follower'
             }
