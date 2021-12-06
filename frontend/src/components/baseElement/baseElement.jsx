@@ -115,21 +115,21 @@ export class SingleAuthor extends React.Component {
 
 
       axios.put(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`, postData,
-      {
-        headers: {
-          Authorization: "token " + token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState((prevState, props) => {
-          prevState.clickedFollow = true;
-          return prevState;
-       });
-      })
-      .catch((e) => {
-        console.log(e)
-      });
+        {
+          headers: {
+            Authorization: "token " + token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = true;
+            return prevState;
+          });
+        })
+        .catch((e) => {
+          console.log(e)
+        });
     }
 
   }
