@@ -97,9 +97,9 @@ class Liked(models.Model):
 
 
 class FriendRequest(models.Model):
-    author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True,
+    author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,
                                  verbose_name='author_id',editable=True)
-    foreign_author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,unique=True,
+    foreign_author_id = models.CharField(max_length=1000,default=uuid.uuid4,blank=True,null=True,
                                  verbose_name='foreign_author_id',editable=True)
     type = models.CharField(max_length=100, default="Follow", blank=False)
     summary = models.CharField(max_length=50,default="", blank=False)

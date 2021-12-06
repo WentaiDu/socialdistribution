@@ -639,6 +639,7 @@ class FriendRequestAPI(generics.GenericAPIView):
         #用 Foreign 获得 author_id
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
+        print(foreign_author_id)
         author = request.data['actor']
         foreign_author = request.data['object']
         summary = author['displayName']+ ' wants to follow '+foreign_author['displayName']
@@ -678,12 +679,11 @@ class FriendRequestAPI(generics.GenericAPIView):
             item_list.append(author)
             item_list = json.dumps(item_list)
             follower = Followers.objects.create(items=item_list,id=foreign_author_id)
-            follower.save()
         try:
             try:
-
                 friend_request = FriendRequest.objects.filter(author_id=author_id,foreign_author_id=foreign_author_id)
                 if not friend_request:
+                    print('alibaba')
                     raise Exception
                 else:
                     print('走的这里 get到了')
@@ -708,6 +708,7 @@ class FriendRequestAPI(generics.GenericAPIView):
                                                               ,summary=summary,actor=json.dumps(author),
                                                               object=json.dumps(foreign_author))
                 friend_request.save()
+                print('friendrequest is',friend_request)
                 response = {
                     "details": 'Your follow succeed!'
                 }
@@ -723,15 +724,19 @@ class FriendRequestAPI(generics.GenericAPIView):
     def delete(self,request,*args, **kwargs):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
+        print(author_id)
+        print(foreign_author_id)
 
         try:
-            friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+            friend_request = FriendRequest.objects.get(author_id=foreign_author_id, foreign_author_id=author_id)
             friend_request.delete()
-            follower = Followers.objects.get(id=foreign_author_id)
+            follower = Followers.objects.get(id=author_id)
+            print('1')
             items = json.loads(follower.items)
             new_items = []
             for item in items:
-                if item['author_id'] == author_id:
+                print(item)
+                if item['author_id'] == str(foreign_author_id):
                     pass
                 else:
                     new_items.append(item)

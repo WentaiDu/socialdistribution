@@ -113,7 +113,7 @@ export class SingleAuthor extends React.Component {
       }
 
 
-      axios.put(`${base_url}/author/${this.props.author.author_id}/followers/${userID}/`, postData,
+      axios.put(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`, postData,
         {
           headers: {
             Authorization: "token " + token,
