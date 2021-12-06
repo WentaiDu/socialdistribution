@@ -25,6 +25,45 @@ const token = localStorage.getItem('jwtToken')
 const userID = localStorage.getItem('userID')
 
 
+export default function MainPage(props) {
+  const [ready, setReady] = useState(false);
+
+const jwtToken = localStorage.getItem('jwtToken');
+const userID = localStorage.getItem('userID');
+console.log(jwtToken)
+console.log(userID)
+
+  // var authorId = props.match.params.author_id
+
+  return(
+      <Stack 
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+              spacing={2}>
+    {/* <Grid
+container
+direction="column"
+justifyContent="flex-start"
+alignItems="flex-start"
+> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid>  */}
+{/* <Grid
+container
+direction="column"
+justifyContent="flex-start"
+alignItems="flex-start">    */}
+ <div>
+   <PostList/>
+ <PostList2  />
+ <PostList3 />
+ </div>
+{/*    
+ </Grid>  */}
+
+</Stack>);
+}
+
+
 class PostList extends React.Component {
   constructor(props){
     super(props);
@@ -53,11 +92,11 @@ class PostList extends React.Component {
 
   renderPosts = () =>{
       try{
-        const posts = this.state.results;
+        const posts = Object.values(this.state);
+        console.log(posts)
+        
         return posts.length === 0
-            ? (<ListItem>
-              <ListItemText primary="404 Not Found" secondary="" />
-              </ListItem>)
+            ? (null)
             : (posts.map(item => (
     
               <ListItem key = {item.post_id}>
@@ -65,7 +104,7 @@ class PostList extends React.Component {
     
                 <ListItemText primary={item.title} secondary={item.description} />
                 </Link> */}
-                <SinglePost userId = {posts} post = {item} />
+                <SinglePost post = {item} />
               </ListItem> ))
               )
     
@@ -159,13 +198,11 @@ class PostList2 extends React.Component {
         console.log(this.state);
         try{
           return posts.length === 0
-              ? (<ListItem>
-                <ListItemText primary="404 Not Found" secondary="" />
-                </ListItem>)
+              ? (null)
               : (posts.map(item => (
       
                 <ListItem key = {item.post_id}>
-                  <SinglePost userId = {this.props.authorId} post = {item} badge = {"T10"}/>
+                  <SinglePost post = {item} badge = {"T10"}/>
                 </ListItem> ))
                 )
       
@@ -224,7 +261,7 @@ class PostList2 extends React.Component {
           var result = [];
           for (let item of temp.items){
             console.log(item)
-            var currentLink = item.url + "posts/"
+            var currentLink = item.url + "/posts/"
             console.log(currentLink)
             axios.get(currentLink,
                 {
@@ -298,234 +335,197 @@ class PostList2 extends React.Component {
       }
   }
 
-class AuthorList extends React.Component {
-    constructor(props){
-      super(props);
-      this.state = {
-        authors: []
-        // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
-      }
-    }
+// class AuthorList extends React.Component {
+//     constructor(props){
+//       super(props);
+//       this.state = {
+//         authors: []
+//         // authors: [{author_id:1,username:"dragon",profileImage:"/media/user.jpg"}]
+//       }
+//     }
   
-    componentDidMount() {
-      axios.get(`${base_url}/authors/`,    
-      {
-        headers: {
-          // "X-CSRFToken": this.props.token
-          Authorization:"Token " + this.props.token,
+//     componentDidMount() {
+//       axios.get(`${base_url}/authors/`,    
+//       {
+//         headers: {
+//           // "X-CSRFToken": this.props.token
+//           Authorization:"Token " + this.props.token,
   
-        },
-      })
-        .then(res => {
-          const authors = res.data;
-          console.log(authors);
-          this.setState( authors );
-      })
+//         },
+//       })
+//         .then(res => {
+//           const authors = res.data;
+//           console.log(authors);
+//           this.setState( authors );
+//       })
   
-    }
+//     }
   
-    renderAuthors(){
-      const {authors} = this.state;
-      return authors.length === 0
-          ? (<CircularProgress />)
-          : (authors.map(item => (
+//     renderAuthors(){
+//       const {authors} = this.state;
+//       return authors.length === 0
+//           ? (<CircularProgress />)
+//           : (authors.map(item => (
   
-            <ListItem key = {item.author_id}>
-                  <SingleAuthor author = {item}/>
-            </ListItem>)))
+//             <ListItem key = {item.author_id}>
+//                   <SingleAuthor author = {item}/>
+//             </ListItem>)))
   
-          };
+//           };
   
-      render(){
-        return (
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <List
-              sx={{
-                width: '100%',
-                maxWidth: 360,
-                bgcolor: 'background.paper',
-              }}
-            >
-              {this.renderAuthors()}
-            </List>
-          </Grid>
-        )
-      }
-  }
+//       render(){
+//         return (
+//           <Grid
+//             container
+//             direction="column"
+//             justifyContent="center"
+//             alignItems="center"
+//           >
+//             <List
+//               sx={{
+//                 width: '100%',
+//                 maxWidth: 360,
+//                 bgcolor: 'background.paper',
+//               }}
+//             >
+//               {this.renderAuthors()}
+//             </List>
+//           </Grid>
+//         )
+//       }
+//   }
 
   
-class AuthorList2 extends React.Component {
-    constructor(props){
-      super(props);
-      this.state = {
-        authors: [],
-        data:[]
-      }
-    }
+// class AuthorList2 extends React.Component {
+//     constructor(props){
+//       super(props);
+//       this.state = {
+//         authors: [],
+//         data:[]
+//       }
+//     }
   
 
-    componentDidMount() {
-      axios.get(`https://social-distribution-t10.herokuapp.com/api/authors/?size=99`,
-      {
-        headers: {
-            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+//     componentDidMount() {
+//       axios.get(`https://social-distribution-t10.herokuapp.com/api/authors/?size=99`,
+//       {
+//         headers: {
+//             "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
         
-        },
-      })
-        .then(res => {
-          console.log(res);
+//         },
+//       })
+//         .then(res => {
+//           console.log(res);
   
-          this.setState(res.data);
-          console.log(this.state);
+//           this.setState(res.data);
+//           console.log(this.state);
   
-      })
-    }
+//       })
+//     }
   
-    renderAuthors(){
-        try{
-            const authorList = this.state.data;
-            return authorList.length === 0
-                ? (<CircularProgress />)
-                : (authorList.map(item => (
+//     renderAuthors(){
+//         try{
+//             const authorList = this.state.data;
+//             return authorList.length === 0
+//                 ? (<CircularProgress />)
+//                 : (authorList.map(item => (
         
-                  <ListItem key = {item.author_id}>
-                        <SingleAuthor author = {item} badge = {"T10"}/>
-                  </ListItem>)))
+//                   <ListItem key = {item.author_id}>
+//                         <SingleAuthor author = {item} badge = {"T10"}/>
+//                   </ListItem>)))
         
-                }
+//                 }
         
         
-        catch(e){
-            return null
-        }
-    }
+//         catch(e){
+//             return null
+//         }
+//     }
 
-      render(){
-        return (
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <List
-              sx={{
-                width: '100%',
-                maxWidth: 360,
-                bgcolor: 'background.paper',
-              }}
-            >
-              {this.renderAuthors()}
-            </List>
-          </Grid>
-        )
-      }
-  }
+//       render(){
+//         return (
+//           <Grid
+//             container
+//             direction="column"
+//             justifyContent="center"
+//             alignItems="center"
+//           >
+//             <List
+//               sx={{
+//                 width: '100%',
+//                 maxWidth: 360,
+//                 bgcolor: 'background.paper',
+//               }}
+//             >
+//               {this.renderAuthors()}
+//             </List>
+//           </Grid>
+//         )
+//       }
+//   }
 
-  class AuthorList3 extends React.Component {
-    constructor(props){
-      super(props);
-      this.state = {
-        authors: [],
-        data:[]
-      }
-    }
+//   class AuthorList3 extends React.Component {
+//     constructor(props){
+//       super(props);
+//       this.state = {
+//         authors: [],
+//         data:[]
+//       }
+//     }
   
 
-    componentDidMount() {
-      axios.get('https://social-distance-api.herokuapp.com/authors/',
-      {
-        headers: {
-            "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
+//     componentDidMount() {
+//       axios.get('https://social-distance-api.herokuapp.com/authors/',
+//       {
+//         headers: {
+//             "X-CSRFToken": "nNXYy5zg9rWT4t8vdJfhg5bbtvbSHMPMVIltbT14UCOMdga0MbJYJQmkfWEAU18L"      
         
-        },
-      })
-        .then(res => {
-          console.log(res);
+//         },
+//       })
+//         .then(res => {
+//           console.log(res);
   
-          this.setState(res.data);
-          console.log(this.state);
+//           this.setState(res.data);
+//           console.log(this.state);
   
-      })
-    }
+//       })
+//     }
   
-    renderAuthors(){
-        try{
-            const authorList = this.state.items;
-            return authorList.length === 0
-                ? (<CircularProgress />)
-                : (authorList.map(item => (
+//     renderAuthors(){
+//         try{
+//             const authorList = this.state.items;
+//             return authorList.length === 0
+//                 ? (<CircularProgress />)
+//                 : (authorList.map(item => (
         
-                  <ListItem key = {item.author_id}>
-                        <SingleAuthor author = {item} badge = {"T1"}/>
-                  </ListItem>)))
+//                   <ListItem key = {item.author_id}>
+//                         <SingleAuthor author = {item} badge = {"T1"}/>
+//                   </ListItem>)))
         
-                }
+//                 }
         
         
-        catch(e){
-            return null
-        }
-    }
+//         catch(e){
+//             return null
+//         }
+//     }
 
-      render(){
-        return (
-          <Grid
-            container
-            direction="column"
-          >
-            <List
-              sx={{
-                width: '100%',
-                maxWidth: 360,
-                bgcolor: 'background.paper',
-              }}
-            >
-              {this.renderAuthors()}
-            </List>
-          </Grid>
-        )
-      }
-  }
-export default function MainPage(props) {
-    const [ready, setReady] = useState(false);
-
-  const jwtToken = localStorage.getItem('jwtToken');
-  const userID = localStorage.getItem('userID');
-  console.log(jwtToken)
-  console.log(userID)
-  
-    var authorId = props.match.params.author_id
-
-    return(
-        <Stack 
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-                spacing={2}>
-      {/* <Grid
-  container
-  direction="column"
-  justifyContent="flex-start"
-  alignItems="flex-start"
-> <div><AuthorList token = {token} authorId = {authorId} /><AuthorList2  /> <AuthorList3/></div></Grid>  */}
-  {/* <Grid
-  container
-  direction="column"
-  justifyContent="flex-start"
-  alignItems="flex-start">    */}
-   <div>
-     <PostList token = {token} authorId = {authorId} />
-   <PostList2  />
-   <PostList3 />
-   </div>
-{/*    
-   </Grid>  */}
-  
-  </Stack>);
-}
+//       render(){
+//         return (
+//           <Grid
+//             container
+//             direction="column"
+//           >
+//             <List
+//               sx={{
+//                 width: '100%',
+//                 maxWidth: 360,
+//                 bgcolor: 'background.paper',
+//               }}
+//             >
+//               {this.renderAuthors()}
+//             </List>
+//           </Grid>
+//         )
+//       }
+//   }

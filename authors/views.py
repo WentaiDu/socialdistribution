@@ -581,8 +581,8 @@ class FriendRequestAPI(generics.GenericAPIView):
     serializers = FriendRequestSerializer
 
     def get(self,request,*args, **kwargs):
-        author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
+        author_id = self.kwargs['author_id']
         try:
             print('1')
             friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
@@ -593,7 +593,6 @@ class FriendRequestAPI(generics.GenericAPIView):
             return Response(response, status.HTTP_200_OK)
 
         except:
-            friend_request = FriendRequest.objects.create(author_id=author_id, foreign_author_id=foreign_author_id)
             response = {
                 'is_follower': False,
                 "details": 'This is not your follower'
@@ -637,42 +636,64 @@ class FriendRequestAPI(generics.GenericAPIView):
         tags=['FriendRequest']
     )
     def put(self,request,*args, **kwargs):
+        #用 Foreign 获得 author_id
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        author = request.data['author']
-        foreign_author = request.data['foreign_author']
-        summary = foreign_author['displayName']+ ' wants to follow '+author['displayName']
-
+        author = request.data['actor']
+        foreign_author = request.data['object']
+        summary = author['displayName']+ ' wants to follow '+foreign_author['displayName']
+        #～～～～这个地方好像是反的
+        if author_id==foreign_author_id or author==foreign_author:
+            response = {
+                "details": 'Can not follow yourself'
+            }
+            return Response(response,status.HTTP_409_CONFLICT)
+        print('author',author,author_id)
+        print('FA',foreign_author,foreign_author_id)
         try:
             follower = Followers.objects.get(id=foreign_author_id)
             if follower.items == None:
                 print("follower is",follower)
+
                 items = []
                 items = json.dumps(items.append(author))
                 follower.items = items
                 follower.save()
             else:
+
                 item_list = json.loads(follower.items)
-                item_list.append(author)
-                item_list = json.dumps(item_list)
-                follower.items = item_list
-                follower.save()
+                if author in item_list:
+                    response = {
+                        "details": 'Your have already follow!'
+                    }
+                    return Response(response)
+                else:
+                    item_list.append(author)
+                    item_list = json.dumps(item_list)
+                    follower.items = item_list
+                    follower.save()
         except:
+            print('不存在 ==None这个，get空的话直接报错了！！')
             item_list = []
             item_list.append(author)
             item_list = json.dumps(item_list)
-            follower = Followers.objects.create(items=item_list)
-            new_id = follower.id
-            follower = Followers.objects.filter(id=new_id)
-            follower.update(id=foreign_author_id)
+            follower = Followers.objects.create(items=item_list,id=foreign_author_id)
+            follower.save()
         try:
             try:
+
                 friend_request = FriendRequest.objects.filter(author_id=author_id,foreign_author_id=foreign_author_id)
-                friend_request.update(actor=json.dumps(author))
-                friend_request.update(object=json.dumps(foreign_author))
-                friend_request.update(summary=summary)
-                friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
-                serializer = FriendRequestSerializer(friend_request.__dict__)
+                if not friend_request:
+                    raise Exception
+                else:
+                    print('走的这里 get到了')
+                    friend_request.update(actor=json.dumps(author))
+                    print('到这里了？？？')
+                    friend_request.update(object=json.dumps(foreign_author))
+                    friend_request.update(summary=summary)
+                    friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
+                    serializer = FriendRequestSerializer(friend_request.__dict__)
+
                 response = {
                     'data': serializer.data,
                     "details": 'Your follow succeed!'
@@ -680,21 +701,22 @@ class FriendRequestAPI(generics.GenericAPIView):
                 return Response(response, status.HTTP_200_OK)
 
             except:
-                author = request.data['author']
-                foreign_author = request.data['foreign_author']
-                FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
+                print('走的这里except')
+                author = request.data['actor']
+                foreign_author = request.data['object']
+                friend_request=FriendRequest.objects.create(author_id=author_id,foreign_author_id=foreign_author_id
                                                               ,summary=summary,actor=json.dumps(author),
                                                               object=json.dumps(foreign_author))
-                friend_request = FriendRequest.objects.get(author_id=author_id, foreign_author_id=foreign_author_id)
-                serializer = FriendRequestSerializer(friend_request.__dict__)
+                friend_request.save()
                 response = {
-                    'data':serializer.data,
                     "details": 'Your follow succeed!'
                 }
                 return Response(response, status.HTTP_200_OK)
-        except:
+        except Exception as e:
             response = {
-                "details": 'Your follow failed!'
+                "details": 'Your follow failed!',
+                "shit" : str(e)
+
             }
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
@@ -859,7 +881,7 @@ class FriendRequestAPI(generics.GenericAPIView):
 
 class publicpost(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Like.objects.all()
+    queryset = Post.objects.all()
 
     # queryset = Post.objects.filter(visibility='PUBLIC')
     serializer_class=PostSerializer
@@ -950,3 +972,26 @@ def Share(request, author_id,post_id):
 
     except Exception as e:
         return Response(str(e), status.HTTP_400_BAD_REQUEST)
+
+class Myfriend(generics.ListCreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = FriendRequest.objects.all()
+
+    # queryset = Post.objects.filter(visibility='PUBLIC')
+    serializer_class=FriendRequestSerializer
+    def getfriend(request,author_id):
+        try:
+            author = Author.objects.get(author_id=author_id)
+            followers = FriendRequest.objects.filter(object = author)
+            print(followers)
+
+
+        except:
+            response = {
+                            'details': 'Author not exist!'
+                        }
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
+
+
+

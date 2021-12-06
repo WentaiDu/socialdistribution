@@ -12,8 +12,10 @@ import Inbox from '../Inbox';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios";
+import { FollowerCount } from ".././baseElement/baseElement";
 
 
+const userID = localStorage.getItem('userID')
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken')
 function TabPanel(props) {
@@ -44,6 +46,7 @@ const Center = (props) => {
     }
     const [value, setValue] = React.useState(0);
     const [isEdit, setIsEdit] = React.useState(true);
+    const [isCurrentUser, setIsCurrentUser] = React.useState(true);
     const [form, setForm] = React.useState(props?.value);
     const [file, setFile] = React.useState({});
 
@@ -58,6 +61,12 @@ const Center = (props) => {
     }
     useEffect(() => {
         setForm(props?.value)
+        if (props?.value.author_id) {
+            if (userID !== props?.value?.author_id) {
+                setIsCurrentUser(false)
+            }
+        }
+
     }, [props?.value])
     // edit fn
     const editHandle = () => {
@@ -66,9 +75,7 @@ const Center = (props) => {
     }
     const saveHandle = () => {
         const data = { ...form };
-        data['profileImage'] = file
-        console.log(form, 'eee')
-        console.log(file, 'file')
+        data['profileImage'] = file;
         axios.put(`${base_url}/author/${props?.value.author_id}/`, data, {
             headers: {
                 Authorization: "token " + token,
@@ -128,7 +135,13 @@ const Center = (props) => {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" className="tabs">
                         <Tab label="User Information" {...a11yProps(0)} />
                         <Tab label="Posts" {...a11yProps(1)} />
-                        <Tab label="Inbox" {...a11yProps(2)} />
+                        {
+                            isCurrentUser ?
+                                <Tab label="Inbox" {...a11yProps(2)} />
+                                :
+                                null
+                        }
+                        <Tab label="Stream" {...a11yProps(3)} />
                     </Tabs>
 
                 </div>
@@ -164,17 +177,38 @@ const Center = (props) => {
                                     !isEdit ? <input type="file" name="file" onChange={e => handleFile(e)} /> : null
                                 }
 
-                                <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
-                                <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
+                                {
+                                    props?.value?.author_id && isCurrentUser ?
+                                        <>
+                                            <Button size="small" variant="contained" style={{ margin: '10px' }} onClick={editHandle}>edit</Button>
+                                            <Button size="small" variant="contained" onClick={saveHandle}>save</Button>
+                                        </>
+                                        :
+                                        null
+                                }
+
                             </div>
                         </Box>
                     </TabPanel>
                     <TabPanel value={value} index={1} className="tab_content">
                         <Posts author_id={props?.value.author_id} />
                     </TabPanel>
-                    <TabPanel value={value} index={2} className="tab_content">
-                        <Inbox />
+                    {
+                        isCurrentUser ?
+                            <TabPanel value={value} index={2} className="tab_content">
+
+                                <Inbox />
+
+
+                            </TabPanel>
+                            :
+                            null
+                    }
+                    <TabPanel value={value} index={3} className="tab_content">
+                    None3
                     </TabPanel>
+                        
+      
                 </div>
             </Box>
         </div>

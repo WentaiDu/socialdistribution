@@ -14,6 +14,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import ForumIcon from '@mui/icons-material/Forum';
 import { getUserInfo } from "./baseElement/toolFuntions";
+import DialogFriendlist from "./Friend/index";
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken');
@@ -26,17 +27,20 @@ export default class PostAction extends React.Component{
         console.log(this.props);
 
         this.state = {
-            commentClicked: false,
+            // commentClicked: false,
             alreadyLiked: false,
             likes: [],
             comments: [],
             showAddComment: false,
+            friendListOpen: false
         }
     }
 
     componentDidMount() {
         const authorId = this.props.post.author.author_id;
         const postId = this.props.post.post_id;
+        console.log(authorId)
+        console.log(postId)
         axios.get(`${base_url}/author/${authorId}/posts/${postId}/likes/`,
         {
           headers: {
@@ -47,25 +51,21 @@ export default class PostAction extends React.Component{
             const temp = res.data;
             console.log(temp);
 
-            this.setState({
-                commentClicked: this.state.commentClicked,
-                alreadyLiked: this.state.alreadyLiked,
-                likes: temp,
-                comments: this.state.comments,
-            })
+            this.setState((prevState, props) => {
+              prevState.likes = temp
+              return prevState;
+           });
             for(let item of temp){
 
                 console.log(userID);
                 console.log(item.author.author_id);
 
                 if (item.author.author_id === userID){
-                    this.setState({
-                        commentClicked: this.state.commentClicked,
-                        alreadyLiked: !this.state.alreadyLiked,
-                        likes: this.state.likes,
-                        comments: this.state.comments,
-                        showAddComment: false,
-                    })
+ 
+                    this.setState((prevState, props) => {
+                      prevState.alreadyLiked = true;
+                      return prevState;
+                   });
                     break;
                 }
             }
@@ -81,12 +81,11 @@ export default class PostAction extends React.Component{
             const temp2 = res.data.comments;
             console.log(temp2);
 
-            this.setState({
-                commentClicked: this.state.commentClicked,
-                alreadyLiked: this.state.alreadyLiked,
-                likes: this.state.likes,
-                comments: temp2,
-            })
+            this.setState((prevState, props) => {
+              prevState.comments = temp2
+              return prevState;
+           });
+            
         })
       }
 
@@ -118,58 +117,86 @@ export default class PostAction extends React.Component{
           .then(res => {
             const like = res.data;
             console.log(like);
-            this.setState({
-              commentClicked: this.state.commentClicked,
-              alreadyLiked: !this.state.alreadyLiked,
-              likes: this.state.likes,
-              comments: this.state.comments,
-              showAddComment: false,
-          })
+
+          this.setState((prevState, props) => {
+            prevState.alreadyLiked = !prevState.alreadyLiked
+            return prevState;
+         });
         })
       
     }
 
     onClickComment = () => {
-      
-        console.log("comment clicked")
-        if (this.state.showAddComment){
-          this.setState({
-            commentClicked: !this.state.commentClicked,
-            alreadyLiked: this.state.alreadyLiked,
-            likes: this.state.likes,
-            comments: this.state.comments,
-            showAddComment: false,
 
-        })  
+        if (this.state.showAddComment){
+          this.setState((prevState, props) => {  
+            prevState.showAddComment = false;
+
+            return prevState;
+         });  
+        
+
         }
         else{
-          this.setState({
-            commentClicked: !this.state.commentClicked,
-            alreadyLiked: this.state.alreadyLiked,
-            likes: this.state.likes,
-            comments: this.state.comments,
-            showAddComment: true,
-
-        })
+          this.setState((prevState, props) => {  
+            prevState.showAddComment = true;
+            return prevState;
+         });  
         }
 
 
+    }
+
+    handleShare = (friend) =>{
+      let postData =this.props.post
+
+      axios.post(`${base_url}/author/${friend.author_id}/inbox`, postData,
+      {
+        headers: {
+          Authorization: "Token " + token,
+          "X-CSRFToken":  token,
+
+        },
+      })
+        .then(res => {
+          const like = res.data;
+          console.log(like);
+
+        this.setState((prevState, props) => {
+          prevState.alreadyLiked = !prevState.alreadyLiked
+          return prevState;
+       });
+      })
     }
 
     onClickShare = () => {
         console.log("share clicked")
+        this.setState((prevState, props) => {
+          prevState.friendListOpen = true
+          return prevState;
+       });  
 
     }
+  
+    cancelFriendList = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      this.setState((prevState, props) => {
+        prevState.friendListOpen = false
+        return prevState;
+     }); 
+  };
 
     onClickClose = () =>{
 
-      this.setState({
-        commentClicked: !this.state.commentClicked,
-        alreadyLiked: this.state.alreadyLiked,
-        likes: this.state.likes,
-        comments: this.state.comments,
-        showAddComment: false,
-      })
+      this.setState((prevState, props) => {
+        prevState.showAddComment = false
+        // prevState.commentClicked = !prevState.commentClicked
+        
+        return prevState;
+     }); 
     }
     renderAddComment = () =>{
       const postId = this.props.post.post_id;
@@ -193,6 +220,8 @@ export default class PostAction extends React.Component{
               divider={<Divider orientation="horizontal"/>}
               spacing={2}
               >
+            <DialogFriendlist open = {this.state.friendListOpen}  onClickEnd = {this.cancelFriendList} handleShare = {this.handleShare}/>
+
             <Grid
             container
             direction="row"

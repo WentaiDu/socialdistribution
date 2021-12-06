@@ -22,6 +22,7 @@ urlpatterns = [
     re_path(r'author/(?P<author_id>[(-z)]{36})/followers/(?P<foreign_author_id>[(-z)]{36})', views.FriendRequestAPI.as_view()),
 
     re_path(r'author/(?P<author_id>[(-z)]{36})/followers/', views.FollowerListAPI.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/friends/', views.Myfriend.as_view()),
 
     re_path(r'public', views.publicpost.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/', views.AuthorDetail.as_view()),

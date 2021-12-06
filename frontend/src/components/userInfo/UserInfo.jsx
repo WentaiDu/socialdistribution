@@ -7,6 +7,8 @@ import './userInfo.css'
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+
+
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken')
 function UserInfo (props) {

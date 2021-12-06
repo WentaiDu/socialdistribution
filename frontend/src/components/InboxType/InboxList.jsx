@@ -38,7 +38,7 @@ export default class Converter extends React.Component{
     if (this.props.item.type == "post"){
       return(
           <span>
-            <Link> <li>{this.props.item.author.displayName} has a new post! </li></Link>
+            <Link> <li>{this.props.item.author.displayName} share you a post! </li></Link>
             <SinglePost post = {this.props.item}/>
             </span>
         )
