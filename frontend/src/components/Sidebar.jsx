@@ -1,3 +1,5 @@
+//Some code comes fromhttps://mui.com/zh/getting-started/usage/
+//The layout is inspired by https://weibo.com/
 import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";

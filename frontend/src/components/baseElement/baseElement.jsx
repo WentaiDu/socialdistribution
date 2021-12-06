@@ -233,7 +233,7 @@ export class SingleAuthor extends React.Component {
     try {
       return (
 
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 1000 }}>
 
           <Avatar
             alt={author.profileImage} src={author.profileImage}
@@ -392,7 +392,7 @@ export class SinglePost extends React.Component {
 
     return (
       <Card variant="outlined" sx={{
-        maxWidth: 1000,
+        width: 1000,
         align: "center",
         padding: "10px",
         borderRadius: 7,

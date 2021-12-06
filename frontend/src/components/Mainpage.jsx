@@ -114,9 +114,10 @@ class PostList extends React.Component {
 
           <List
             sx={{
-              width: '100%',
-              maxWidth: 1000,
-              minWidth: 1000,
+              // width: '100%',
+              width: 1000,
+              // maxWidth: 1000,
+              // minWidth: 1000,
               bgcolor: '#F5F5F5',
             }}
           >         
@@ -213,9 +214,10 @@ class PostList2 extends React.Component {
   
             <List
               sx={{
-                width: '100%',
-                maxWidth: 1000,
-                minWidth: 1000,
+                // width: '100%',
+                // maxWidth: 1000,
+                // minWidth: 1000,
+                width: 1000,
                 bgcolor: 'background.paper',
               }}
             >         
@@ -313,9 +315,10 @@ class PostList2 extends React.Component {
   
             <List
               sx={{
-                width: '100%',
-                maxWidth: 1000,
-                minWidth: 1000,
+                // width: '100%',
+                // maxWidth: 1000,
+                // minWidth: 1000,
+                width: 1000,
                 bgcolor: 'background.paper',
               }}
             >         
