@@ -115,9 +115,10 @@ class Comment extends React.Component {
   render(){
 
     return(
+
       <Card variant="outlined">
       <Stack direction="row" spacing={2}>
-      <li>@ {this.state.name}: {this.props.item.comment}</li> <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked}/>
+      <li>style={{color:'#20B2AA'}}@ {this.state.name}: {this.props.item.comment}</li> <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked}/>
        </Stack></Card>
 
     )

@@ -223,18 +223,19 @@ export default class PostAction extends React.Component{
               direction="column"
               divider={<Divider orientation="horizontal"/>}
               spacing={2}
+              className='actions'
               >
             <DialogFriendlist open = {this.state.friendListOpen}  onClickEnd = {this.cancelFriendList} handleShare = {this.handleShare}/>
 
             <Grid
             container
             direction="row"
-            justifyContent="center"
-            alignItems="center"
+            justifyContent="start"
+            alignItems="start"
             >
-            <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked}/>
-            <Comment onClickComment = {this.onClickComment}/>
-            <Share onClickShare = {this.onClickShare}/>
+            <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked} style={{color:'#20B2AA'}}/>
+            <Comment onClickComment = {this.onClickComment} style={{color:'#20B2AA'}}/>
+            <Share onClickShare = {this.onClickShare} style={{color:'#20B2AA'}}/>
             </Grid>
             {this.renderAddComment()}
 
@@ -245,7 +246,7 @@ export default class PostAction extends React.Component{
                 spacing={1}
                 >
             
-            <FavoriteIcon size = "large"/>
+            <FavoriteIcon size = "large" style={{color:'#20B2AA'}}/>
             <LikeList likes = {this.state.likes}/>
 
             </Stack>
@@ -257,7 +258,7 @@ export default class PostAction extends React.Component{
                 spacing={1}
                 >
             
-            <ForumIcon size = "large"/>
+            <ForumIcon size = "large" style={{color:'#20B2AA'}}/>
             <CommentList comments = {this.state.comments}/>
             </Stack>
                 </Stack>

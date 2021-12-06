@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import axios from "axios";
 import { useState } from "react";
-
+import './style/author.css'
 import Button from '@mui/material/Button';
 import PostAction from "./PostAction";
 import { SinglePost } from "./baseElement/baseElement";
@@ -24,7 +24,7 @@ const token = localStorage.getItem('jwtToken')
 
 export default function Authors() {
 
-  return(<div>
+  return(<div style={{backgroundColor:'#20B2AA',width:'100%',padding:'20px'}}>
   <AuthorList  />
   <AuthorList2  />
   <AuthorList3 />
@@ -65,7 +65,7 @@ class AuthorList extends React.Component {
         ? (<CircularProgress />)
         : (authors.map(item => (
 
-          <ListItem key = {item.id}>
+          <ListItem key = {item.id} style={{width:'100%'}}>
                 <SingleAuthor author = {item}/>
           </ListItem>)))
 
@@ -77,14 +77,15 @@ class AuthorList extends React.Component {
           container
           direction="column"
           justifyContent="center"
-          alignItems="center"
+          alignItems="center"style={{backgroundColor:'#20B2AA'}}
+          color
         >
           <List
             sx={{
               width: '100%',
-              maxWidth: 360,
               bgcolor: 'background.paper',
             }}
+            className='list_author'
           >
             {this.renderAuthors()}
           </List>

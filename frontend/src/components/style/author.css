@@ -1,0 +1,8 @@
+.list_author{
+    margin: 0 auto!important;
+    width:  50vw!important;
+}
+.list_author li{
+    margin-bottom: 10px;
+    width: 100%!important;
+}

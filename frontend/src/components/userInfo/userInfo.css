@@ -2,7 +2,7 @@
     list-style: none;
 }
 .userInfo{
-    background-color: #efefef;
+    background-color: #20B2AA;
 }
 .mui-table-view-cell{
     display: flex;
@@ -117,7 +117,9 @@
     float: right;
     background-color: #fff;
 }
-
+.left_slider a,.left_slider span,.left_slider svg {
+    color: #20B2AA!important;
+}
 
 .userInfoCenterBg{
     width: 100%;
