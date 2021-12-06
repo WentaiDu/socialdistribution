@@ -108,6 +108,9 @@ export default function SignUp() {
             "Content-Type": "multipart/form-data",
           },
         })
+        .catch(e =>{
+          console.log(e)
+        })
         // .then((res) => {
         // console.log("123")
         // console.log(res.data);

@@ -155,7 +155,9 @@ function Header() {
     }
     const handleAgree = ()=>{
         setLogoutOpen(false);
-        history.push('/Signup')
+        localStorage.setItem("jwtToken", "null");
+        localStorage.setItem("userID", "null");
+        history.push('/')
     }
 
       const cancelFriendList = (event, reason) => {
