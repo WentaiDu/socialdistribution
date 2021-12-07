@@ -515,9 +515,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             except:
                 post = {}
                 path = request.build_absolute_uri()
+                new_path = path.split('/')
+                if new_path[2] == 'testserver':
+                    new_path[2] = '127.0.0.1:8000'
+                    path = '/'.join(new_path)
                 pid = path + str(post_id)+'/'
                 post['title'] = request.data['title']
-                # post['post_id'] = pid
                 post['source'] = pid
                 post['origin'] = pid
                 post['description'] = request.data['description']
@@ -535,7 +538,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                     post = Post.objects.create(**serializer.validated_data, author=author, post_id=post_id)
                     post.save()
                     try:
-                        followers = Followers.objects.filter(following_id=author_id)
+                        followers = Followers.objects.filter(id=author_id)
 
                     except Exception as e:
                         print(str(e))

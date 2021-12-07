@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status, response
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from .models import *
 
 from django.contrib.auth.models import User
@@ -95,6 +95,7 @@ class PostTest(APITestCase):
 
 
     def setUp(self):
+        self.factory = RequestFactory()
         self.request1 = {'username': "siyuan9", 'displayName': "Rain", 'password': "123", 'github': "rain",
                          'profileImage': "null"}
         self.login1 = {'username': "admin", 'password': "123"}
@@ -107,9 +108,9 @@ class PostTest(APITestCase):
         }
         self.post = {
                         "type": "post",
-                        "title": "post 1",
-                        "source": "http://lastplaceigotthisfrom.com/posts/yyyyy",
-                        "origin": "http://whereitcamefrom.com/posts/zzzzz",
+                        "title": "TestCase 1",
+                        # "source": "https://www.google.com",
+                        # "origin": "https://whereitcamefrom.com/posts/zzzzz/",
                         "description": "string",
                         "contentType": "text/markdown",
                         "content": "string",
@@ -121,9 +122,10 @@ class PostTest(APITestCase):
                             "host": "string",
                             "displayName": "string",
                             "url": "http://127.0.0.1:5454/author/e38e962a-24e9-4199-be01-86eb68114f14",
-                            "github": "string"
+                            "github": "string",
+                            "profileImage": None
                         },
-                        "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments",
+                        # "comments": "http://127.0.0.1:5454/author/9de17f29c12e8f97bcbbd34cc908f1baba40658e/posts/de305d54-75b4-431b-adb2-eb6b9e546013/comments/",
                         "visibility": "PUBLIC",
                         "unlisted": True
                     }
@@ -141,13 +143,33 @@ class PostTest(APITestCase):
         self.client.post(url, self.pending_author, format='json')
         url = reverse('authors:login')
         self.author = self.client.post(url, self.login2, format='json')
-        print(self.author)
         self.author = Author.objects.get(username=self.request1['username'])
         self.author_id = self.author.author_id
-        print(self.author_id)
 
-    # def test_create_post(self):
-    #     url = reverse('authors:post_a_post', args=[self.author_id])
-    #     response = self.client.post(url, self.post1, format='json')
-    #     print(response.data)
 
+    def test_create_post(self):
+        url = reverse('authors:post_a_post', args=[self.author_id])
+        response = self.client.post(url, self.post, format='json')
+        self.assertEqual(Post.objects.count(),1)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['serializer']['title'], 'TestCase 1')
+
+
+    def test_post_detail(self):
+        url = reverse('authors:post_a_post', args=[self.author_id])
+        response = self.client.post(url, self.post, format='json')
+        self.assertEqual(response.status_code, 200)
+        post_id = response.data['serializer']['id']
+        response = self.client.get(post_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['post']['title'], 'TestCase 1')
+
+    def test_post_delete(self):
+        url = reverse('authors:post_a_post', args=[self.author_id])
+        response = self.client.post(url, self.post, format='json')
+        self.assertEqual(response.status_code, 200)
+        post_id = response.data['serializer']['id']
+        # url = reverse(post_id)
+        response = self.client.delete(post_id)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(Post.objects.count(),0)
