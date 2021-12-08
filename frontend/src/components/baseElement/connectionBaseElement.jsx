@@ -54,6 +54,11 @@ const token = localStorage.getItem('jwtToken')
     }
   }
     
+  const T18Head = {
+    headers: {
+        Authorization: "Basic "+ b64EncodeUnicode("Rain:CMPUT404")
+    }
+  }
 
   function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -88,6 +93,10 @@ export class OnlineSingleAuthor extends React.Component {
             this.state.head = T12Head;
             this.state.payload = t10FollowPayload;
         }
+        if (this.props.badge == "T18"){
+          this.state.head = T18Head;
+          this.state.payload = t10FollowPayload;
+      }
         console.log(this.state);
     }
   
@@ -105,8 +114,15 @@ export class OnlineSingleAuthor extends React.Component {
             });
         }
         else if (this.props.badge == "T12"){
-          sleep(1100)
           var res = await axios.get(`${this.props.author.id}/followers/${userID}`, this.state.head)
+          var result = res.data;
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = result.follower;
+            return prevState;
+            });
+        }
+        else if (this.props.badge == "T18"){
+          var res = await axios.get(`https://cmput404-socialdistributio-t18.herokuapp.com/author/${this.props.author.id}/followers/${userID}`, this.state.head)
           var result = res.data;
           this.setState((prevState, props) => {
             prevState.clickedFollow = result.follower;
@@ -232,6 +248,45 @@ export class OnlineSingleAuthor extends React.Component {
             });
             this.friendRequestClicked()
           }
+
+          
+          else if (this.props.badge == "T18"){
+            postData = {};
+            var temp = await getUserInfo().catch(err => {
+              console.log("bugbugbug")
+            });
+            var user = temp.data;
+        
+            console.log(user);
+            // console.log(this.props);
+            const authorId = this.props.author.id;
+    
+            // var temp = await axios.get(`${authorId}/`,this.state.head)
+            // var author = temp.data;
+        
+            // console.log(author);
+        
+        
+            postData = {
+              "actor": user,
+              "object": author,
+              "type": "follower",
+              // "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.username
+            };
+        
+            axios.put(`https://cmput404-socialdistributio-t18.herokuapp.com/author/${authorId}/followers`, postData, this.state.head)
+            .then((res) => {
+                console.log(res.data);
+                this.setState((prevState, props) => {
+                prevState.clickedFollow = true;
+                return prevState;
+                });
+            })
+            .catch((e) => {
+                console.log(e)
+            });
+            this.friendRequestClicked()
+          }
           else{
             axios.put(`${this.props.author.id}/followers/${userID}/`, postData, this.state.head)
             .then((res) => {
@@ -271,6 +326,14 @@ export class OnlineSingleAuthor extends React.Component {
         console.log(author);
     
         if(this.props.badge == "T12"){
+          postData = {
+            "actor": user,
+            "object": author.data[0],
+            "type": "follow",
+            "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
+          };
+        }
+        else if(this.props.badge == "T10"){
           postData = {
             "actor": user,
             "object": author.data[0],
