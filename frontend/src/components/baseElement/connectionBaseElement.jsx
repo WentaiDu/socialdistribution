@@ -19,19 +19,24 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
 const token = localStorage.getItem('jwtToken')
 
-const t10Auth = {
-    headers: {
-        "X-CSRFToken": "57ddbefa32fbdc602755462b0700a1c3ebd75171"
-    }}
 
-const t10FollowPayload = {
-    "id": "http://127.0.0.1:8000/author/change-me-123123/",
-    "host": "http://127.0.0.1:8000/",
-    "displayName": "Change Me",
-    "url": "http://127.0.0.1:8000/author/change-me-123123/",
-    "github": "https://github.com/123123123asdafsdfasdfasdfasdf/"
+  const t10FollowPayload = {
+      "id": "http://127.0.0.1:8000/author/change-me-123123/",
+      "host": "http://127.0.0.1:8000/",
+      "displayName": "Change Me",
+      "url": "http://127.0.0.1:8000/author/change-me-123123/",
+      "github": "https://github.com/123123123asdafsdfasdfasdfasdf/"
+    }
+
+  const t1FollowPayload = {
+    "type": "author",
+    "id": "string",
+    "host": "string",
+    "displayName": "string",
+    "url": "string",
+    "github": "string",
+    "profileImage": "string",
   }
-
   const T10Head = {
     headers: {
         Authorization: "Basic "+ b64EncodeUnicode("Lara:CMPUT404")
@@ -49,6 +54,11 @@ const t10FollowPayload = {
     }
   }
     
+
+  function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+
 export class OnlineSingleAuthor extends React.Component {
     constructor(props) {
         super(props);
@@ -61,40 +71,52 @@ export class OnlineSingleAuthor extends React.Component {
             payload : {},
         }
         if (this.props.badge == "T10"){
-            console.log("change")
-            this.state.head = t10Auth;
+            this.state.head = T10Head;
             this.state.payload = t10FollowPayload;
         }
         if (this.props.badge == "T1"){
-          console.log("change")
-          this.state.head = t10Auth;
-          this.state.payload = t10FollowPayload;
+          this.state.head = T1Head;
+          this.state.payload = t1FollowPayload;
         }
           if (this.props.badge == "T12"){
-            console.log("change")
-            this.state.head = t10Auth;
+            this.state.head = T12Head;
             this.state.payload = t10FollowPayload;
         }
         console.log(this.state);
     }
   
   
-    componentDidMount() {
+    async componentDidMount() {
         console.log(this.props)
         console.log(userID)
-
-        axios.get(`${this.props.author.id}/followers/${userID}/`, this.state.head)
-        .then((res) => {
-            console.log(res.data);
-
-            this.setState((prevState, props) => {
-            prevState.clickedFollow = res.data.is_follower;
+        if (this.props.badge == "T10"){
+          await new delay(1002);
+          var res = await axios.get(`${this.props.author.id}/followers/${userID}/`, this.state.head)
+          var result = res.data;
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = result.is_following;
             return prevState;
             });
-        })
-        .catch((e) => {
-            console.log(e)
-        });
+        }
+
+        else{
+          console.log(this.state)
+          axios.get(`${this.props.author.id}/followers/${userID}/`, this.state.head)
+          .then((res) => {
+              console.log(res.data);
+  
+              this.setState((prevState, props) => {
+              prevState.clickedFollow = res.data.is_following;
+              return prevState;
+              });
+          })
+          .catch(async(e) => {
+            console.log(e);
+  
+          });
+        }
+
+
       
   
     }
@@ -108,7 +130,7 @@ export class OnlineSingleAuthor extends React.Component {
             console.log(res.data);
   
             this.setState((prevState, props) => {
-              prevState.clickedFollow = res.data.is_follower;
+              prevState.clickedFollow = res.data.is_following;
               return prevState;
             });
           })
@@ -135,25 +157,46 @@ export class OnlineSingleAuthor extends React.Component {
             postData["type"] = "author";
 
             console.log(postData);
-
+            if(this.props.badge == "T1"){
+              postData["profileColor"] = "blue"
+            }
         }
         catch (e) {
           console.log(e);
         }
-          axios.put(`${this.props.author.id}/followers/${userID}/`, postData, this.state.head)
-          .then((res) => {
-              console.log(res.data);
-              this.setState((prevState, props) => {
-              prevState.clickedFollow = true;
-              return prevState;
-              });
-          })
-          .catch((e) => {
-              console.log(e)
-          });
-        }
+          if (this.props.badge == "T12"){
+            axios.put(`${this.props.author.id}/followers/${userID}`, postData, this.state.head)
+            .then((res) => {
+                console.log(res.data);
+                this.setState((prevState, props) => {
+                prevState.clickedFollow = true;
+                return prevState;
+                });
+            })
+            .catch((e) => {
+                console.log(e)
+            });
+          
+          }
+          else{
+            axios.put(`${this.props.author.id}/followers/${userID}/`, postData, this.state.head)
+            .then((res) => {
+                console.log(res.data);
+                this.setState((prevState, props) => {
+                prevState.clickedFollow = true;
+                return prevState;
+                });
+            })
+            .catch((e) => {
+                console.log(e)
+            });
+          }
+          
+
+
   
     }
+  }
   
     friendRequestClicked = async () => {
       
@@ -166,11 +209,9 @@ export class OnlineSingleAuthor extends React.Component {
     
         console.log(user);
         console.log(this.props);
-    
-        const authorId = this.props.author.author_id;
-        var temp = await getAuthorInfo(authorId).catch(err => {
-          console.log("bugbugbug")
-        });
+        const authorId = this.props.author.id;
+
+        var temp = await axios.get(`${authorId}/`,this.state.head)
         var author = temp.data;
     
         console.log(author);
@@ -180,17 +221,12 @@ export class OnlineSingleAuthor extends React.Component {
           "actor": JSON.stringify(user),
           "object": JSON.stringify(author),
           "type": "follow",
-          "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName + "(" + author.author_id + ")",
+          "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
         };
     
     
         console.log(postData);
-        axios.post(`${base_url}/author/${this.props.author.author_id}/inbox`, postData,
-          {
-            headers: {
-              Authorization: "Token " + token,  
-            },
-          })
+        axios.post(`${this.props.author.id}/inbox`, postData, this.state.head)
           .then(res => {
             console.log(res.data);
             this.setState((prevState, props) => {

@@ -20,6 +20,9 @@ const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken')
 
 
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 function LabelBottomNavigation(props) {
   const [value, setValue] = React.useState('recents');
@@ -185,7 +188,9 @@ class AuthorList2 extends React.Component {
     })
   }
 
-  renderAuthors(){
+
+
+   renderAuthors(){
       try{
           const authorList = this.state.data;
           return authorList.length === 0
@@ -193,7 +198,7 @@ class AuthorList2 extends React.Component {
               : (authorList.map(item => (
       
                 <ListItem key = {item.author_id}>
-                      <OnlineSingleAuthor author = {item} badge = {"T10"}/>
+                  <OnlineSingleAuthor author = {item} badge = {"T10"}/>
                 </ListItem>)))
       
               }
