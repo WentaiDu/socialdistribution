@@ -515,9 +515,12 @@ class PostDetail(generics.RetrieveUpdateAPIView):
             except:
                 post = {}
                 path = request.build_absolute_uri()
+                new_path = path.split('/')
+                if new_path[2] == 'testserver':
+                    new_path[2] = '127.0.0.1:8000'
+                    path = '/'.join(new_path)
                 pid = path + str(post_id)+'/'
                 post['title'] = request.data['title']
-                # post['post_id'] = pid
                 post['source'] = pid
                 post['origin'] = pid
                 post['description'] = request.data['description']
@@ -535,7 +538,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                     post = Post.objects.create(**serializer.validated_data, author=author, post_id=post_id)
                     post.save()
                     try:
-                        followers = Followers.objects.filter(following_id=author_id)
+                        followers = Followers.objects.filter(id=author_id)
 
                     except Exception as e:
                         print(str(e))
@@ -602,7 +605,7 @@ class FriendRequestAPI(generics.GenericAPIView):
                 description = "Create Inbox Post Succeeds",
                 examples={
                     'application/json': {
-                                  "author": {
+                                  "actor": {
                                   "username": "string",
                                   "password": "string",
                                   "author_type": "string",
@@ -613,7 +616,7 @@ class FriendRequestAPI(generics.GenericAPIView):
                                   "url": "string",
                                   "github": "string"
                                 },
-                                  "foreign_author": {
+                                  "object": {
                                   "username": "string",
                                   "password": "string",
                                   "author_type": "string",
@@ -634,12 +637,9 @@ class FriendRequestAPI(generics.GenericAPIView):
         #用 Foreign 获得 author_id
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        print(foreign_author_id)
         author = request.data['actor']
         foreign_author = request.data['object']
         summary = author['displayName']+ ' wants to follow '+foreign_author['displayName']
-        print(author_id)
-        print(foreign_author_id)
         #～～～～这个地方好像是反的
         if author_id == foreign_author_id or author==foreign_author:
             response = {
@@ -648,7 +648,6 @@ class FriendRequestAPI(generics.GenericAPIView):
             return Response(response,status.HTTP_409_CONFLICT)
         try:
             follower = Followers.objects.get(id=foreign_author_id)
-            print(follower.items)
             if follower.items == None or json.loads(follower.items) =='[]':
                 items = []
                 items.append(author)
@@ -693,7 +692,6 @@ class FriendRequestAPI(generics.GenericAPIView):
                                                               ,summary=summary,actor=json.dumps(author),
                                                               object=json.dumps(foreign_author))
                 friend_request.save()
-                print('friendrequest is',friend_request)
                 response = {
                     "details": 'Your follow succeed!'
                 }
