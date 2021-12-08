@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getAuthorInfo,getUserInfo } from ".././baseElement/toolFuntions";
 import Like from ".././postActionComponents/Like";
-import axios from "axios";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 

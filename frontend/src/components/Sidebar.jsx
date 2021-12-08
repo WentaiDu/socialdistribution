@@ -2,11 +2,8 @@
 //The layout is inspired by https://weibo.com/
 import "./App.css";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import * as React from 'react';
 // import AppBar from '@mui/material/AppBar';
-import {withRouter} from 'react-router-dom'
-import { Link } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
@@ -25,7 +22,6 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';

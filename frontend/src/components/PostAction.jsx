@@ -11,7 +11,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import ForumIcon from '@mui/icons-material/Forum';
 import { getUserInfo } from "./baseElement/toolFuntions";
 import DialogFriendlist from "./Friend/index";
@@ -24,7 +23,7 @@ const userID = localStorage.getItem('userID');
 export default class PostAction extends React.Component{
     constructor(props){
         super(props);
-        console.log(this.props);
+        console.log(props);
 
         this.state = {
             // commentClicked: false,

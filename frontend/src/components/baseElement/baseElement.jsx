@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import PostAction from "../PostAction";
+import ConnectionPostAction from "./connectionPostAction";
 import axios from "axios";
 import Chip from '@mui/material/Chip';
 import FaceIcon from '@mui/icons-material/Face';
@@ -23,10 +24,26 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import Markdown from 'react-markdown'
+import GroupIcon from '@mui/icons-material/Group';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
 const token = localStorage.getItem('jwtToken')
+
+function Image(props) {
+  console.log("1111111111111111111111111111111111111111111111111111111111111111111111");
+
+  return <img {...props} style={{maxWidth: 100}} />
+}
+const renderers = {
+  //This custom renderer changes how images are rendered
+  //we use it to constrain the max width of an image to its container
+  image: Image,
+};
+
 
 export class SingleAuthor extends React.Component {
   constructor(props) {
@@ -43,22 +60,25 @@ export class SingleAuthor extends React.Component {
   componentDidMount() {
     console.log(this.props)
     axios.get(`${base_url}/author/${userID}/followers/${this.props.author.author_id}/`,
-      {
-        headers: {
-          Authorization: "token " + token,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
+    {
+      headers: {
+        Authorization: "token " + token,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
 
-        this.setState((prevState, props) => {
-          prevState.clickedFollow = res.data.is_follower;
-          return prevState;
-        });
-      })
-      .catch((e) => {
-        console.log(e)
+      this.setState((prevState, props) => {
+        prevState.clickedFollow = res.data.is_follower;
+        return prevState;
       });
+    })
+    .catch((e) => {
+      console.log(e)
+    });
+  
+
+
   }
 
 
@@ -233,7 +253,7 @@ export class SingleAuthor extends React.Component {
     try {
       return (
 
-        <Card sx={{ maxWidth: 1000 }}>
+        <Card sx={{ Width: "100%" }}>
 
           <Avatar
             alt={author.profileImage} src={author.profileImage}
@@ -355,10 +375,17 @@ export class SinglePost extends React.Component {
 
       )
     }
+    if (post.contentType == "text/markdown"){
+      return (
+
+        <Markdown  children= {post.content} renderers={renderers}/>
+
+      )
+    }
 
     else {
       return (
-        <li style={{ width: '100%'}}>{post.content}1
+        <li style={{ width: '100%'}}>{post.content}
         </li>
       )
     }
@@ -379,6 +406,16 @@ export class SinglePost extends React.Component {
     return null
   }
 
+  renderPostAction(){
+    if(this.props.badge){      
+      return <ConnectionPostAction post={ this.props.post} badge = {this.props.badge}/>
+    }
+    else{
+      return <PostAction post={ this.props.post} />
+    }
+
+  }
+
   render() {
     var badge = this.props.badge;
     if (badge == undefined) {
@@ -392,7 +429,7 @@ export class SinglePost extends React.Component {
 
     return (
       <Card variant="outlined" sx={{
-        width: 1000,
+        width: "100%",
         align: "center",
         padding: "10px",
         borderRadius: 7,
@@ -426,8 +463,8 @@ export class SinglePost extends React.Component {
                 /></Link>
               <li >
                 {post.author.displayName}
-              </li> <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
-          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
+              </li> <Chip icon={<CorporateFareIcon />} label={badge} variant="outlined" />
+          <Chip icon={<VisibilityIcon />} label={post.visibility} variant="outlined" />
             </Stack>
 
             <CardContent style={{ flex: 1 }}>
@@ -451,7 +488,7 @@ export class SinglePost extends React.Component {
 
         <CardActions>
 
-          <PostAction post={post} />
+        {this.renderPostAction()}
           {this.renderModifyButton()}
 
         </CardActions>

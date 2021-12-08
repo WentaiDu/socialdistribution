@@ -10,7 +10,8 @@ import axios from "axios";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
-
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 // const base_url = 'http://localhost:8000';
@@ -74,8 +75,8 @@ class SingleReq extends React.Component{
         return (
             <li>
               {name} 
-              <Button onClick = {this.onClickAccpet}>Accept</Button>
-              <Button onClick = {this.onClickReject}>Reject</Button>
+              <Button onClick = {this.onClickAccpet}><CheckIcon /></Button>
+              <Button onClick = {this.onClickReject}><CloseIcon /></Button>
             </li>
         )
     }

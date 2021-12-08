@@ -5,8 +5,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Link, Typography, TextField} from "@material-ui/core";
 import Card from "@mui/material/Card";
 import axios from "axios";
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 
 export default function Inbox() {
     const token = localStorage.getItem('jwtToken')
@@ -51,9 +53,34 @@ export default function Inbox() {
     }, [])
     
 
+    function deleteInbox(){
+      axios.delete(
+        `${base_url}/author/${id}/inbox/`,
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })    
+      axios.get(
+        `${base_url}/author/${id}/inbox/`,
+      {
+        headers: {
+          Authorization: "token " + token,
+        },
+      })
+      window.location.reload(false);
 
+    }
 
     return (
+      <Box
+      sx={{
+        bgcolor: 'background.paper',
+        width: "100%",
+        position: 'relative',
+        minHeight: 500,
+      }}
+    >
       <ThemeProvider>
         {messages.map((message, index) => (
         <Card key = {index}
@@ -64,13 +91,25 @@ export default function Inbox() {
           }}
         variant="outlined"
         >
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "90%" }}>
             <InboxList
               item = {message}
             />
           </Box>
         </Card>
       ))}
+
+
       </ThemeProvider>
+            <Fab size="medium" color="secondary" aria-label="add" style={{width: 60,  
+              height: 60,   
+              borderRadius: 30,            
+              backgroundColor: '#ee6e73',                                    
+              position: 'absolute',                                          
+              bottom: 10,                                                    
+              right: 10,
+              alignSelf:'flex-end' }} onClick = {deleteInbox}>
+        <RestoreFromTrashIcon/>
+      </Fab> </Box>
     );
 }
