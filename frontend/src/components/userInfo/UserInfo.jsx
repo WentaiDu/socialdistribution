@@ -28,7 +28,14 @@ function UserInfo (props) {
           .then(res => {
             const _value = res.data;
             console.log(_value,'ffff')
-            setValue( _value );
+            if(_value.id){
+                setValue( _value );
+
+            }
+            else{
+                setValue(_value.data[0])
+            }
+            
         }).catch(e => {
             console.log("get failed")
 
