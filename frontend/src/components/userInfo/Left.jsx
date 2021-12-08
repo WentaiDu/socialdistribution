@@ -30,7 +30,7 @@ const Left = () => {
                     onClick={(event) => handleListItemClick(event, 2)}
                 >
                     <CenterFocusWeakOutlinedIcon fontSize={'medium'}></CenterFocusWeakOutlinedIcon>
-                    <Link to="/Post"><ListItemText primary="Follow" /></Link>
+                    <ListItemText primary="Follow" />
                 </ListItemButton>
                 <ListItemButton
                     selected={selectedIndex === 3}

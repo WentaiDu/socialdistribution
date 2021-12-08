@@ -36,7 +36,7 @@ const token = localStorage.getItem('jwtToken')
 function Image(props) {
   console.log("1111111111111111111111111111111111111111111111111111111111111111111111");
 
-  return <img {...props} style={{maxWidth: 100}} />
+  return <img {...props} style={{maxWidth: 200}} />
 }
 const renderers = {
   //This custom renderer changes how images are rendered
@@ -270,7 +270,7 @@ export class SingleAuthor extends React.Component {
 
           <CardActions>
             {this.renderFollow()}
-            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.author_id } }}>
+            <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.id } }}>
               <Button size="small">Detail</Button></Link>
           </CardActions>
           <Collapse in={this.state.open}>
@@ -423,7 +423,7 @@ export class SinglePost extends React.Component {
     }
     const post = this.props.post;
     console.log(post);
-    var linkaddr = "/author/" + this.props.post.author.author_id + "/posts/" + post.post_id + "/"
+    var linkaddr = this.props.post.id
     console.log(linkaddr);
 
 
@@ -436,13 +436,6 @@ export class SinglePost extends React.Component {
       }}>
         <AddPost open={this.state.dia} onClickEnd={this.cancelPostDialog} post={this.props.post} />
         <CardActionArea href={linkaddr}>
-
-          {/* <CardMedia
-            component="img"
-            height="140"
-            image="/static/images/cards/contemplative-reptile.jpg"
-            alt="green iguana"
-          /> */}
           <Stack
             direction="row"
             divider={<Divider orientation="vertical" flexItem />}

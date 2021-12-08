@@ -11,6 +11,7 @@ import { getAuthorInfo } from ".././baseElement/toolFuntions";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const token = localStorage.getItem('jwtToken')
 
 
 
@@ -27,23 +28,37 @@ export default class GithubList extends React.Component {
     async componentDidMount() {
 
     const authorId = this.props.authorId;
-    var temp = await getAuthorInfo(authorId).catch(err => {
-      console.log("bugbugbug")
-    });
-    var author = temp.data;
+    // var temp = await getAuthorInfo(authorId).catch(err => {
+    //   console.log("bugbugbug")
+    // });
+    // var author = temp.data;
+    try{
+      var temp = await axios.get(`${authorId}/`,
+      {
+        headers: {
+          // "X-CSRFToken":  this.props.token,
+          Authorization:"Token " + token,
+  
+        },
+      })
+      var author = temp.data;
+      console.log(author)
+      const name = author.github
+      let nameList = name.split("/")
+      let resultURL = nameList.pop();
+      console.log(resultURL)
+      var temp2 = await axios.get(`https://api.github.com/users/${resultURL}/events`)
+        
+      var activity = temp2.data;
+      this.setState(activity);
+      console.log(author);
+  
+      console.log(this.state);
+    }
+    catch(e){
+      console.log(e)
+    }
 
-
-    const name = author.github
-    let nameList = name.split("/")
-    let resultURL = nameList.pop();
-    console.log(resultURL)
-    var temp2 = await axios.get(`https://api.github.com/users/${resultURL}/events`)
-      
-    var activity = temp2.data;
-    this.setState(activity);
-    console.log(author);
-
-    console.log(this.state);
 
     // temp2.then(res => {
     //     console.log(res);

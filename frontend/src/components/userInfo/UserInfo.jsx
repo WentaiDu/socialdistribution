@@ -17,7 +17,7 @@ function UserInfo (props) {
     console.log(props,"00000")
     const  author_id = props?.location?.state?.author_id
     useEffect(()=>{
-        axios.get(`${base_url}/author/${author_id}/`,
+        axios.get(`${author_id}/`,
         {
           headers: {
             // "X-CSRFToken":  this.props.token,
@@ -31,6 +31,7 @@ function UserInfo (props) {
             setValue( _value );
         }).catch(e => {
             console.log("get failed")
+
         })
     },[])
     return (
