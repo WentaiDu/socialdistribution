@@ -191,11 +191,14 @@ class CommentList(generics.ListCreateAPIView):
         try:
             post=Post.objects.get(pk=post_id)
             author = Author.objects.get(pk=author_id)
-            if str(request.user)==str(post.author.username):
-                Comments = Comment.objects.filter(comment_post=post)
+            if post.visibility == "FRIENDS":
+                if str(request.user)==str(post.author.username):
+                    Comments = Comment.objects.filter(comment_post=post)
+                else:
+                    Comments = Comment.objects.filter(comment_post=post,comment_author=author)
             else:
+                Comments = Comment.objects.filter(comment_post=post)
 
-                Comments = Comment.objects.filter(comment_post=post,comment_author=author)
         except Exception as e:
             return Response(e,status=status.HTTP_404_NOT_FOUND)
 
