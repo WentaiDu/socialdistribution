@@ -18,10 +18,10 @@ urlpatterns = [
     re_path(r'author/(?P<author_id>[(-z)]{36})/posts/(?P<post_id>[(-z)]{36})', views.PostDetail.as_view()),
     re_path(r'author/(?P<author_id>[(-z)]{36})/posts/', views.PostList.as_view(),name='post_a_post'),
 
-    re_path(r'author/(?P<author_id>[(-z)]{36})/inbox', views.InboxView.as_view()),
-    re_path(r'author/(?P<author_id>[(-z)]{36})/followers/(?P<foreign_author_id>[(-z)]{36})', views.FriendRequestAPI.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/inbox', views.InboxView.as_view(),name='inbox'),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/followers/(?P<foreign_author_id>[(-z)]{36})', views.FriendRequestAPI.as_view(),name='create_follower'),
 
-    re_path(r'author/(?P<author_id>[(-z)]{36})/followers/', views.FollowerListAPI.as_view()),
+    re_path(r'author/(?P<author_id>[(-z)]{36})/followers/', views.FollowerListAPI.as_view(),name='followers'),
     re_path(r'author/(?P<author_id>[(-z)]{36})/friends/', views.Myfriend.as_view()),
 
     re_path(r'public', views.publicpost.as_view()),
