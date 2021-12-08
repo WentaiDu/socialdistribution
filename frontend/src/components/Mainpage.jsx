@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import axios from "axios";
 import { useState } from "react";
+import Box from '@mui/material/Box';
 
 import { SinglePost } from "./baseElement/baseElement";
 
@@ -12,7 +13,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Paper from '@mui/material/Paper';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -101,12 +102,16 @@ export default function MainPage(props) {
       alignItems="center"
       backgroundColor= '#20B2AA'
               spacing={2}>
-
-        <div>
+        <span>
         {renderPosts()}
-        </div>
+        </span>
+        <Box sx={{ width: "100%", height: 50 }}>
+
         <LabelBottomNavigation onClickChange ={onClickChange} />
+        </Box>
+
         </Stack>
+
         );
   // return(<div style={{backgroundColor:'#20B2AA',width:'100%',padding:'20px'}}>
   // </div>)
@@ -145,7 +150,7 @@ class PostList extends React.Component {
         console.log(posts)
         
         return posts.length === 0
-            ? (null)
+            ? null
             : (posts.map(item => (
     
               <ListItem key = {item.post_id} >
@@ -158,7 +163,7 @@ class PostList extends React.Component {
       
       catch(e){
           console.log(e)
-          return null;
+          return <CircularProgress/>;
       }
     }
     render(){
@@ -249,7 +254,12 @@ class PostList2 extends React.Component {
         console.log(this.state);
         try{
           return posts.length === 0
-              ? (null)
+              ?  <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            ><CircularProgress/></Stack>
               : (posts.map(item => (
       
                 <ListItem key = {item.post_id}>
@@ -261,7 +271,7 @@ class PostList2 extends React.Component {
         
         catch(e){
             console.log(e)
-            return null;
+            return  <CircularProgress/>;
         }
       }
       render(){
@@ -362,7 +372,7 @@ class PostList2 extends React.Component {
         
         catch(e){
             console.log(e)
-            return null;
+            return  <CircularProgress/>;
         }
       }
       render(){
@@ -453,7 +463,7 @@ class PostList2 extends React.Component {
         
         catch(e){
             console.log(e)
-            return null;
+            return <CircularProgress/>;
         }
       }
       render(){

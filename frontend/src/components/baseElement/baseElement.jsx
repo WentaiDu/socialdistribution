@@ -25,6 +25,9 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import Markdown from 'react-markdown'
+import GroupIcon from '@mui/icons-material/Group';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const userID = localStorage.getItem('userID')
@@ -250,7 +253,7 @@ export class SingleAuthor extends React.Component {
     try {
       return (
 
-        <Card sx={{ maxWidth: 1000 }}>
+        <Card sx={{ Width: "100%" }}>
 
           <Avatar
             alt={author.profileImage} src={author.profileImage}
@@ -382,7 +385,7 @@ export class SinglePost extends React.Component {
 
     else {
       return (
-        <li style={{ width: '100%'}}>{post.content}1
+        <li style={{ width: '100%'}}>{post.content}
         </li>
       )
     }
@@ -426,7 +429,7 @@ export class SinglePost extends React.Component {
 
     return (
       <Card variant="outlined" sx={{
-        width: 1000,
+        width: "100%",
         align: "center",
         padding: "10px",
         borderRadius: 7,
@@ -460,8 +463,8 @@ export class SinglePost extends React.Component {
                 /></Link>
               <li >
                 {post.author.displayName}
-              </li> <Chip icon={<FaceIcon />} label={badge} variant="outlined" />
-          <Chip icon={<FaceIcon />} label={post.visibility} variant="outlined" />
+              </li> <Chip icon={<CorporateFareIcon />} label={badge} variant="outlined" />
+          <Chip icon={<VisibilityIcon />} label={post.visibility} variant="outlined" />
             </Stack>
 
             <CardContent style={{ flex: 1 }}>

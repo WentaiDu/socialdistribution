@@ -7,6 +7,7 @@ import './style/author.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import { SingleAuthor } from "./baseElement/baseElement";
 import { OnlineSingleAuthor } from "./baseElement/connectionBaseElement";
+import Box from '@mui/material/Box';
 
 
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -64,9 +65,6 @@ function LabelBottomNavigation(props) {
 export default function Authors() {
   const [value, setValue] = React.useState(0);
 
-
-
-
   function onClickChange(newValue){
     setValue(newValue)
   }
@@ -77,10 +75,10 @@ export default function Authors() {
       return(<AuthorList  />)
     }
     if(value == "1"){
-      return(<AuthorList2  />)
+      return(<AuthorList3  />)
     }
     if(value == "2"){
-      return(<AuthorList3  />)
+      return(<AuthorList2  />)
     }
     if(value == "3"){
       return(<AuthorList4  />)
@@ -90,7 +88,10 @@ export default function Authors() {
   
   return(<div style={{backgroundColor:'#20B2AA',width:'100%',padding:'20px'}}>
   {renderAuthors()}
+  <Box sx={{ width: "100%", height: 50 }}>
+
   <LabelBottomNavigation onClickChange ={onClickChange} />
+  </Box>
   </div>)
 }
 

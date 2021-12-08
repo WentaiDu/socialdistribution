@@ -4,7 +4,8 @@ import Like from "../postActionComponents/Like";
 import Share from "../postActionComponents/Share";
 import Comment from "../postActionComponents/CommentButton";
 import LikeList from "../postActionComponents/LikeList";
-import AddComment from "../postActionComponents/AddComment";
+import {TextField} from "@material-ui/core";
+import Button from '@mui/material/Button';
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
@@ -49,14 +50,20 @@ const T1PostInboxLike = {
   "object": "string"
 }
 const T1Head = {
-
-
   headers: {
-      Authorization: "Basic "+ b64EncodeUnicode("dragon2:Dragon123!")
+      Authorization: "Basic "+ b64EncodeUnicode("Lara:CMPUT404")
   }
 }
 
-
+const T1PostCommentAuthor = {
+  "id": "string",
+  "host": "string",
+  "displayName": "string",
+  "url": "string",
+  "github": "string",
+  "profileImage": "string",
+  "profileColor": "string"
+}
 
 export default class ConnectionPostAction extends React.Component{
     constructor(props){
@@ -72,9 +79,24 @@ export default class ConnectionPostAction extends React.Component{
             PostInboxLike: {},
             head: "",
             PostComments: {},
+            postCommentAuthor: {},
         }
 
         if (this.props.badge == "T1"){
+          console.log("T1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          this.state.PostInboxLike = T1PostInboxLike;
+          this.state.PostComments = T1PostComments;
+          this.state.postCommentAuthor =T1PostCommentAuthor;
+          this.state.head = T1Head;
+        }
+        if (this.props.badge == "T10"){
+          console.log("T10!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          this.state.PostInboxLike = T1PostInboxLike;
+          this.state.PostComments = T1PostComments;
+          this.state.head = T1Head;
+        }
+        if (this.props.badge == "T12"){
+          console.log("T12!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
           this.state.PostInboxLike = T1PostInboxLike;
           this.state.PostComments = T1PostComments;
           this.state.head = T1Head;
@@ -151,8 +173,9 @@ export default class ConnectionPostAction extends React.Component{
         for (let key of Object.keys(this.state.PostInboxLike.author)){
           console.log(key)
           console.log(user[key])
-          postData[key] = user[key];
+          postData["author"][key] = user[key];
         }
+
         postData.author["type"] = "author";
 
         axios.post(`${authorId}/inbox/`, postData, this.state.head)
@@ -242,13 +265,13 @@ export default class ConnectionPostAction extends React.Component{
      }); 
     }
     renderAddComment = () =>{
-      const postId = this.props.post.post_id;
+      const postId = this.props.post.id;
       const authorId = this.props.post.author.id;
 
       if (this.state.showAddComment){
 
         return (
-        <AddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId}/>
+        <OnlineAddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId} head = {this.state.head} commentAuthor = {this.state.postCommentAuthor}/>
         )
       }
       return null;
@@ -415,4 +438,104 @@ class CommentList extends React.Component {
 
       )
     }
+}
+
+
+
+class OnlineAddComment extends React.Component{
+  constructor(props){
+      super(props);
+      this.state={
+          author:  {},
+          comment:"",
+          contentType:"text/markdown",
+      }
+  }
+
+
+  handleForm = e => {
+      const target = e.target;
+
+      const value = target.type === "checkbox"
+      ? target.checked
+      : target.value;
+
+      const name = target.name;
+      console.log(name)
+      console.log(value)
+      this.setState({
+          [name]:value
+      })
+  }
+
+  handlePost = async () => {
+      console.log(this.state);
+      if (this.state.comment === ""){
+          return null;
+      }
+
+      
+      console.log("like clicked")
+      var temp = await getUserInfo().catch(err=>{
+        console.log("bugbugbug")
+      });
+      var user = temp.data;
+
+      console.log(user);
+
+      var postData = this.state;
+
+      for (let key of Object.keys(this.props.commentAuthor)){
+        postData["author"][key] = user[key];
+      }
+
+      axios
+        .post(`${this.props.postId}/comments/`, postData,    this.props.head)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch(e => {
+            console.log(e);
+        }); 
+        
+      this.props.onClickClose();
+
+      } 
+
+  render(){
+      const {comment} = this.state;
+      return(
+
+          <Stack
+          direction="row"
+          divider={<Divider orientation="vertical"/>}
+          spacing={1}
+          >
+          <TextField
+              required
+              name="comment"
+              label="comment"
+              fullWidth
+              variant="standard"
+              value={comment}
+              onChange={this.handleForm}
+          />
+
+
+          <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                  width: 100,
+                  m:'auto',
+                  borderRadius: 15,
+                  backgroundColor: "#00428b",
+              }}
+              onClick={this.handlePost}
+          >
+              Submit
+          </Button>
+          </Stack>
+      )
+  }
 }
