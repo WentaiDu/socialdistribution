@@ -433,7 +433,9 @@ class PostList(generics.ListCreateAPIView):
             if str(request.user) == str(author.username):
                 posts = Post.objects.filter(author_id=author_id)
             elif check_friend(author_id,str(request.user))==True:
-                posts = Post.objects.filter(author_id=author_id,visibility="FRIENDS",unlisted=False)
+                posts1 = Post.objects.filter(author_id=author_id,visibility="FRIENDS",unlisted=False)
+                posts2 = Post.objects.filter(author_id=author_id,visibility="PUBLIC",unlisted=False)
+                posts = posts1 | posts2
             else:
                 posts = Post.objects.filter(author_id=author_id,visibility="PUBLIC",unlisted=False)
         except:
