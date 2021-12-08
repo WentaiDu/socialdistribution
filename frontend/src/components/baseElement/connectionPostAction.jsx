@@ -151,7 +151,7 @@ export default class ConnectionPostAction extends React.Component{
               temp[i] = "post"
             }
           }
-          await delay(1002)
+          await new delay(1002)
 
           postId = temp.join("/")
           axios.get(`${postId}/likes`,this.state.head)
@@ -179,7 +179,7 @@ export default class ConnectionPostAction extends React.Component{
             }
         })
         postId = this.props.post.id;
-        await delay(1002)
+        await new delay(1002)
         axios.get(`${postId}/comments`,this.state.head)
           .then(res => {
             const temp2 = res.data.data;
