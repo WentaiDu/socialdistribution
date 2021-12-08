@@ -205,7 +205,7 @@ const Center = (props) => {
                             null
                     } */}
                     <TabPanel value={value} index={2} className="tab_content">
-                    <GithubList authorId = {props?.value.author_id}/>
+                    <GithubList authorId = {props?.value.id}/>
                     </TabPanel>
                         
       

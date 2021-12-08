@@ -15,7 +15,7 @@ const userID = localStorage.getItem('userID');
 class Comment extends React.Component {
   constructor(props){
     super(props);
-    console.log(this.props);
+    console.log(props);
     this.state = {
       name: "new user",
       alreadyLiked:false,

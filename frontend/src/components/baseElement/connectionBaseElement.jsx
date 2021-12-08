@@ -65,6 +65,16 @@ export class OnlineSingleAuthor extends React.Component {
             this.state.head = t10Auth;
             this.state.payload = t10FollowPayload;
         }
+        if (this.props.badge == "T1"){
+          console.log("change")
+          this.state.head = t10Auth;
+          this.state.payload = t10FollowPayload;
+        }
+          if (this.props.badge == "T12"){
+            console.log("change")
+            this.state.head = t10Auth;
+            this.state.payload = t10FollowPayload;
+        }
         console.log(this.state);
     }
   
@@ -264,7 +274,7 @@ export class OnlineSingleAuthor extends React.Component {
   
             <CardActions>
               {this.renderFollow()}
-              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.author_id } }}>
+              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.author.id } }}>
                 <Button size="small">Detail</Button></Link>
             </CardActions>
             <Collapse in={this.state.open}>

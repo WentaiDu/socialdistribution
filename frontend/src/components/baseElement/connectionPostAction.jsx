@@ -65,6 +65,38 @@ const T1PostCommentAuthor = {
   "profileColor": "string"
 }
 
+const T10PostCommentAuthor = {    
+  "id": "string",
+"host": "string",
+"displayName": "string",
+"url": "string",
+"github": "string",
+"profileImage": "string",
+"profileColor": "string"}
+
+const T10PostComments = {
+  "type": "string",
+  "author": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "post": "string",
+  "comment": "string",
+  "contentType": "string",
+  "id": "string"
+}
+
+const T10Head = {
+  headers: {
+      Authorization: "Basic "+ b64EncodeUnicode("Lara:CMPUT404")
+  }
+}
+const T12Head = {
+  headers: {
+      Authorization: "Basic "+ b64EncodeUnicode("Lara:CMPUT404")
+  }
+}
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 export default class ConnectionPostAction extends React.Component{
     constructor(props){
         super(props);
@@ -92,23 +124,119 @@ export default class ConnectionPostAction extends React.Component{
         if (this.props.badge == "T10"){
           console.log("T10!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
           this.state.PostInboxLike = T1PostInboxLike;
-          this.state.PostComments = T1PostComments;
-          this.state.head = T1Head;
+          this.state.PostComments = T10PostComments;
+          this.state.postCommentAuthor =T10PostCommentAuthor;
+
+          this.state.head = T10Head;
         }
         if (this.props.badge == "T12"){
           console.log("T12!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
           this.state.PostInboxLike = T1PostInboxLike;
           this.state.PostComments = T1PostComments;
-          this.state.head = T1Head;
+          this.state.postCommentAuthor =T1PostCommentAuthor;
+
+          this.state.head = T12Head;
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const authorId = this.props.post.author.id;
-        const postId = this.props.post.id;
+        var postId = this.props.post.id;
         console.log(authorId)
         console.log(postId)
-        axios.get(`${postId}/likes/`,this.state.head)
+        if (this.props.badge == "T10"){
+          var temp = postId.split('/')
+          for (let i in temp){
+            if(temp[i] == "posts"){
+              temp[i] = "post"
+            }
+          }
+          await delay(1002)
+
+          postId = temp.join("/")
+          axios.get(`${postId}/likes`,this.state.head)
+          .then(res => {
+            const temp = res.data;
+            console.log(temp);
+
+            this.setState((prevState, props) => {
+              prevState.likes = temp
+              return prevState;
+           });
+            for(let item of temp){
+
+                console.log(userID);
+                console.log(item.author.id);
+
+                if (item.author.id.includes(userID)){
+ 
+                    this.setState((prevState, props) => {
+                      prevState.alreadyLiked = true;
+                      return prevState;
+                   });
+                    break;
+                }
+            }
+        })
+        postId = this.props.post.id;
+        await delay(1002)
+        axios.get(`${postId}/comments`,this.state.head)
+          .then(res => {
+            const temp2 = res.data.data;
+            console.log(temp2);
+
+            this.setState((prevState, props) => {
+              prevState.comments = temp2
+              return prevState;
+           });
+            
+        })
+        await delay(1002)
+
+        }
+        else if (this.props.badge == "T12"){
+          
+          axios.get(`${postId}/likes`,this.state.head)
+          .then(res => {
+            const temp = res.data.data;
+            console.log(temp);
+
+            this.setState((prevState, props) => {
+              prevState.likes = temp
+              return prevState;
+           });
+            for(let item of temp){
+
+                console.log(userID);
+                console.log(item.author.id);
+
+                if (item.author.id.includes(userID)){
+ 
+                    this.setState((prevState, props) => {
+                      prevState.alreadyLiked = true;
+                      return prevState;
+                   });
+                    break;
+                }
+            }
+        })
+
+        axios.get(`${postId}/comments`,this.state.head)
+          .then(res => {
+            const temp2 = res.data.data;
+            console.log(temp2);
+
+            this.setState((prevState, props) => {
+              prevState.comments = temp2
+              return prevState;
+           });
+            
+        })
+        
+
+        }
+          else{
+          axios.get(`${postId}/likes/`,this.state.head)
           .then(res => {
             const temp = res.data;
             console.log(temp);
@@ -133,12 +261,7 @@ export default class ConnectionPostAction extends React.Component{
             }
         })
 
-        axios.get(`${postId}/comments/`,
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        })
+        axios.get(`${postId}/comments/`,this.state.head)
           .then(res => {
             const temp2 = res.data.comments;
             console.log(temp2);
@@ -149,6 +272,8 @@ export default class ConnectionPostAction extends React.Component{
            });
             
         })
+        }
+
       }
 
     onClickLike = async () => {
@@ -162,12 +287,21 @@ export default class ConnectionPostAction extends React.Component{
 
         console.log(user);
         const summaryTxt = user.displayName + " Likes your post";
-        const postData = {
+        var postData = {
           "type": "Like",
             summary: summaryTxt,
-            context: "http://127.0.0.1:8000/",
+            context: base_url,
             author: {},
             object: this.props.post.source,
+        }
+        if (this.props.badge == "T12"){
+          postData = {
+            "type": "Like",
+              summary: summaryTxt,
+              "@context": base_url,
+              author: {},
+              object: this.props.post.source,
+          }
         }
 
         for (let key of Object.keys(this.state.PostInboxLike.author)){
@@ -214,16 +348,13 @@ export default class ConnectionPostAction extends React.Component{
     handleShare = (friend) =>{
       let postData =this.props.post
       postData.author = JSON.stringify(postData.author);
-      const authorId = this.props.post.author.id;
 
 
       console.log(friend);
-      axios.post(`${authorId}/inbox/`, postData,
+      axios.post(`${base_url}/author/${friend.author.author_id}/inbox`, postData,
       {
         headers: {
           Authorization: "Token " + token,
-          "X-CSRFToken":  token,
-
         },
       })
         .then(res => {
@@ -271,7 +402,8 @@ export default class ConnectionPostAction extends React.Component{
       if (this.state.showAddComment){
 
         return (
-        <OnlineAddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId} head = {this.state.head} commentAuthor = {this.state.postCommentAuthor}/>
+        <OnlineAddComment onClickClose = {this.onClickClose}  postId = {postId} authorId = {authorId} head = {this.state.head} 
+        commentAuthor = {this.state.postCommentAuthor} commentFrame = {this.state.postComments} badge = {this.props.badge}/>
         )
       }
       return null;
@@ -371,8 +503,17 @@ class SingleComment extends React.Component {
       })
     }
     catch(e){
+      try{
+        var authorName = this.props.item.author.displayName;
+        this.setState({
+          name: authorName
+        })      
+      }
+      catch(e){
 
+      }
     }
+
 
   }
 
@@ -483,20 +624,62 @@ class OnlineAddComment extends React.Component{
 
       console.log(user);
 
-      var postData = this.state;
+      var postData;
+      if (this.props.badge == "T10"){
+         postData = {
+          "type": "comment",
+          "author": user,
+          "post": this.props.postId,
+          "comment": this.state.comment,
+          "contentType": "text/markdown",
+          "id": this.props.postId
+        }
 
-      for (let key of Object.keys(this.props.commentAuthor)){
-        postData["author"][key] = user[key];
+      }
+      // else if (this.props.badge == "T12"){
+
+      // }
+      else{
+         postData = this.state;
+      
+        for (let key of Object.keys(this.props.commentAuthor)){
+          postData["author"][key] = user[key];
+        }
       }
 
+      if (this.props.badge == "T12"){
+        postData["type"] = "comment"
+        postData["id"] = this.props.postId
+
       axios
-        .post(`${this.props.postId}/comments/`, postData,    this.props.head)
+        .post(`${this.props.postId}/comments`, postData,    this.props.head)
         .then((res) => {
           console.log(res.data);
         })
         .catch(e => {
             console.log(e);
         }); 
+      }
+      else{
+        axios
+        .post(`${this.props.postId}/comments/`, postData,    this.props.head)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch(e => {
+            console.log(e);
+            axios
+            .post(`${this.props.postId}/comments`, postData,    this.props.head)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch(e => {
+                console.log(e);
+            }); 
+        }); 
+      }
+
+
         
       this.props.onClickClose();
 

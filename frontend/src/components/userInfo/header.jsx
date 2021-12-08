@@ -18,6 +18,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ContactsIcon from '@mui/icons-material/Contacts';
+
 const userId = localStorage.getItem('userID');
 
 
@@ -28,7 +29,8 @@ function Header() {
     const [logoutOpen, setLogoutOpen] = useState(false)
 
     const [friendListOpen, setFriendListOpen] = useState(false)
-
+    const [userUrl, setUserUrl] = useState("")
+    
     const [authAlert, setAuthAlert] = useState(false)
 
     const row = {
@@ -157,6 +159,14 @@ function Header() {
         setFriendListOpen(false);
       };
 
+      const setUserInfo = async () => {
+        var temp = await getUserInfo().catch(err => {
+            console.log("bugbugbug")
+        });
+        var user = temp.data;
+        setUserUrl(user.id)
+      }
+      setUserInfo();
     return (
 
 
@@ -184,7 +194,7 @@ function Header() {
                     <Link to= {"/author/"+userId+"/inbox/"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
                     </li>
                     <li onClick={() => active(4)} className={index === 4 ? 'bottomActive' : ''}>
-                        <Link to={{ pathname: '/UserInfo', state: {  author_id: userId }  }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
+                        <Link to={{ pathname: '/UserInfo', state: {  author_id: userUrl }  }}><AccountCircleOutlinedIcon fontSize={'large'}></AccountCircleOutlinedIcon></Link>
                     </li>
                 </ul>
             </div>

@@ -9,6 +9,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
+import Stack from '@mui/material/Stack';
 
 export default function Inbox() {
     const token = localStorage.getItem('jwtToken')
@@ -71,18 +72,17 @@ export default function Inbox() {
       window.location.reload(false);
 
     }
+    function renderMessage(){
 
-    return (
-      <Box
-      sx={{
-        bgcolor: 'background.paper',
-        width: "100%",
-        position: 'relative',
-        minHeight: 500,
-      }}
-    >
-      <ThemeProvider>
-        {messages.map((message, index) => (
+              
+      return messages.length === 0
+      ? (<Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >you do not have any message!</Stack>)
+      : (messages.map((message, index) => (
         <Card key = {index}
           sx={{
             align: "center",
@@ -96,8 +96,23 @@ export default function Inbox() {
               item = {message}
             />
           </Box>
-        </Card>
-      ))}
+        </Card>))
+        )
+
+    }
+
+    return (
+      <Box
+      sx={{
+        bgcolor: 'background.paper',
+        width: "100%",
+        position: 'relative',
+        minHeight: 500,
+      }}
+    >
+      <ThemeProvider>
+
+        {renderMessage()}
 
 
       </ThemeProvider>
