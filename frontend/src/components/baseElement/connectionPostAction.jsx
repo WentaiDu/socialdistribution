@@ -49,6 +49,20 @@ const T1PostInboxLike = {
   },
   "object": "string"
 }
+
+const T12PostInboxLike = {
+  "type": "Like",
+  "summary": "string",
+  "author": {
+    "id": "string",
+    "host": "string",
+    "displayName": "string",
+    "url": "string",
+    "github": "string",
+    "profileImage": "string"
+  },
+  "object": "string"
+}
 const T1Head = {
   headers: {
       Authorization: "Basic "+ b64EncodeUnicode("Lara:CMPUT404")
@@ -97,6 +111,11 @@ function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
+function sleep(seconds) {
+  var e = new Date().getTime() + (seconds);
+  while (new Date().getTime() <= e) {}
+}
+
 export default class ConnectionPostAction extends React.Component{
     constructor(props){
         super(props);
@@ -131,7 +150,7 @@ export default class ConnectionPostAction extends React.Component{
         }
         if (this.props.badge == "T12"){
           console.log("T12!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-          this.state.PostInboxLike = T1PostInboxLike;
+          this.state.PostInboxLike = T12PostInboxLike;
           this.state.PostComments = T1PostComments;
           this.state.postCommentAuthor =T1PostCommentAuthor;
 
@@ -151,8 +170,7 @@ export default class ConnectionPostAction extends React.Component{
               temp[i] = "post"
             }
           }
-          await new delay(1002)
-
+          sleep(1100)
           postId = temp.join("/")
           axios.get(`${postId}/likes`,this.state.head)
           .then(res => {
@@ -178,8 +196,9 @@ export default class ConnectionPostAction extends React.Component{
                 }
             }
         })
+        sleep(1100)
+
         postId = this.props.post.id;
-        await new delay(1002)
         axios.get(`${postId}/comments`,this.state.head)
           .then(res => {
             const temp2 = res.data.data;
@@ -191,11 +210,11 @@ export default class ConnectionPostAction extends React.Component{
            });
             
         })
-        await delay(1002)
 
         }
         else if (this.props.badge == "T12"){
-          
+          sleep(1100)
+
           axios.get(`${postId}/likes`,this.state.head)
           .then(res => {
             const temp = res.data.data;
@@ -220,6 +239,7 @@ export default class ConnectionPostAction extends React.Component{
                 }
             }
         })
+        sleep(1100)
 
         axios.get(`${postId}/comments`,this.state.head)
           .then(res => {
@@ -235,7 +255,9 @@ export default class ConnectionPostAction extends React.Component{
         
 
         }
-          else{
+          else{      
+              sleep(1100)
+
           axios.get(`${postId}/likes/`,this.state.head)
           .then(res => {
             const temp = res.data;
@@ -260,6 +282,7 @@ export default class ConnectionPostAction extends React.Component{
                 }
             }
         })
+        sleep(1100)
 
         axios.get(`${postId}/comments/`,this.state.head)
           .then(res => {
@@ -650,7 +673,7 @@ class OnlineAddComment extends React.Component{
       if (this.props.badge == "T12"){
         postData["type"] = "comment"
         postData["id"] = this.props.postId
-
+        postData["published"]= ""
       axios
         .post(`${this.props.postId}/comments`, postData,    this.props.head)
         .then((res) => {

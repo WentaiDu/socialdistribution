@@ -59,6 +59,12 @@ const token = localStorage.getItem('jwtToken')
     return new Promise(resolve => setTimeout(resolve, time));
   }
 
+  function sleep(seconds) {
+    var e = new Date().getTime() + (seconds);
+    while (new Date().getTime() <= e) {}
+  }
+  
+
 export class OnlineSingleAuthor extends React.Component {
     constructor(props) {
         super(props);
@@ -90,11 +96,20 @@ export class OnlineSingleAuthor extends React.Component {
         console.log(this.props)
         console.log(userID)
         if (this.props.badge == "T10"){
-          await new delay(1002);
-          var res = await axios.get(`${this.props.author.id}/followers/${userID}/`, this.state.head)
+          sleep(1100)
+            var res = await axios.get(`${this.props.author.id}/followers/${userID}/`, this.state.head)
           var result = res.data;
           this.setState((prevState, props) => {
             prevState.clickedFollow = result.is_following;
+            return prevState;
+            });
+        }
+        else if (this.props.badge == "T12"){
+          sleep(1100)
+          var res = await axios.get(`${this.props.author.id}/followers/${userID}`, this.state.head)
+          var result = res.data;
+          this.setState((prevState, props) => {
+            prevState.clickedFollow = result.follower;
             return prevState;
             });
         }
@@ -125,7 +140,22 @@ export class OnlineSingleAuthor extends React.Component {
     followClicked = async () => {
       console.log(this.props);
       if (this.state.clickedFollow) {
-        axios.delete(`${this.props.author.id}/followers/${userID}/`, this.state.head)
+        if( this.props.badge == "T12") {
+            axios.delete(`${this.props.author.id}/followers/${userID}`, this.state.head)
+            .then((res) => {
+              console.log(res.data);
+
+              this.setState((prevState, props) => {
+                prevState.clickedFollow = res.data.is_following;
+                return prevState;
+              });
+            })
+            .catch((e) => {
+              console.log(e)
+            });
+          }  
+          else{     
+   axios.delete(`${this.props.author.id}/followers/${userID}/`, this.state.head)
           .then((res) => {
             console.log(res.data);
   
@@ -137,6 +167,7 @@ export class OnlineSingleAuthor extends React.Component {
           .catch((e) => {
             console.log(e)
           });
+        }
       }
       else {
         try {
@@ -165,6 +196,29 @@ export class OnlineSingleAuthor extends React.Component {
           console.log(e);
         }
           if (this.props.badge == "T12"){
+            postData = {};
+            var temp = await getUserInfo().catch(err => {
+              console.log("bugbugbug")
+            });
+            var user = temp.data;
+        
+            console.log(user);
+            console.log(this.props);
+            const authorId = this.props.author.id;
+    
+            var temp = await axios.get(`${authorId}/`,this.state.head)
+            var author = temp.data;
+        
+            console.log(author);
+        
+        
+            postData = {
+              "actor": user,
+              "object": author.data[0],
+              "type": "follower",
+              "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
+            };
+        
             axios.put(`${this.props.author.id}/followers/${userID}`, postData, this.state.head)
             .then((res) => {
                 console.log(res.data);
@@ -176,7 +230,7 @@ export class OnlineSingleAuthor extends React.Component {
             .catch((e) => {
                 console.log(e)
             });
-          
+            this.friendRequestClicked()
           }
           else{
             axios.put(`${this.props.author.id}/followers/${userID}/`, postData, this.state.head)
@@ -216,17 +270,27 @@ export class OnlineSingleAuthor extends React.Component {
     
         console.log(author);
     
-    
-        postData = {
-          "actor": JSON.stringify(user),
-          "object": JSON.stringify(author),
-          "type": "follow",
-          "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
-        };
+        if(this.props.badge == "T12"){
+          postData = {
+            "actor": user,
+            "object": author.data[0],
+            "type": "follow",
+            "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
+          };
+        }
+        else{
+          postData = {
+            "actor": JSON.stringify(user),
+            "object": JSON.stringify(author),
+            "type": "follow",
+            "summary": user.displayName + "(" + user.author_id + ")" + " want to make friend with " + author.displayName
+          };
+        }
+
     
     
         console.log(postData);
-        axios.post(`${this.props.author.id}/inbox`, postData, this.state.head)
+        axios.post(`${this.props.author.id}/inbox/`, postData, this.state.head)
           .then(res => {
             console.log(res.data);
             this.setState((prevState, props) => {

@@ -160,11 +160,17 @@ function Header() {
       };
 
       const setUserInfo = async () => {
-        var temp = await getUserInfo().catch(err => {
-            console.log("bugbugbug")
-        });
-        var user = temp.data;
-        setUserUrl(user.id)
+          try{
+            var temp = await getUserInfo().catch(err => {
+                console.log("bugbugbug")
+            });
+            var user = temp.data;
+            setUserUrl(user.id)
+          }
+          catch(e){
+              
+          }
+
       }
       setUserInfo();
     return (
