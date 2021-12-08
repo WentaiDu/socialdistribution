@@ -62,6 +62,11 @@ function LabelBottomNavigation(props) {
         value="3"
         icon={<LocationOnIcon />}
       />
+      <BottomNavigationAction
+        label="T18"
+        value="4"
+        icon={<LocationOnIcon />}
+      />
     </BottomNavigation>
     </Paper>
   );
@@ -91,6 +96,9 @@ export default function MainPage(props) {
     }
     if(value == "3"){
       return(<PostList4  />)
+    }
+    if(value == "4"){
+      return(<PostList5  />)
     }
   }
 
@@ -456,6 +464,97 @@ class PostList2 extends React.Component {
       
                 <ListItem key = {item.post_id}>
                   <SinglePost userId = {this.props.authorId} post = {item} badge = {"T12"}/>
+                </ListItem> ))
+                )
+      
+          }
+        
+        catch(e){
+            console.log(e)
+            return <CircularProgress/>;
+        }
+      }
+      render(){
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+  
+            <List
+              sx={{
+                // width: '100%',
+                // maxWidth: 1000,
+                // minWidth: 1000,
+                width: 1000,
+                bgcolor: 'background.paper',
+              }}
+            >         
+              {this.renderPosts()}
+            </List>
+          </Grid>
+        )
+      }
+  }
+
+
+
+  
+  class PostList5 extends React.Component {
+    constructor(props){
+      super(props);
+      console.log(props);
+      this.state = {
+        posts: [],
+      }
+    }
+  
+
+    componentDidMount() {
+      axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors', {})
+        .then(res => {
+          const temp = res.data;
+          console.log(temp);
+          var result = [];
+          for (let item of temp.data){
+            console.log(item)
+            var currentLink = item.url + "/posts/"
+            console.log(currentLink)
+            axios.get(currentLink,{})
+                  .then(res => {
+                  var value = res.data.data;
+                  console.log(value);
+                  for (let item of value){
+                    result.push(item)
+                  }
+                })
+                .catch( e => {
+                    console.log(e)
+                }).then(() => {
+                  console.log(result);
+                  this.setState({posts:result,})
+                })
+
+          }
+
+  
+      })
+    }
+  
+   
+  
+    renderPosts = () =>{
+     const posts = this.state.posts
+        console.log(this.state);
+        try{
+          return posts.length === 0
+              ? null
+              : (posts.map(item => (
+      
+                <ListItem key = {item.post_id}>
+                  <SinglePost userId = {this.props.authorId} post = {item} badge = {"T18"}/>
                 </ListItem> ))
                 )
       

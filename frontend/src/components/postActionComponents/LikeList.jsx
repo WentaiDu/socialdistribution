@@ -27,19 +27,24 @@ export default class LikeList extends React.Component {
   renderLikes(){
     const likes = this.props.likes;
     console.log(likes);
-    return likes.length === 0
-        ? null
-        : (likes.map(item => (
+    try{
+      return likes.length === 0
+      ? null
+      : (likes.map(item => (
 
-            <Link to= {"/author/"+item.author.author_id +"/"} replace style={{color:'black'}}>
-            <Avatar
-                alt={item.author.profileImage} src={item.author.profileImage}
-                />
-            <ListItemText primary={item.author.displayName} />
-            </Link>)))
+          <Link to= {"/author/"+item.author.author_id +"/"} replace style={{color:'black'}}>
+          <Avatar
+              alt={item.author.profileImage} src={item.author.profileImage}
+              />
+          <ListItemText primary={item.author.displayName} />
+          </Link>)))
 
-        };
-
+      }
+    
+    catch(e){
+      return null
+    }
+  }
     render(){
       return (
         <Grid

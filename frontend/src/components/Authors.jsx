@@ -58,6 +58,11 @@ function LabelBottomNavigation(props) {
         value="3"
         icon={<LocationOnIcon />}
       />
+      <BottomNavigationAction
+        label="T18"
+        value="4"
+        icon={<LocationOnIcon />}
+      />
     </BottomNavigation>
     </Paper>
   );
@@ -85,6 +90,9 @@ export default function Authors() {
     }
     if(value == "3"){
       return(<AuthorList4  />)
+    }
+    if(value == "4"){
+      return(<AuthorList5  />)
     }
   }
 
@@ -304,6 +312,71 @@ class AuthorList3 extends React.Component {
 }
 
 
+class AuthorList5 extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      authors: [],
+      data:[]
+    }
+  }
+
+
+  componentDidMount() {
+    axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors',{})
+      .then(res => {
+        console.log(res);
+
+        this.setState(res.data);
+        console.log(this.state);
+
+    })
+  }
+
+  renderAuthors(){
+      try{
+          const authorList = this.state.data;
+          return authorList.length === 0
+              ? (<CircularProgress />)
+              : (authorList.map(item => (
+      
+                <ListItem key = {item.author_id}>
+                      <OnlineSingleAuthor author = {item} badge = {"T18"}/>
+                </ListItem>)))
+      
+              }
+      
+      
+      catch(e){
+          return null
+      }
+  }
+
+    render(){
+      return (
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          color
+        >
+          <List
+            sx={{
+              width: '100%',
+              bgcolor: 'background.paper',
+            }}
+            className='list_author'
+
+          >
+            {this.renderAuthors()}
+          </List>
+        </Grid>
+      )
+    }
+}
+
+
 class AuthorList4 extends React.Component {
   constructor(props){
     super(props);
@@ -315,7 +388,7 @@ class AuthorList4 extends React.Component {
 
 
   componentDidMount() {
-    axios.get('https://glowing-palm-tree1.herokuapp.com/service/authors/',{})
+    axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors/',{})
       .then(res => {
         console.log(res);
 

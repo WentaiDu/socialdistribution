@@ -66,17 +66,26 @@ const Center = (props) => {
                 setIsCurrentUser(false)
             }
         }
+        setFile(props?.value.profileImage)
 
     }, [props?.value])
     // edit fn
     const editHandle = () => {
-        setIsEdit(false)
-        console.log(form, 'eee')
+        if(isEdit){
+            setIsEdit(false)
+            console.log(form, 'eee')
+        }
+        else{
+            setIsEdit(true)
+
+        }
+
     }
     const saveHandle = () => {
         const data = { ...form };
         data['profileImage'] = file;
-        axios.put(`${base_url}/author/${props?.value.author_id}/`, data, {
+        delete data["profileImage"];
+        axios.patch(`${base_url}/author/${props?.value.author_id}/`, data, {
             headers: {
                 Authorization: "token " + token,
             },
