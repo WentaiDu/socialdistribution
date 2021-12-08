@@ -72,7 +72,7 @@ In the personal homepage, we can modify our own information, and we can also vie
 Docs:https://ourbackend.herokuapp.com/docs/
 
 # AJAX Design  
-We use Axios extensively. Axios is a promise-based asynchronous communication framework that can be used in browsers and node.js; its main function is to achieve AJAX asynchronous communication. We use Axios to call the API provided by the backend to get data.   
+We use Axios extensively. We used Axios for all requests so all of our requests are based on AJAX. Axios is a promise-based asynchronous communication framework that can be used in browsers and node.js; its main function is to achieve AJAX asynchronous communication. We use Axios to call the API provided by the backend to get data.   
 The advantage of using axios:  
 You can send XMLHttpRequests in the browser  
 You can send http requests in node.js  
