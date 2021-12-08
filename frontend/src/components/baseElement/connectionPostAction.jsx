@@ -1,51 +1,92 @@
 import * as React from 'react';
 import Grid from "@mui/material/Grid";
-import Like from "./postActionComponents/Like";
-import Share from "./postActionComponents/Share";
-import Comment from "./postActionComponents/CommentButton";
-import CommentList from "./postActionComponents/Comment";
-import LikeList from "./postActionComponents/LikeList";
-import AddComment from "./postActionComponents/AddComment";
+import Like from "../postActionComponents/Like";
+import Share from "../postActionComponents/Share";
+import Comment from "../postActionComponents/CommentButton";
+import LikeList from "../postActionComponents/LikeList";
+import AddComment from "../postActionComponents/AddComment";
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import ForumIcon from '@mui/icons-material/Forum';
-import { getUserInfo } from "./baseElement/toolFuntions";
-import DialogFriendlist from "./Friend/index";
+import { getUserInfo,b64EncodeUnicode ,getAuthorInfo} from "./toolFuntions";
+import DialogFriendlist from "../Friend/index";
+import CircularProgress from '@mui/material/CircularProgress';
+import Card from "@mui/material/Card";
+
 
 const base_url = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const token = localStorage.getItem('jwtToken');
 const URL = window.location.href;
 const userID = localStorage.getItem('userID');
 
-export default class PostAction extends React.Component{
+
+const T1PostComments = {
+  "author": {
+    "id": "string",
+    "host": "string",
+    "displayName": "string",
+    "url": "string",
+    "github": "string",
+    "profileImage": "string",
+    "profileColor": "string"
+  },
+  "comment": "string",
+  "contentType": "text/markdown"
+}
+const T1PostInboxLike = {
+  "type": "Like",
+  "summary": "string",
+  "author": {
+    "id": "string",
+    "host": "string",
+    "displayName": "string",
+    "url": "string",
+    "github": "string"
+  },
+  "object": "string"
+}
+const T1Head = {
+
+
+  headers: {
+      Authorization: "Basic "+ b64EncodeUnicode("dragon2:Dragon123!")
+  }
+}
+
+
+
+export default class ConnectionPostAction extends React.Component{
     constructor(props){
         super(props);
         console.log(props);
 
         this.state = {
-            // commentClicked: false,
             alreadyLiked: false,
             likes: [],
             comments: [],
             showAddComment: false,
-            friendListOpen: false
+            friendListOpen: false,
+            PostInboxLike: {},
+            head: "",
+            PostComments: {},
+        }
+
+        if (this.props.badge == "T1"){
+          this.state.PostInboxLike = T1PostInboxLike;
+          this.state.PostComments = T1PostComments;
+          this.state.head = T1Head;
         }
     }
 
     componentDidMount() {
-        const authorId = this.props.post.author.author_id;
-        const postId = this.props.post.post_id;
+        const authorId = this.props.post.author.id;
+        const postId = this.props.post.id;
         console.log(authorId)
         console.log(postId)
-        axios.get(`${base_url}/author/${authorId}/posts/${postId}/likes/`,
-        {
-          headers: {
-            Authorization: "Token " + token,
-          },
-        })
+        axios.get(`${postId}/likes/`,this.state.head)
           .then(res => {
             const temp = res.data;
             console.log(temp);
@@ -57,9 +98,9 @@ export default class PostAction extends React.Component{
             for(let item of temp){
 
                 console.log(userID);
-                console.log(item.author.author_id);
+                console.log(item.author.id);
 
-                if (item.author.author_id === userID){
+                if (item.author.id.includes(userID)){
  
                     this.setState((prevState, props) => {
                       prevState.alreadyLiked = true;
@@ -70,7 +111,7 @@ export default class PostAction extends React.Component{
             }
         })
 
-        axios.get(`${base_url}/author/${authorId}/posts/${postId}/comments/`,
+        axios.get(`${postId}/comments/`,
         {
           headers: {
             Authorization: "Token " + token,
@@ -89,8 +130,9 @@ export default class PostAction extends React.Component{
       }
 
     onClickLike = async () => {
+      const authorId = this.props.post.author.id;
+
         console.log("like clicked")
-        const authorId = this.props.post.author.author_id;
         var temp = await getUserInfo().catch(err=>{
           console.log("bugbugbug")
         });
@@ -99,20 +141,21 @@ export default class PostAction extends React.Component{
         console.log(user);
         const summaryTxt = user.displayName + " Likes your post";
         const postData = {
-            type: "like",
+          "type": "Like",
             summary: summaryTxt,
             context: "http://127.0.0.1:8000/",
-            author: user,
+            author: {},
             object: this.props.post.source,
         }
-        axios.post(`${base_url}/author/${authorId}/inbox`, postData,
-        {
-          headers: {
-            Authorization: "Token " + token,
-            "X-CSRFToken":  token,
 
-          },
-        })
+        for (let key of Object.keys(this.state.PostInboxLike.author)){
+          console.log(key)
+          console.log(user[key])
+          postData[key] = user[key];
+        }
+        postData.author["type"] = "author";
+
+        axios.post(`${authorId}/inbox/`, postData, this.state.head)
           .then(res => {
             const like = res.data;
             console.log(like);
@@ -130,7 +173,6 @@ export default class PostAction extends React.Component{
         if (this.state.showAddComment){
           this.setState((prevState, props) => {  
             prevState.showAddComment = false;
-
             return prevState;
          });  
         
@@ -139,7 +181,6 @@ export default class PostAction extends React.Component{
         else{
           this.setState((prevState, props) => {  
             prevState.showAddComment = true;
-  
             return prevState;
          });  
         }
@@ -150,10 +191,11 @@ export default class PostAction extends React.Component{
     handleShare = (friend) =>{
       let postData =this.props.post
       postData.author = JSON.stringify(postData.author);
-      
+      const authorId = this.props.post.author.id;
+
 
       console.log(friend);
-      axios.post(`${base_url}/author/${friend.author.author_id}/inbox`, postData,
+      axios.post(`${authorId}/inbox/`, postData,
       {
         headers: {
           Authorization: "Token " + token,
@@ -195,15 +237,13 @@ export default class PostAction extends React.Component{
     onClickClose = () =>{
 
       this.setState((prevState, props) => {
-        prevState.showAddComment = false
-        // prevState.commentClicked = !prevState.commentClicked
-        
+        prevState.showAddComment = false        
         return prevState;
      }); 
     }
     renderAddComment = () =>{
       const postId = this.props.post.post_id;
-      const authorId = this.props.post.author.author_id;
+      const authorId = this.props.post.author.id;
 
       if (this.state.showAddComment){
 
@@ -268,4 +308,111 @@ export default class PostAction extends React.Component{
         )
     }
 
+}
+
+
+
+class SingleComment extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(this.props);
+    this.state = {
+      name: "anonymous",
+      alreadyLiked:false,
+    }
+    this.getInfo();
+  }
+
+  
+  componentDidMount() {
+    const url = this.props.item;
+
+    console.log(url)
+  }
+
+  onClickLike = async () => {
+  }
+
+  getInfo = async () => {
+    try{
+      const authorId = this.props.item.comment_author;
+      var temp = await getAuthorInfo(authorId).catch(err=>{
+        console.log("bugbugbug")
+      });
+      var author = temp.data;
+  
+      console.log(author);
+  
+      this.setState({
+        name: author.displayName
+      })
+    }
+    catch(e){
+
+    }
+
+  }
+
+  render(){
+
+    return(
+
+      <Card variant="outlined">
+      <Stack direction="row" spacing={2}>
+      <li>@ {this.state.name}: {this.props.item.comment}</li> <Like onClickLike = {this.onClickLike} alreadyLiked = {this.state.alreadyLiked}/>
+       </Stack></Card>
+
+    )
+  }
+
+
+
+}
+
+class CommentList extends React.Component {
+  constructor(props){
+    super(props);
+    console.log(props);
+  }
+
+  renderComments = () =>{
+    try{
+
+      const comments = this.props.comments;
+      console.log(comments);
+      if (comments === undefined) {
+        return null
+      } 
+      
+  
+        console.log(comments)
+        return comments.length === 0
+        ? null
+        : (comments?.map(item => (
+
+          <SingleComment item = {item} />
+      )))
+
+    }
+    
+    catch(e){
+      console.log(e);
+      return (<CircularProgress />)
+    }
+  }
+    render(){
+      return (
+        <Grid
+        container
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        >
+
+        {this.renderComments()}
+
+        </Grid>
+
+      )
+    }
 }

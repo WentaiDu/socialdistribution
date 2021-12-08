@@ -1,5 +1,4 @@
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AlertDialog from './logout'
@@ -14,12 +13,11 @@ import AddPost from ".././Post";
 import SeeReq from ".././adminReq/signUpReq";
 import { getUserInfo } from "../baseElement/toolFuntions";
 import Snackbar from "@mui/material/Snackbar";
-import Avatar from '@mui/material/Avatar';
 import DialogFriendlist from "../Friend/index";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import ContactsIcon from '@mui/icons-material/Contacts';
 const userId = localStorage.getItem('userID');
 
 
@@ -180,7 +178,7 @@ function Header() {
 
                     <li onClick={() => active(2)} className={index === 2 ? 'bottomActive' : ''}>
 
-                    <Link to= {"/authors/"}><LocalFireDepartmentIcon fontSize={'large'} /></Link>
+                    <Link to= {"/authors/"}><GroupIcon fontSize={'large'} /></Link>
                     </li>
                     <li onClick={() => active(3)} className={index === 3 ? 'bottomActive' : ''}>
                     <Link to= {"/author/"+userId+"/inbox/"}><MailOutlineIcon fontSize={'large'}></MailOutlineIcon></Link>
@@ -204,7 +202,7 @@ function Header() {
                     </li>
                     <li className="mui-table-view-cell">
 
-                    <Button onClick = {showFriendList}><GroupIcon fontSize={'large'} /></Button>
+                    <Button onClick = {showFriendList}><ContactsIcon fontSize={'large'} /></Button>
 
                     </li>
                     <li className="mui-table-view-cell" style={{marginLeft:'20px'}}>

@@ -309,6 +309,7 @@ export default class AddPost extends React.Component{
                                 </Select>
                             </FormControl>
                             </Box>
+
                         <Box sx={{ minWidth: 120,}}>
                         <FormControlLabel control={<Checkbox />} label="unlisted" name = "unlisted"  checked = {unlisted} onChange={this.handleForm}/>
 

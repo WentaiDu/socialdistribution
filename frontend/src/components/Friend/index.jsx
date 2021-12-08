@@ -43,7 +43,7 @@ export default class DialogFriendlist extends React.Component {
 class SingleFriend extends React.Component{
     constructor(props){
         super(props);
-        console.log(this.props)
+        console.log(props)
     }
 
     render(){
@@ -58,7 +58,7 @@ class SingleFriend extends React.Component{
                 sx={{ width: 50, height: 50 }}
             />
             </ListItemAvatar>
-            <ListItemText primary={author.displayName} secondary = {author.id}/>
+            <ListItemText primary={author.displayName} secondary = {author.github}/>
         </ListItem>
         )
     }
