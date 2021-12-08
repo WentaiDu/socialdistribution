@@ -605,7 +605,7 @@ class FriendRequestAPI(generics.GenericAPIView):
                 description = "Create Inbox Post Succeeds",
                 examples={
                     'application/json': {
-                                  "author": {
+                                  "actor": {
                                   "username": "string",
                                   "password": "string",
                                   "author_type": "string",
@@ -616,7 +616,7 @@ class FriendRequestAPI(generics.GenericAPIView):
                                   "url": "string",
                                   "github": "string"
                                 },
-                                  "foreign_author": {
+                                  "object": {
                                   "username": "string",
                                   "password": "string",
                                   "author_type": "string",
@@ -637,12 +637,9 @@ class FriendRequestAPI(generics.GenericAPIView):
         #用 Foreign 获得 author_id
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        print(foreign_author_id)
         author = request.data['actor']
         foreign_author = request.data['object']
         summary = author['displayName']+ ' wants to follow '+foreign_author['displayName']
-        print(author_id)
-        print(foreign_author_id)
         #～～～～这个地方好像是反的
         if author_id == foreign_author_id or author==foreign_author:
             response = {
@@ -651,7 +648,6 @@ class FriendRequestAPI(generics.GenericAPIView):
             return Response(response,status.HTTP_409_CONFLICT)
         try:
             follower = Followers.objects.get(id=foreign_author_id)
-            print(follower.items)
             if follower.items == None or json.loads(follower.items) =='[]':
                 items = []
                 items.append(author)
@@ -696,7 +692,6 @@ class FriendRequestAPI(generics.GenericAPIView):
                                                               ,summary=summary,actor=json.dumps(author),
                                                               object=json.dumps(foreign_author))
                 friend_request.save()
-                print('friendrequest is',friend_request)
                 response = {
                     "details": 'Your follow succeed!'
                 }

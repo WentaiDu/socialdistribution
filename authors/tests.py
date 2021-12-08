@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status, response
 from django.test import TestCase, Client, RequestFactory
 from .models import *
-
+import simplejson as json
 from django.contrib.auth.models import User
 # Create your tests here.
 
@@ -131,7 +131,7 @@ class PostTest(APITestCase):
                     }
 
         url = reverse('authors:signup')
-        self.client.post(
+        response = self.client.post(
             url,
             self.request1,
             format='json'
@@ -173,3 +173,112 @@ class PostTest(APITestCase):
         response = self.client.delete(post_id)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Post.objects.count(),0)
+
+
+class FollowerTest(TestCase):
+
+    def create_user(self):
+        self.username = "admin"
+        self.password = '123'
+        user, created = Author.objects.get_or_create(username=self.username)
+        user.set_password(self.password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save()
+        self.user = user
+
+    def setUp(self):
+        self.request1 = {'username': "siyuan9", 'displayName': "Rain", 'password': "123", 'github': "rain",
+                         'profileImage': "null"}
+        self.request2 = {'username': "Lara", 'displayName': "Lara", 'password': "123", 'github': "Lara",
+                         'profileImage': "null"}
+
+        self.pending_author1 = {
+            'id': 1,
+            'accept': 'accept',
+            'pending_author': '{"username": "siyuan9", "displayName": "Rain", "password": "123", "github": "rain", "profileImage": "null"}'
+
+        }
+        self.pending_author2 = {
+            'id': 2,
+            'accept':'accept',
+            'pending_author': '{"username": "Lara", "displayName": "Lara", "password": "123", "github": "Lara", "profileImage": "null"}'
+        }
+
+        self.login1 = {'username': "admin", 'password': "123"}
+        self.login2 = {'username': "siyuan9", 'password': "123"}
+        self.login3 = {'username': "Lara", 'password':'123'}
+
+        url = reverse('authors:signup')
+        self.client.post(url,self.request1,format='json')
+        self.client.post(url, self.request2, format='json')
+        self.create_user()
+        url = reverse('authors:login')
+        self.client.post(url, self.login1, format='json')
+        url = reverse('authors:pending_signup')
+        response = self.client.post(url, self.pending_author1, format='json')
+        self.author_id1 = str(response.data['id'])
+        response = self.client.post(url, self.pending_author2, format='json')
+        self.author_id2 = str(response.data['id'])
+
+        self.friend_request = { "actor":
+                                {"username": "siyuan9",
+                                "password": "string",
+                                "author_type": "string",
+                                "id": "string",
+                                "author_id": self.author_id1,
+                                 "host": "string",
+                                "displayName": "Rain",
+                                "url": "string",
+                                "github": "string",
+                                "profileImage": None},
+                            "object": {
+                                  "username": "string",
+                                  "password": "string",
+                                  "author_type": "string",
+                                  "id": "string",
+                                  "author_id": self.author_id2,
+                                  "host": "string",
+                                  "displayName": "Lara",
+                                  "url": "string",
+                                  "github": "string",
+                                  "profileImage": None}
+                            }
+
+    def test_create_follower(self):
+
+
+        url = reverse('authors:create_follower', args=[self.author_id1, self.author_id2])
+        response = self.client.put(
+            url,
+            self.friend_request,
+            format='json',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Followers.objects.count(), 1)
+        self.assertEqual(FriendRequest.objects.count(),1)
+        self.assertTrue(Followers.objects.get(id=self.author_id2))
+        self.assertTrue(FriendRequest.objects.get(author_id=self.author_id1,foreign_author_id=self.author_id2))
+
+    def test_get_follower(self):
+        url = reverse('authors:create_follower', args=[self.author_id1, self.author_id2])
+        response = self.client.put(
+            url,
+            self.friend_request,
+            format='json',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        url = reverse('authors:followers', args=[self.author_id2])
+        response = self.client.get(url)
+        self.assertEqual(response.data['id'], self.author_id2)
+        self.assertTrue(self.author_id1 in response.data['items'])
+
+
+
+
+
+
+
