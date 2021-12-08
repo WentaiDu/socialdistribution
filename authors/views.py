@@ -21,6 +21,7 @@ import simplejson as json
 from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
+from rest_framework.authentication import BaseAuthentication, TokenAuthentication
 from urllib.parse import urlparse
 
 
@@ -65,9 +66,10 @@ class SignupAPI(generics.GenericAPIView):
 
 
 class PendingAuthorListAPI(generics.ListCreateAPIView):
+    permission_classes = [IsAdminUser,IsAuthenticated]
     queryset = PendingAuthor.objects.all()
     serializer_class = PendingAuthorSerializer
-    permission_classes = [IsAdminUser,IsAuthenticated]
+
 
     def post(self, request, *args, **kwargs):
         check_node(request)
@@ -130,7 +132,7 @@ class PendingAuthorListAPI(generics.ListCreateAPIView):
 
 
 class AuthorList(generics.ListAPIView):
-
+    permission_classes = [IsAuthenticated]
     # context_object_name = "context_authors"
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
@@ -148,7 +150,7 @@ class AuthorList(generics.ListAPIView):
         return Response({'authors':serializer.data})
 
 class AuthorDetail(generics.RetrieveUpdateAPIView):
-
+    permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
     lookup_field = 'author_id'
     serializer_class = AuthorSerializer
@@ -265,6 +267,11 @@ class InboxView(generics.GenericAPIView):
                 items = json.dumps(items)
                 inbox.items = items
                 inbox.save()
+                if request.data['type'] == 'like':
+                    author = Author.objects.get(author_id=request.data['author']["author_id"])
+                    like = Like.objects.create(context=request.data["context"], type=request.data["type"],
+                                               author=author,
+                                               summary=request.data["summary"], object=request.data["object"])
                 response = {
                     'detail': 'succeed'
                 }
@@ -274,8 +281,7 @@ class InboxView(generics.GenericAPIView):
             items.append(request.data)
             items = json.dumps(items)
             author = Author.objects.get(author_id=author_id)
-            a = Inbox.objects.create(inbox_author_id=author_id,author=author.id, items=items)
-            print(a)
+            Inbox.objects.create(inbox_author_id=author_id,author=author.id, items=items)
             if request.data['type'] == 'like':
                 author = Author.objects.get(author_id=request.data['author']["author_id"])
                 like = Like.objects.create(context=request.data["context"], type=request.data["type"], author=author,
@@ -541,7 +547,6 @@ class PostDetail(generics.RetrieveUpdateAPIView):
                         followers = Followers.objects.filter(id=author_id)
 
                     except Exception as e:
-                        print(str(e))
                         return Response({'serializer': serializer.data})
                     return Response({'serializer': serializer.data})
                 else:
@@ -707,18 +712,15 @@ class FriendRequestAPI(generics.GenericAPIView):
     def delete(self,request,*args, **kwargs):
         author_id = self.kwargs['author_id']
         foreign_author_id = self.kwargs['foreign_author_id']
-        print(author_id)
         print(foreign_author_id)
 
         try:
             friend_request = FriendRequest.objects.get(author_id=foreign_author_id, foreign_author_id=author_id)
             friend_request.delete()
             follower = Followers.objects.get(id=author_id)
-            print('1')
             items = json.loads(follower.items)
             new_items = []
             for item in items:
-                print(item)
                 if item['author_id'] == str(foreign_author_id):
                     pass
                 else:
