@@ -320,7 +320,7 @@ export default class ConnectionPostAction extends React.Component{
         
 
         }
-          else{      
+      else{      
 
           axios.get(`${postId}/likes/`,this.state.head)
           .then(res => {
@@ -349,7 +349,7 @@ export default class ConnectionPostAction extends React.Component{
 
         axios.get(`${postId}/comments/`,this.state.head)
           .then(res => {
-            const temp2 = Object.values(res.data.data);
+            const temp2 = res.data.comments;
             console.log(temp2);
 
             this.setState((prevState, props) => {

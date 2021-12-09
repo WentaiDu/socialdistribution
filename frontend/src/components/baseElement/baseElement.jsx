@@ -435,7 +435,7 @@ export class SinglePost extends React.Component {
         borderRadius: 7,
       }}>
         <AddPost open={this.state.dia} onClickEnd={this.cancelPostDialog} post={this.props.post} />
-        <CardActionArea href={linkaddr}>
+        <CardActionArea >
           <Stack
             direction="row"
             divider={<Divider orientation="vertical" flexItem />}
@@ -449,7 +449,7 @@ export class SinglePost extends React.Component {
               justifyContent="center"
               paddingLeft='10px'
             >
-              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.author_id } }} >
+              <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.post.author.url } }} >
                 <Avatar
                   alt={post.author.profileImage} src={post.author.profileImage}
                   sx={{ width: 50, height: 50 }}
