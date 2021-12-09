@@ -57,10 +57,8 @@ export default class Converter extends React.Component{
 
       console.log(this.props.item.actor.id)
       return(
-        <Link to = {this.props.item.actor.id} >
-
-         <li>{this.props.item.summary}</li> 
-        </Link>
+        <Link to={{ pathname: '/UserInfo', state: { author_id: this.props.item.actor.url } }} >
+         <li>{this.props.item.summary}</li> </Link>
 
         )
     }

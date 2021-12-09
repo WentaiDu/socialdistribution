@@ -95,7 +95,7 @@ const Center = (props) => {
             })).catch((err => {
                 console.log(err, 'rerr')
             }))
-
+        editHandle()
     }
     const setObjAttr = (val, key) => {
         const obj = { ...form };

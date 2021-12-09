@@ -312,7 +312,8 @@ class AuthorList3 extends React.Component {
 }
 
 
-class AuthorList5 extends React.Component {
+
+class AuthorList4 extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -323,7 +324,7 @@ class AuthorList5 extends React.Component {
 
 
   componentDidMount() {
-    axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors',{})
+    axios.get('https://glowing-palm-tree1.herokuapp.com/service/authors/',{})
       .then(res => {
         console.log(res);
 
@@ -341,7 +342,7 @@ class AuthorList5 extends React.Component {
               : (authorList.map(item => (
       
                 <ListItem key = {item.author_id}>
-                      <OnlineSingleAuthor author = {item} badge = {"T18"}/>
+                      <OnlineSingleAuthor author = {item} badge = {"T12"}/>
                 </ListItem>)))
       
               }
@@ -377,7 +378,8 @@ class AuthorList5 extends React.Component {
 }
 
 
-class AuthorList4 extends React.Component {
+
+class AuthorList5 extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -388,7 +390,7 @@ class AuthorList4 extends React.Component {
 
 
   componentDidMount() {
-    axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors/',{})
+    axios.get('https://cmput404-socialdistributio-t18.herokuapp.com/authors',{})
       .then(res => {
         console.log(res);
 
@@ -406,7 +408,7 @@ class AuthorList4 extends React.Component {
               : (authorList.map(item => (
       
                 <ListItem key = {item.author_id}>
-                      <OnlineSingleAuthor author = {item} badge = {"T12"}/>
+                      <OnlineSingleAuthor author = {item} badge = {"T18"}/>
                 </ListItem>)))
       
               }

@@ -37,8 +37,7 @@ function UserInfo (props) {
             }
             
         }).catch(e => {
-            console.log("get failed")
-
+            console.log(e)
         })
     },[])
     return (
