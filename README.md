@@ -6,7 +6,6 @@ https://github.com/abramhindle/CMPUT404-project-socialdistribution
 Contributors:  
 -Wentai Du  
 -Jinglong Zhao  
--Ziying Li  
 -Haoyuan Li  
 -Siyuan Wu  
   
