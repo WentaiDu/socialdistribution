@@ -36,6 +36,8 @@ python manage.py createsuperuser
 
 # Deployed Server
 
+Due to heroku policy update, the deployment no longer available.
+
 Frontend: https://socialdistribution-t02.herokuapp.com
 
 Backend:https://ourbackend.herokuapp.com
