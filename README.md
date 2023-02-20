@@ -1,8 +1,6 @@
-# CMPUT-404-Project  
-CMPUT 404 Fall 2016 Team Project  
-Based on Abram Hindle's CMPUT404-project-Project: 
-https://github.com/abramhindle/CMPUT404-project-socialdistribution  
- https://github.com/abramhindle/CMPUT404-project-socialdistribution/blob/master/project.org  
+# https://github.com/WentaiDu/socialdistribution 
+
+
 Contributors:  
 -Wentai Du  
 -Jinglong Zhao  
@@ -93,3 +91,7 @@ https://www.sioe.cn/yingyong/yanse-rgb-16/
 https://stackoverflow.com/questions/60969224/how-to-override-muipaper-root-style-in-material-table  
 https://www.w3.org/Style/Examples/007/color-bullets.zh_CN.html  
 https://www.tutorialguruji.com/javascript/materialui-how-to-overwrite-styles-of-nested-mui-component/  
+
+Based on Abram Hindle's CMPUT404-project-Project: 
+https://github.com/abramhindle/CMPUT404-project-socialdistribution  
+ https://github.com/abramhindle/CMPUT404-project-socialdistribution/blob/master/project.org  
