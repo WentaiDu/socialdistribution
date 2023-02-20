@@ -1,4 +1,4 @@
-# https://github.com/WentaiDu/socialdistribution 
+# socialdistribution 
 
 
 Contributors:  
